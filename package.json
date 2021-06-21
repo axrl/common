@@ -15,7 +15,7 @@
     "start": "ng serve",
     "build": "ng build -c production",
     "watch": "ng build --watch --configuration development",
-    "publish": "cd dist && npm publish",
+    "publish": "ng build -c production && cd dist && npm publish --access public",
     "test": "ng test"
   },
   "homepage": "https://github.com/axrl/ngx-extended-form-builder/tree/main/projects/ngx-extended-form-builder",
