@@ -5,16 +5,15 @@
     "name": "Axrl",
     "email": "axrl@mail.ru"
   },
-  "homepage": "https://www.npmjs.com/package/@axrl/ngx-extended-form-builder",
+  "homepage": "https://github.com/axrl/ngx-extended-form-builder/tree/main/projects/ngx-extended-form-builder",
   "repository": {
     "type": "git",
     "url": "git@github.com:axrl/ngx-extended-form-builder.git"
   },
-  "directories": {
-    "lib": "projects/ngx-extended-form-builder"
-  },
-  "version": "1.0.1",
+  "private": false,
+  "version": "1.0.2",
   "peerDependencies": {
-    "@angular/forms": "^12.0.5"
+    "@angular/forms": "^12.0.5",
+    "rxjs": "~6.6.7"
   }
 }

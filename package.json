@@ -5,9 +5,6 @@
     "name": "Axrl",
     "email": "axrl@mail.ru"
   },
-  "directories": {
-    "lib": "projects/ngx-extended-form-builder"
-  },
   "repository": {
     "type": "git",
     "url": "git@github.com:axrl/ngx-extended-form-builder.git"
@@ -21,7 +18,8 @@
     "publish": "cd dist && npm publish",
     "test": "ng test"
   },
-  "private": true,
+  "homepage": "https://github.com/axrl/ngx-extended-form-builder/tree/main/projects/ngx-extended-form-builder",
+  "private": false,
   "dependencies": {
     "@angular/animations": "^12.0.5",
     "@angular/common": "^12.0.5",
