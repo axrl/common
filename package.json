@@ -1,5 +1,14 @@
 {
   "name": "ngx-extended-form-builder",
+  "description": "Библиотека для облегчения создания Angular Reactive Form из объекта, как расширенная альтернатива встроенному FormBuilder.\n В отличие от стандартного FormBuilder-а, при создании формы из сложных объектов, сохраняется вложенность контролов - каждый вложенный объект превращается во вложенную FormGroup, обычные свойства обёектов становятся FormControl-ами, а массивы - FormArray-ми.",
+  "author": {
+    "name": "Axrl",
+    "email": "axrl@mail.ru"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:axrl/ngx-extended-form-builder.git"
+  },
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -23,6 +32,7 @@
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
+    "@angular-devkit/build-angular": "~12.0.5",
     "@angular/cli": "~12.0.4",
     "@angular/compiler-cli": "~12.0.4",
     "@types/jasmine": "~3.6.0",
@@ -33,6 +43,7 @@
     "karma-coverage": "~2.0.3",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
+    "ng-packagr": "^12.0.0",
     "typescript": "~4.2.3"
   }
 }
