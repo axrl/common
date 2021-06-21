@@ -5,6 +5,9 @@
     "name": "Axrl",
     "email": "axrl@mail.ru"
   },
+  "directories": {
+    "lib": "projects/ngx-extended-form-builder"
+  },
   "repository": {
     "type": "git",
     "url": "git@github.com:axrl/ngx-extended-form-builder.git"
