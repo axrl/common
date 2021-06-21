@@ -15,6 +15,7 @@
     "start": "ng serve",
     "build": "ng build -c production",
     "watch": "ng build --watch --configuration development",
+    "publish": "cd dist && npm publish",
     "test": "ng test"
   },
   "private": true,

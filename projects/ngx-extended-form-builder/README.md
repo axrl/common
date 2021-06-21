@@ -1,23 +1,20 @@
 # NgxExtendedFormBuilder
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.5.
+Библиотека для облегчения создания Angular Reactive Form из объекта, как расширенная альтернатива встроенному FormBuilder.
 
-## Code scaffolding
-
-Run `ng generate component component-name --project ngx-extended-form-builder` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project ngx-extended-form-builder`.
-> Note: Don't forget to add `--project ngx-extended-form-builder` or else it will be added to the default project in your `angular.json` file. 
+В отличие от стандартного FormBuilder-а, при создании формы из сложных объектов, сохраняется вложенность контролов - каждый вложенный объект превращается во вложенную FormGroup, обычные свойства обёектов становятся FormControl-ами, а массивы - FormArray-ми.
 
 ## Build
 
-Run `ng build ngx-extended-form-builder` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Publishing
-
-After building your library with `ng build ngx-extended-form-builder`, go to the dist folder `cd dist/ngx-extended-form-builder` and run `npm publish`.
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
 ## Running unit tests
 
-Run `ng test ngx-extended-form-builder` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+
+## Running end-to-end tests
+
+Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
 
 ## Further help
 
