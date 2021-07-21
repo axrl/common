@@ -10,10 +10,14 @@
     "type": "git",
     "url": "git@github.com:axrl/ngx-extended-form-builder.git"
   },
-  "version": "1.0.3",
+  "version": "1.0.4",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "peerDependencies": {
-    "@angular/forms": "^12.0.5",
-    "rxjs": "~6.6.7"
+    "@angular/forms": "^12.1.2",
+    "rxjs": "~7.2.0"
   },
   "main": "bundles/axrl-ngx-extended-form-builder.umd.js",
   "module": "fesm2015/axrl-ngx-extended-form-builder.js",
@@ -23,6 +27,6 @@
   "typings": "axrl-ngx-extended-form-builder.d.ts",
   "sideEffects": false,
   "dependencies": {
-    "tslib": "^2.1.0"
+    "tslib": "^2.2.0"
   }
 }
