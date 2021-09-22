@@ -1,8 +1,8 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/forms'), require('rxjs')) :
     typeof define === 'function' && define.amd ? define('@axrl/ngx-extended-form-builder', ['exports', '@angular/forms', 'rxjs'], factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory((global.axrl = global.axrl || {}, global.axrl['ngx-extended-form-builder'] = {}), global.ng.forms, global.rxjs));
-}(this, (function (exports, forms, rxjs) { 'use strict';
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory((global.axrl = global.axrl || {}, global.axrl["ngx-extended-form-builder"] = {}), global.ng.forms, global.rxjs));
+})(this, (function (exports, forms, rxjs) { 'use strict';
 
     ;
     function makeFormGroup(source, keysValidator, asyncKeysValidator, internal) {
@@ -65,5 +65,5 @@
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-})));
+}));
 //# sourceMappingURL=axrl-ngx-extended-form-builder.umd.js.map
