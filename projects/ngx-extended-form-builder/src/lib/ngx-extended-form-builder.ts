@@ -1,4 +1,5 @@
-import { FormGroup, FormArray, FormControl, ValidatorFn, AsyncValidatorFn, AbstractControlOptions } from "@angular/forms";
+import { FormGroup, FormArray, FormControl } from "@angular/forms";
+import type { ValidatorFn, AsyncValidatorFn, AbstractControlOptions } from "@angular/forms";
 import { Observable } from "rxjs";
 
 interface ExtendedControlOptions extends AbstractControlOptions {
@@ -74,5 +75,5 @@ export function makeForm<T extends FormGroup | FormArray | FormControl = FormGro
       asyncKeysValidator?.has('mainFormValidators') && !internal ?
         asyncKeysValidator.get('mainFormValidators') :
         null);
-  return <T>form
+  return <T>form;
 };

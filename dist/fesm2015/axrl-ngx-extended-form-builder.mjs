@@ -57,4 +57,4 @@ function makeForm(source, keysValidator, asyncKeysValidator, internal = false) {
  */
 
 export { makeForm };
-//# sourceMappingURL=axrl-ngx-extended-form-builder.js.map
+//# sourceMappingURL=axrl-ngx-extended-form-builder.mjs.map

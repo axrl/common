@@ -1,4 +1,5 @@
-import { FormGroup, FormArray, FormControl, ValidatorFn, AsyncValidatorFn, AbstractControlOptions } from "@angular/forms";
+import { FormGroup, FormArray, FormControl } from "@angular/forms";
+import type { ValidatorFn, AsyncValidatorFn, AbstractControlOptions } from "@angular/forms";
 interface ExtendedControlOptions extends AbstractControlOptions {
     disabled?: boolean;
 }

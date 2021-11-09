@@ -10,13 +10,13 @@
     "type": "git",
     "url": "git@github.com:axrl/ngx-extended-form-builder.git"
   },
-  "version": "1.0.5",
+  "version": "1.0.6",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
   "peerDependencies": {
-    "@angular/forms": "^12.2.6",
-    "rxjs": "^7.3.0"
+    "@angular/forms": "^13.0.0",
+    "rxjs": "^7.4.0"
   }
 }

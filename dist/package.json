@@ -10,23 +10,36 @@
     "type": "git",
     "url": "git@github.com:axrl/ngx-extended-form-builder.git"
   },
-  "version": "1.0.5",
+  "version": "1.0.6",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
   "peerDependencies": {
-    "@angular/forms": "^12.2.6",
-    "rxjs": "^7.3.0"
+    "@angular/forms": "^13.0.0",
+    "rxjs": "^7.4.0"
   },
-  "main": "bundles/axrl-ngx-extended-form-builder.umd.js",
-  "module": "fesm2015/axrl-ngx-extended-form-builder.js",
-  "es2015": "fesm2015/axrl-ngx-extended-form-builder.js",
-  "esm2015": "esm2015/axrl-ngx-extended-form-builder.js",
-  "fesm2015": "fesm2015/axrl-ngx-extended-form-builder.js",
+  "module": "fesm2015/axrl-ngx-extended-form-builder.mjs",
+  "es2020": "fesm2020/axrl-ngx-extended-form-builder.mjs",
+  "esm2020": "esm2020/axrl-ngx-extended-form-builder.mjs",
+  "fesm2020": "fesm2020/axrl-ngx-extended-form-builder.mjs",
+  "fesm2015": "fesm2015/axrl-ngx-extended-form-builder.mjs",
   "typings": "axrl-ngx-extended-form-builder.d.ts",
+  "exports": {
+    "./package.json": {
+      "default": "./package.json"
+    },
+    ".": {
+      "types": "./axrl-ngx-extended-form-builder.d.ts",
+      "esm2020": "./esm2020/axrl-ngx-extended-form-builder.mjs",
+      "es2020": "./fesm2020/axrl-ngx-extended-form-builder.mjs",
+      "es2015": "./fesm2015/axrl-ngx-extended-form-builder.mjs",
+      "node": "./fesm2015/axrl-ngx-extended-form-builder.mjs",
+      "default": "./fesm2020/axrl-ngx-extended-form-builder.mjs"
+    }
+  },
   "sideEffects": false,
   "dependencies": {
-    "tslib": "^2.2.0"
+    "tslib": "^2.3.0"
   }
 }
