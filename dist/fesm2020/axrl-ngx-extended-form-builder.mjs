@@ -2,43 +2,77 @@ import { FormGroup, FormControl, FormArray } from '@angular/forms';
 import { Observable } from 'rxjs';
 
 ;
-function getValidatorsOrNull(key, keysValidator, internal = false) {
-    return keysValidator?.has(key) && !internal ?
-        keysValidator.get(key) :
-        null;
+//function getValidatorsOrNull(key: string, keysValidator?: Map<string, AsyncValidatorFn[] | null>, internal?: boolean): AsyncValidatorFn[] | null
+//function getValidatorsOrNull(key: string, keysValidator?: Map<string, ValidatorFn[] | ExtendedControlOptions | null>, internal?: boolean): ValidatorFn[] | ExtendedControlOptions | null
+function getValidatorsOrNull(key, keysValidator) {
+    return keysValidator && keysValidator.has(key) ? keysValidator.get(key) : null;
 }
-function makeFormGroup(source, keysValidator, asyncKeysValidator, internal = false) {
+function makeFormGroup(source, internalKey, keysValidator, asyncKeysValidator) {
     return source instanceof FormGroup ? source : Object.entries(source).reduce((accumulator, entry) => {
         const key = entry[0];
         const value = entry[1];
         if (!(value instanceof Observable)) {
-            accumulator.addControl(key, !!value && typeof value == 'object' && !(value instanceof Date) ?
-                value instanceof FormControl || value instanceof FormGroup || value instanceof FormArray ?
-                    value :
-                    makeForm(value, keysValidator, asyncKeysValidator, true) :
-                new FormControl({
-                    disabled: keysValidator?.has(key) && 'disabled' in keysValidator.get(key) ? keysValidator.get(key).disabled : false,
-                    value: !!value && typeof value == 'string' && (value.includes('0001-01-01') || value.includes('1970-01-01')) ? null : value
-                }, getValidatorsOrNull(key, keysValidator), getValidatorsOrNull(key, asyncKeysValidator)));
+            accumulator.addControl(key, !!value && value instanceof FormControl || value instanceof FormGroup || value instanceof FormArray ?
+                value :
+                makeForm(value, makeNewMainFormValidatorsMap(key, keysValidator), makeNewMainFormValidatorsMap(key, asyncKeysValidator)));
         }
         ;
         return accumulator;
-    }, new FormGroup({}, getValidatorsOrNull('mainFormValidators', keysValidator, internal), getValidatorsOrNull('mainFormValidators', asyncKeysValidator, internal)));
+    }, new FormGroup({}, getValidatorsOrNull(internalKey, keysValidator), getValidatorsOrNull(internalKey, asyncKeysValidator)));
 }
-function makeForm(source, keysValidator, asyncKeysValidator, internal = false) {
+function makeNewMainFormValidatorsMap(key, oldMap) {
+    if (!oldMap || key === 'mainFormValidators' || key === 'mainFormValidatorsItems') {
+        return oldMap;
+    }
+    else {
+        if (!oldMap.has(key) && !oldMap.has(`${key}Items`)) {
+            return new Map(Array.from(oldMap.entries()).filter(item => item[0] !== 'mainFormValidators' && item[0] !== 'mainFormValidatorsItems'));
+        }
+        else {
+            const filterPredicate = oldMap.has('mainFormValidators') ?
+                oldMap.has('mainFormValidatorsItems') ?
+                    (item) => item[0] !== key && item[0] !== 'mainFormValidators' && item[0] !== 'mainFormValidatorsItems' :
+                    (item) => item[0] !== key && item[0] !== 'mainFormValidators' :
+                oldMap.has('mainFormValidatorsItems') ?
+                    (item) => item[0] !== key && item[0] !== 'mainFormValidatorsItems' :
+                    (item) => item[0] !== key;
+            const newMainValidatorsArray = oldMap.has(key) ?
+                oldMap.has(`${key}Items`) ?
+                    [
+                        ['mainFormValidators', oldMap.get(key)],
+                        ['mainFormValidatorsItems', oldMap.get(`${key}Items`)]
+                    ] :
+                    [
+                        ['mainFormValidators', oldMap.get(key)],
+                    ] :
+                oldMap.has(`${key}Items`) ?
+                    [
+                        ['mainFormValidatorsItems', oldMap.get(`${key}Items`)]
+                    ] :
+                    [];
+            return new Map([
+                ...newMainValidatorsArray,
+                ...Array.from(oldMap.entries()).filter(filterPredicate)
+            ]);
+        }
+        ;
+    }
+    ;
+}
+function makeForm(source, keysValidator, asyncKeysValidator) {
     const form = !!source && (typeof source === 'object' || typeof source === 'function') ?
         source instanceof Array ?
             new FormArray(source.map(item => {
-                const itemForm = makeForm(item, keysValidator, asyncKeysValidator, true);
+                const itemForm = makeForm(item, makeNewMainFormValidatorsMap('mainFormValidatorsItems', keysValidator), makeNewMainFormValidatorsMap('mainFormValidatorsItems', asyncKeysValidator));
                 return itemForm;
-            }), getValidatorsOrNull('mainFormValidators', keysValidator, internal), getValidatorsOrNull('mainFormValidators', asyncKeysValidator, internal)) :
-            makeFormGroup(source, keysValidator, asyncKeysValidator, internal) :
+            }), getValidatorsOrNull('mainFormValidators', keysValidator), getValidatorsOrNull('mainFormValidators', asyncKeysValidator)) :
+            makeFormGroup(source, 'mainFormValidators', keysValidator, asyncKeysValidator) :
         new FormControl({
             disabled: keysValidator?.has('mainFormValidators') && 'disabled' in (keysValidator.get('mainFormValidators')) ?
                 keysValidator.get('mainFormValidators').disabled :
                 false,
-            value: source
-        }, getValidatorsOrNull('mainFormValidators', keysValidator, internal), getValidatorsOrNull('mainFormValidators', asyncKeysValidator, internal));
+            value: !!source && typeof source == 'string' && (source.includes('0001-01-01') || source.includes('1970-01-01')) ? null : source
+        }, getValidatorsOrNull('mainFormValidators', keysValidator), getValidatorsOrNull('mainFormValidators', asyncKeysValidator));
     return form;
 }
 ;
