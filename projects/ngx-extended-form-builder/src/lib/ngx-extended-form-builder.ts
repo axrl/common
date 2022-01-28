@@ -6,12 +6,20 @@ interface ExtendedControlOptions extends AbstractControlOptions {
   disabled?: boolean,
 };
 
-//function getValidatorsOrNull(key: string, keysValidator?: Map<string, AsyncValidatorFn[] | null>, internal?: boolean): AsyncValidatorFn[] | null
-//function getValidatorsOrNull(key: string, keysValidator?: Map<string, ValidatorFn[] | ExtendedControlOptions | null>, internal?: boolean): ValidatorFn[] | ExtendedControlOptions | null
 function getValidatorsOrNull<T extends ValidatorFn[] | AsyncValidatorFn[] | ExtendedControlOptions | null>(
-  key: string, keysValidator?: Map<string, T>
+  key: string, keysValidator?: Map<string, T>, addLift: boolean = false
 ): T | undefined | null {
-  return keysValidator && keysValidator.has(key) ? keysValidator.get(key) : null
+  const result = keysValidator && keysValidator.has(key) ? keysValidator.get(key) : null;
+  if (addLift) {
+    if (result && Array.isArray(result)) {
+      (<ValidatorFn[]>result).push(<ValidatorFn>liftErrors);
+      return <T>result;
+    } else {
+      return result ? result : <T>[liftErrors]
+    }
+  } else {
+    return result;
+  };
 }
 
 function makeFormGroup(
@@ -38,8 +46,8 @@ function makeFormGroup(
       };
       return accumulator;
     }, new FormGroup({},
-      getValidatorsOrNull(internalKey, keysValidator),
-      getValidatorsOrNull(internalKey, asyncKeysValidator)
+      getValidatorsOrNull(internalKey, keysValidator, true),
+      getValidatorsOrNull(internalKey, asyncKeysValidator, false)
     )
   );
 }
@@ -56,6 +64,8 @@ function makeNewMainFormValidatorsMap<T extends ValidatorFn[] | AsyncValidatorFn
           oldMap.entries()
         ).filter(
           item => item[0] !== 'mainFormValidators' && item[0] !== 'mainFormValidatorsItems'
+        ).map(
+          ([entryKey, entryValue]) => [entryKey.startsWith(`${key}.`) ? entryKey.replace(`${key}.`, '') : entryKey, entryValue]
         )
       );
     } else {
@@ -84,16 +94,20 @@ function makeNewMainFormValidatorsMap<T extends ValidatorFn[] | AsyncValidatorFn
         ...newMainValidatorsArray,
         ...Array.from(
           oldMap.entries()
-        ).filter(filterPredicate)
+        ).filter(filterPredicate).map<[string, T]>(
+          ([entryKey, entryValue]) => [entryKey.startsWith(`${key}.`) ? entryKey.replace(`${key}.`, '') : entryKey, entryValue]
+        )
       ]);
     };
   };
 }
 
-export function makeForm<T extends unknown, R extends (T extends Array<any> ? FormArray : T extends string | number | boolean | symbol ? FormControl : FormGroup)>(
-  source: T,
-  keysValidator?: Map<string, ValidatorFn[] | ExtendedControlOptions | null>,
-  asyncKeysValidator?: Map<string, AsyncValidatorFn[] | null>,
+export function makeForm<T,
+  R extends (T extends Array<any> ? FormArray : T extends string | number | boolean | symbol | null | undefined ? FormControl : FormGroup
+  )>(
+    source: T,
+    keysValidator?: Map<string, ValidatorFn[] | ExtendedControlOptions | null>,
+    asyncKeysValidator?: Map<string, AsyncValidatorFn[] | null>,
 ): R {
   const form = !!source && (typeof source === 'object' || typeof source === 'function') ?
     source instanceof Array ?
@@ -107,8 +121,8 @@ export function makeForm<T extends unknown, R extends (T extends Array<any> ? Fo
             );
             return itemForm;
           }),
-        getValidatorsOrNull('mainFormValidators', keysValidator),
-        getValidatorsOrNull('mainFormValidators', asyncKeysValidator)
+        getValidatorsOrNull('mainFormValidators', keysValidator, true),
+        getValidatorsOrNull('mainFormValidators', asyncKeysValidator, false)
       ) :
       makeFormGroup(source, 'mainFormValidators', keysValidator, asyncKeysValidator) :
     new FormControl({
@@ -117,11 +131,32 @@ export function makeForm<T extends unknown, R extends (T extends Array<any> ? Fo
         false,
       value: !!source && typeof source == 'string' && (source.includes('0001-01-01') || source.includes('1970-01-01')) ? null : source
     },
-      getValidatorsOrNull('mainFormValidators', keysValidator),
-      getValidatorsOrNull('mainFormValidators', asyncKeysValidator)
+      getValidatorsOrNull('mainFormValidators', keysValidator, false),
+      getValidatorsOrNull('mainFormValidators', asyncKeysValidator, false)
     );
   return <R>form;
 };
+
+function liftErrors(control: AbstractControl): ValidationErrors | null {
+  if (control instanceof FormControl) {
+    return null;
+  } else {
+    const allControls = control instanceof FormGroup ?
+      Object.values(control.controls) :
+      control instanceof FormArray ?
+        control.controls :
+        [];
+    const invalidControls = allControls.filter(control => control.status === 'INVALID');
+    return invalidControls.length === 0 ? null : invalidControls.reduce(
+      (accumulator, current) => {
+        if (current.errors) {
+          addValidationErrors(current.errors, accumulator);
+        };
+        return accumulator;
+      }, <ValidationErrors>{}
+    );
+  }
+}
 
 export function liftValidationErrors(control: AbstractControl): ValidationErrors | null {
   const allControls = control instanceof FormGroup ?
