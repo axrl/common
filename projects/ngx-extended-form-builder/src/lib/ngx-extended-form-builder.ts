@@ -1,4 +1,4 @@
-import { FormGroup, FormArray, FormControl } from "@angular/forms";
+import { UntypedFormGroup, UntypedFormArray, UntypedFormControl } from "@angular/forms";
 import type { ValidatorFn, ValidationErrors, AbstractControl, AsyncValidatorFn, AbstractControlOptions } from "@angular/forms";
 import { Observable } from "rxjs";
 
@@ -27,15 +27,15 @@ function makeFormGroup(
   internalKey: string,
   keysValidator?: Map<string, ValidatorFn[] | ExtendedControlOptions | null>,
   asyncKeysValidator?: Map<string, AsyncValidatorFn[] | null>
-): FormGroup {
-  return source instanceof FormGroup ? source : Object.entries(source).reduce(
-    (accumulator: FormGroup, entry: [string, unknown]) => {
+): UntypedFormGroup {
+  return source instanceof UntypedFormGroup ? source : Object.entries(source).reduce(
+    (accumulator: UntypedFormGroup, entry: [string, unknown]) => {
       const key = entry[0];
       const value = entry[1];
       if (!(value instanceof Observable)) {
         accumulator.addControl(
           key,
-          !!value && value instanceof FormControl || value instanceof FormGroup || value instanceof FormArray ?
+          !!value && value instanceof UntypedFormControl || value instanceof UntypedFormGroup || value instanceof UntypedFormArray ?
             value :
             makeForm(
               value,
@@ -45,7 +45,7 @@ function makeFormGroup(
         );
       };
       return accumulator;
-    }, new FormGroup({},
+    }, new UntypedFormGroup({},
       getValidatorsOrNull(internalKey, keysValidator, true),
       getValidatorsOrNull(internalKey, asyncKeysValidator, false)
     )
@@ -103,7 +103,7 @@ function makeNewMainFormValidatorsMap<T extends ValidatorFn[] | AsyncValidatorFn
 }
 
 export function makeForm<T,
-  R extends (T extends Array<any> ? FormArray : T extends string | number | boolean | symbol | null | undefined ? FormControl : FormGroup
+  R extends (T extends Array<any> ? UntypedFormArray : T extends string | number | boolean | symbol | null | undefined ? UntypedFormControl : UntypedFormGroup
   )>(
     source: T,
     keysValidator?: Map<string, ValidatorFn[] | ExtendedControlOptions | null>,
@@ -111,7 +111,7 @@ export function makeForm<T,
 ): R {
   const form = !!source && (typeof source === 'object' || typeof source === 'function') ?
     source instanceof Array ?
-      new FormArray(
+      new UntypedFormArray(
         source.map(
           item => {
             const itemForm = makeForm(
@@ -125,7 +125,7 @@ export function makeForm<T,
         getValidatorsOrNull('mainFormValidators', asyncKeysValidator, false)
       ) :
       makeFormGroup(source, 'mainFormValidators', keysValidator, asyncKeysValidator) :
-    new FormControl({
+    new UntypedFormControl({
       disabled: keysValidator?.has('mainFormValidators') && 'disabled' in (keysValidator.get('mainFormValidators')!) ?
         (<ExtendedControlOptions>keysValidator.get('mainFormValidators')).disabled :
         false,
@@ -138,12 +138,12 @@ export function makeForm<T,
 };
 
 function liftErrors(control: AbstractControl): ValidationErrors | null {
-  if (control instanceof FormControl) {
+  if (control instanceof UntypedFormControl) {
     return null;
   } else {
-    const allControls = control instanceof FormGroup ?
+    const allControls = control instanceof UntypedFormGroup ?
       Object.values(control.controls) :
-      control instanceof FormArray ?
+      control instanceof UntypedFormArray ?
         control.controls :
         [];
     const invalidControls = allControls.filter(control => control.status === 'INVALID');
@@ -159,9 +159,9 @@ function liftErrors(control: AbstractControl): ValidationErrors | null {
 }
 
 export function liftValidationErrors(control: AbstractControl): ValidationErrors | null {
-  const allControls = control instanceof FormGroup ?
+  const allControls = control instanceof UntypedFormGroup ?
     Object.values(control.controls) :
-    control instanceof FormArray ?
+    control instanceof UntypedFormArray ?
       control.controls :
       [];
   const invalidControls = allControls.filter(control => control.status === 'INVALID');
