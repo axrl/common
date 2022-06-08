@@ -22,27 +22,27 @@
   "homepage": "https://github.com/axrl/ngx-extended-form-builder/tree/main/projects/ngx-extended-form-builder",
   "private": false,
   "dependencies": {
-    "@angular/common": "^13.2.0",
-    "@angular/compiler": "^13.2.0",
-    "@angular/core": "^13.2.0",
-    "@angular/forms": "^13.2.0",
-    "rxjs": "^7.5.2",
-    "tslib": "^2.3.1",
-    "zone.js": "~0.11.4"
+    "@angular/common": "^13.3.11",
+    "@angular/compiler": "^13.3.11",
+    "@angular/core": "^13.3.11",
+    "@angular/forms": "^13.3.11",
+    "rxjs": "^7.5.5",
+    "tslib": "^2.4.0",
+    "zone.js": "^0.11.5"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^13.2.0",
-    "@angular/cli": "^13.2.0",
-    "@angular/compiler-cli": "^13.2.0",
+    "@angular-devkit/build-angular": "^13.3.7",
+    "@angular/cli": "^13.3.7",
+    "@angular/compiler-cli": "^13.3.11",
     "@types/jasmine": "~3.6.0",
-    "@types/node": "^16.11.21",
-    "jasmine-core": "^3.99.0",
-    "karma": "^6.3.12",
+    "@types/node": "^16.11.39",
+    "jasmine-core": "^3.99.1",
+    "karma": "^6.3.20",
     "karma-chrome-launcher": "~3.1.0",
     "karma-coverage": "~2.0.3",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.7.0",
-    "ng-packagr": "^13.2.0",
-    "typescript": "^4.5.5"
+    "ng-packagr": "^13.3.1",
+    "typescript": "^4.7.3"
   }
 }
