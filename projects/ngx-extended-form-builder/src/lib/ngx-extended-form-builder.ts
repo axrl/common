@@ -19,11 +19,11 @@ function getValidatorsOrNull<T extends ValidatorFn[] | AsyncValidatorFn[] | null
 }
 
 function makeFormGroup<T>(
-  source: any,
+  source: T,
   internalKey: string,
   keysValidator?: Map<string, ValidatorFn[] | null>,
   asyncKeysValidator?: Map<string, AsyncValidatorFn[] | null>
-): FormGroup<{ [ K in keyof T ]: AbstractControl<any, any>; }> {
+): FormGroup<{ [ K in keyof T ]: AbstractControl<T[ K ], T[ K ]>; }> {
   return source instanceof FormGroup ? source : Object.entries(source).reduce(
     (accumulator: FormGroup, entry: [ string, unknown ]) => {
       const key = entry[ 0 ];
@@ -102,7 +102,7 @@ export function makeForm<T,
   R extends (
     T extends Array<infer U> ? FormArray<
       U extends Array<any> ? FormArray<AbstractControl<U, U>> :
-      U extends string | number | boolean | symbol | null | undefined ? FormControl<U | null> : FormGroup<{ [ K in keyof U ]: AbstractControl<U[ K ], U[ K ]>; }>
+      U extends string | number | boolean | symbol | null | undefined ? FormControl<U | null> : FormGroup<{ [ KU in keyof U ]: AbstractControl<U[ KU ], U[ KU ]>; }>
     > : T extends string | number | boolean | symbol | null | undefined ? FormControl<T | null> : FormGroup<{ [ K in keyof T ]: AbstractControl<T[ K ], T[ K ]>; }>
   )>(
     source: T,
@@ -110,7 +110,7 @@ export function makeForm<T,
     asyncKeysValidator?: Map<string, AsyncValidatorFn[] | null>,
 ): R {
   const form = !!source && (typeof source === 'object' || typeof source === 'function') ?
-    source instanceof Array ?
+    source instanceof Array<infer U> ?
       new FormArray(
         source.map(
           item => {
@@ -124,7 +124,7 @@ export function makeForm<T,
         getValidatorsOrNull('mainFormValidators', keysValidator, true),
         getValidatorsOrNull('mainFormValidators', asyncKeysValidator, false)
       ) :
-      makeFormGroup(source, 'mainFormValidators', keysValidator, asyncKeysValidator) :
+      makeFormGroup<T>(source, 'mainFormValidators', keysValidator, asyncKeysValidator) :
     new FormControl<T | null>(
       !!source && typeof source == 'string' && (source.includes('0001-01-01') || source.includes('1970-01-01')) ? null : source
       ,
