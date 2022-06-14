@@ -1,7 +1,6 @@
-import { UntypedFormGroup, UntypedFormControl, UntypedFormArray } from '@angular/forms';
+import { FormGroup, FormControl, FormArray } from '@angular/forms';
 import { Observable } from 'rxjs';
 
-;
 function getValidatorsOrNull(key, keysValidator, addLift = false) {
     const result = keysValidator && keysValidator.has(key) ? keysValidator.get(key) : null;
     if (addLift) {
@@ -19,17 +18,17 @@ function getValidatorsOrNull(key, keysValidator, addLift = false) {
     ;
 }
 function makeFormGroup(source, internalKey, keysValidator, asyncKeysValidator) {
-    return source instanceof UntypedFormGroup ? source : Object.entries(source).reduce((accumulator, entry) => {
+    return source instanceof FormGroup ? source : Object.entries(source).reduce((accumulator, entry) => {
         const key = entry[0];
         const value = entry[1];
         if (!(value instanceof Observable)) {
-            accumulator.addControl(key, !!value && value instanceof UntypedFormControl || value instanceof UntypedFormGroup || value instanceof UntypedFormArray ?
+            accumulator.addControl(key, !!value && value instanceof FormControl || value instanceof FormGroup || value instanceof FormArray ?
                 value :
                 makeForm(value, makeNewMainFormValidatorsMap(key, keysValidator), makeNewMainFormValidatorsMap(key, asyncKeysValidator)));
         }
         ;
         return accumulator;
-    }, new UntypedFormGroup({}, getValidatorsOrNull(internalKey, keysValidator, true), getValidatorsOrNull(internalKey, asyncKeysValidator, false)));
+    }, new FormGroup({}, getValidatorsOrNull(internalKey, keysValidator, true), getValidatorsOrNull(internalKey, asyncKeysValidator, false)));
 }
 function makeNewMainFormValidatorsMap(key, oldMap) {
     if (!oldMap || key === 'mainFormValidators' || key === 'mainFormValidatorsItems') {
@@ -73,28 +72,23 @@ function makeNewMainFormValidatorsMap(key, oldMap) {
 function makeForm(source, keysValidator, asyncKeysValidator) {
     const form = !!source && (typeof source === 'object' || typeof source === 'function') ?
         source instanceof Array ?
-            new UntypedFormArray(source.map(item => {
+            new FormArray(source.map(item => {
                 const itemForm = makeForm(item, makeNewMainFormValidatorsMap('mainFormValidatorsItems', keysValidator), makeNewMainFormValidatorsMap('mainFormValidatorsItems', asyncKeysValidator));
                 return itemForm;
             }), getValidatorsOrNull('mainFormValidators', keysValidator, true), getValidatorsOrNull('mainFormValidators', asyncKeysValidator, false)) :
             makeFormGroup(source, 'mainFormValidators', keysValidator, asyncKeysValidator) :
-        new UntypedFormControl({
-            disabled: keysValidator?.has('mainFormValidators') && 'disabled' in (keysValidator.get('mainFormValidators')) ?
-                keysValidator.get('mainFormValidators').disabled :
-                false,
-            value: !!source && typeof source == 'string' && (source.includes('0001-01-01') || source.includes('1970-01-01')) ? null : source
-        }, getValidatorsOrNull('mainFormValidators', keysValidator, false), getValidatorsOrNull('mainFormValidators', asyncKeysValidator, false));
+        new FormControl(!!source && typeof source == 'string' && (source.includes('0001-01-01') || source.includes('1970-01-01')) ? null : source, getValidatorsOrNull('mainFormValidators', keysValidator, false), getValidatorsOrNull('mainFormValidators', asyncKeysValidator, false));
     return form;
 }
 ;
 function liftErrors(control) {
-    if (control instanceof UntypedFormControl) {
+    if (control instanceof FormControl) {
         return null;
     }
     else {
-        const allControls = control instanceof UntypedFormGroup ?
+        const allControls = control instanceof FormGroup ?
             Object.values(control.controls) :
-            control instanceof UntypedFormArray ?
+            control instanceof FormArray ?
                 control.controls :
                 [];
         const invalidControls = allControls.filter(control => control.status === 'INVALID');
@@ -108,9 +102,9 @@ function liftErrors(control) {
     }
 }
 function liftValidationErrors(control) {
-    const allControls = control instanceof UntypedFormGroup ?
+    const allControls = control instanceof FormGroup ?
         Object.values(control.controls) :
-        control instanceof UntypedFormArray ?
+        control instanceof FormArray ?
             control.controls :
             [];
     const invalidControls = allControls.filter(control => control.status === 'INVALID');

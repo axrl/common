@@ -1,41 +1,37 @@
-import { UntypedFormGroup, UntypedFormArray, UntypedFormControl } from "@angular/forms";
-import type { ValidatorFn, ValidationErrors, AbstractControl, AsyncValidatorFn, AbstractControlOptions } from "@angular/forms";
+import { FormGroup, FormArray, FormControl } from "@angular/forms";
+import type { ValidatorFn, ValidationErrors, AbstractControl, AsyncValidatorFn } from "@angular/forms";
 import { Observable } from "rxjs";
 
-interface ExtendedControlOptions extends AbstractControlOptions {
-  disabled?: boolean,
-};
-
-function getValidatorsOrNull<T extends ValidatorFn[] | AsyncValidatorFn[] | ExtendedControlOptions | null>(
+function getValidatorsOrNull<T extends ValidatorFn[] | AsyncValidatorFn[] | null>(
   key: string, keysValidator?: Map<string, T>, addLift: boolean = false
 ): T | undefined | null {
   const result = keysValidator && keysValidator.has(key) ? keysValidator.get(key) : null;
   if (addLift) {
     if (result && Array.isArray(result)) {
-      (<ValidatorFn[]>result).push(<ValidatorFn>liftErrors);
-      return <T>result;
+      (<ValidatorFn[]> result).push(<ValidatorFn> liftErrors);
+      return <T> result;
     } else {
-      return result ? result : <T>[liftErrors]
+      return result ? result : <T>[ liftErrors ];
     }
   } else {
     return result;
   };
 }
 
-function makeFormGroup(
+function makeFormGroup<T>(
   source: any,
   internalKey: string,
-  keysValidator?: Map<string, ValidatorFn[] | ExtendedControlOptions | null>,
+  keysValidator?: Map<string, ValidatorFn[] | null>,
   asyncKeysValidator?: Map<string, AsyncValidatorFn[] | null>
-): UntypedFormGroup {
-  return source instanceof UntypedFormGroup ? source : Object.entries(source).reduce(
-    (accumulator: UntypedFormGroup, entry: [string, unknown]) => {
-      const key = entry[0];
-      const value = entry[1];
+): FormGroup<{ [ K in keyof T ]: AbstractControl<any, any>; }> {
+  return source instanceof FormGroup ? source : Object.entries(source).reduce(
+    (accumulator: FormGroup, entry: [ string, unknown ]) => {
+      const key = entry[ 0 ];
+      const value = entry[ 1 ];
       if (!(value instanceof Observable)) {
         accumulator.addControl(
           key,
-          !!value && value instanceof UntypedFormControl || value instanceof UntypedFormGroup || value instanceof UntypedFormArray ?
+          !!value && value instanceof FormControl || value instanceof FormGroup || value instanceof FormArray ?
             value :
             makeForm(
               value,
@@ -45,57 +41,57 @@ function makeFormGroup(
         );
       };
       return accumulator;
-    }, new UntypedFormGroup({},
+    }, new FormGroup({},
       getValidatorsOrNull(internalKey, keysValidator, true),
       getValidatorsOrNull(internalKey, asyncKeysValidator, false)
     )
   );
 }
 
-function makeNewMainFormValidatorsMap<T extends ValidatorFn[] | AsyncValidatorFn[] | ExtendedControlOptions | null>(
+function makeNewMainFormValidatorsMap<T extends ValidatorFn[] | AsyncValidatorFn[] | null>(
   key: string, oldMap?: Map<string, T>,
 ): Map<string, T> | undefined {
   if (!oldMap || key === 'mainFormValidators' || key === 'mainFormValidatorsItems') {
     return oldMap;
   } else {
-    if (!oldMap.has(key) && !oldMap.has(`${key}Items`)) {
+    if (!oldMap.has(key) && !oldMap.has(`${ key }Items`)) {
       return new Map<string, T>(
         Array.from(
           oldMap.entries()
         ).filter(
-          item => item[0] !== 'mainFormValidators' && item[0] !== 'mainFormValidatorsItems'
+          item => item[ 0 ] !== 'mainFormValidators' && item[ 0 ] !== 'mainFormValidatorsItems'
         ).map(
-          ([entryKey, entryValue]) => [entryKey.startsWith(`${key}.`) ? entryKey.replace(`${key}.`, '') : entryKey, entryValue]
+          ([ entryKey, entryValue ]) => [ entryKey.startsWith(`${ key }.`) ? entryKey.replace(`${ key }.`, '') : entryKey, entryValue ]
         )
       );
     } else {
       const filterPredicate = oldMap.has('mainFormValidators') ?
         oldMap.has('mainFormValidatorsItems') ?
-          (item: [string, T]) => item[0] !== key && item[0] !== 'mainFormValidators' && item[0] !== 'mainFormValidatorsItems' :
-          (item: [string, T]) => item[0] !== key && item[0] !== 'mainFormValidators' :
+          (item: [ string, T ]) => item[ 0 ] !== key && item[ 0 ] !== 'mainFormValidators' && item[ 0 ] !== 'mainFormValidatorsItems' :
+          (item: [ string, T ]) => item[ 0 ] !== key && item[ 0 ] !== 'mainFormValidators' :
         oldMap.has('mainFormValidatorsItems') ?
-          (item: [string, T]) => item[0] !== key && item[0] !== 'mainFormValidatorsItems' :
-          (item: [string, T]) => item[0] !== key;
-      const newMainValidatorsArray: [string, T][] = oldMap.has(key) ?
-        oldMap.has(`${key}Items`) ?
+          (item: [ string, T ]) => item[ 0 ] !== key && item[ 0 ] !== 'mainFormValidatorsItems' :
+          (item: [ string, T ]) => item[ 0 ] !== key;
+      const newMainValidatorsArray: [ string, T ][] = oldMap.has(key) ?
+        oldMap.has(`${ key }Items`) ?
           [
-            ['mainFormValidators', oldMap.get(key)!],
-            ['mainFormValidatorsItems', oldMap.get(`${key}Items`)!]
+            [ 'mainFormValidators', oldMap.get(key)! ],
+            [ 'mainFormValidatorsItems', oldMap.get(`${ key }Items`)! ]
           ] :
           [
-            ['mainFormValidators', oldMap.get(key)!],
+            [ 'mainFormValidators', oldMap.get(key)! ],
           ] :
-        oldMap.has(`${key}Items`) ?
+        oldMap.has(`${ key }Items`) ?
           [
-            ['mainFormValidatorsItems', oldMap.get(`${key}Items`)!]
+            [ 'mainFormValidatorsItems', oldMap.get(`${ key }Items`)! ]
           ] :
           [];
       return new Map<string, T>([
         ...newMainValidatorsArray,
         ...Array.from(
           oldMap.entries()
-        ).filter(filterPredicate).map<[string, T]>(
-          ([entryKey, entryValue]) => [entryKey.startsWith(`${key}.`) ? entryKey.replace(`${key}.`, '') : entryKey, entryValue]
+        ).filter(filterPredicate).map<[ string, T ]>(
+          ([ entryKey, entryValue ]) => [ entryKey.startsWith(`${ key }.`) ? entryKey.replace(`${ key }.`, '') : entryKey, entryValue ]
         )
       ]);
     };
@@ -103,15 +99,19 @@ function makeNewMainFormValidatorsMap<T extends ValidatorFn[] | AsyncValidatorFn
 }
 
 export function makeForm<T,
-  R extends (T extends Array<any> ? UntypedFormArray : T extends string | number | boolean | symbol | null | undefined ? UntypedFormControl : UntypedFormGroup
+  R extends (
+    T extends Array<infer U> ? FormArray<
+      U extends Array<any> ? FormArray<AbstractControl<U, U>> :
+      U extends string | number | boolean | symbol | null | undefined ? FormControl<U | null> : FormGroup<{ [ K in keyof U ]: AbstractControl<U[ K ], U[ K ]>; }>
+    > : T extends string | number | boolean | symbol | null | undefined ? FormControl<T | null> : FormGroup<{ [ K in keyof T ]: AbstractControl<T[ K ], T[ K ]>; }>
   )>(
     source: T,
-    keysValidator?: Map<string, ValidatorFn[] | ExtendedControlOptions | null>,
+    keysValidator?: Map<string, ValidatorFn[] | null>,
     asyncKeysValidator?: Map<string, AsyncValidatorFn[] | null>,
 ): R {
   const form = !!source && (typeof source === 'object' || typeof source === 'function') ?
     source instanceof Array ?
-      new UntypedFormArray(
+      new FormArray(
         source.map(
           item => {
             const itemForm = makeForm(
@@ -125,25 +125,22 @@ export function makeForm<T,
         getValidatorsOrNull('mainFormValidators', asyncKeysValidator, false)
       ) :
       makeFormGroup(source, 'mainFormValidators', keysValidator, asyncKeysValidator) :
-    new UntypedFormControl({
-      disabled: keysValidator?.has('mainFormValidators') && 'disabled' in (keysValidator.get('mainFormValidators')!) ?
-        (<ExtendedControlOptions>keysValidator.get('mainFormValidators')).disabled :
-        false,
-      value: !!source && typeof source == 'string' && (source.includes('0001-01-01') || source.includes('1970-01-01')) ? null : source
-    },
+    new FormControl<T | null>(
+      !!source && typeof source == 'string' && (source.includes('0001-01-01') || source.includes('1970-01-01')) ? null : source
+      ,
       getValidatorsOrNull('mainFormValidators', keysValidator, false),
       getValidatorsOrNull('mainFormValidators', asyncKeysValidator, false)
     );
-  return <R>form;
+  return <R> form;
 };
 
 function liftErrors(control: AbstractControl): ValidationErrors | null {
-  if (control instanceof UntypedFormControl) {
+  if (control instanceof FormControl) {
     return null;
   } else {
-    const allControls = control instanceof UntypedFormGroup ?
+    const allControls = control instanceof FormGroup ?
       Object.values(control.controls) :
-      control instanceof UntypedFormArray ?
+      control instanceof FormArray ?
         control.controls :
         [];
     const invalidControls = allControls.filter(control => control.status === 'INVALID');
@@ -153,15 +150,15 @@ function liftErrors(control: AbstractControl): ValidationErrors | null {
           addValidationErrors(current.errors, accumulator);
         };
         return accumulator;
-      }, <ValidationErrors>{}
+      }, <ValidationErrors> {}
     );
   }
 }
 
 export function liftValidationErrors(control: AbstractControl): ValidationErrors | null {
-  const allControls = control instanceof UntypedFormGroup ?
+  const allControls = control instanceof FormGroup ?
     Object.values(control.controls) :
-    control instanceof UntypedFormArray ?
+    control instanceof FormArray ?
       control.controls :
       [];
   const invalidControls = allControls.filter(control => control.status === 'INVALID');
@@ -175,13 +172,13 @@ export function liftValidationErrors(control: AbstractControl): ValidationErrors
         addValidationErrors(innerErrors, accumulator);
       };
       return accumulator;
-    }, <ValidationErrors>{}
+    }, <ValidationErrors> {}
   );
   return Object.values(errors).length === 0 ? null : errors;
 };
 
 function addValidationErrors(additionErrors: ValidationErrors, currentErrors: ValidationErrors) {
   Object.entries(additionErrors).forEach(
-    entry => currentErrors[entry[0]] = entry[1]
+    entry => currentErrors[ entry[ 0 ] ] = entry[ 1 ]
   );
 }
