@@ -98,17 +98,21 @@ function makeNewMainFormValidatorsMap<T extends ValidatorFn[] | AsyncValidatorFn
   };
 }
 
-export function makeForm<T,
-  R extends (
-    T extends Array<infer U> ? FormArray<
-      U extends Array<any> ? FormArray<AbstractControl<U, U>> :
-      U extends string | number | boolean | symbol | null | undefined ? FormControl<U | null> : FormGroup<{ [ KU in keyof U ]: AbstractControl<U[ KU ], U[ KU ]>; }>
-    > : T extends string | number | boolean | symbol | null | undefined ? FormControl<T | null> : FormGroup<{ [ K in keyof T ]: AbstractControl<T[ K ], T[ K ]>; }>
-  )>(
-    source: T,
-    keysValidator?: Map<string, ValidatorFn[] | null>,
-    asyncKeysValidator?: Map<string, AsyncValidatorFn[] | null>,
-): R {
+export function makeForm<T>(
+  source: T,
+  keysValidator?: Map<string, ValidatorFn[] | null>,
+  asyncKeysValidator?: Map<string, AsyncValidatorFn[] | null>,
+): T extends Array<infer U> ?
+  FormArray<
+    U extends Array<any> ?
+    FormArray<AbstractControl<U, U>> :
+    U extends string | number | boolean | symbol | null | undefined ?
+    FormControl<U | null> :
+    FormGroup<{ [ KU in keyof U ]: AbstractControl<U[ KU ], U[ KU ]>; }>
+  >:
+  T extends string | number | boolean | symbol | null | undefined ?
+  FormControl<T | null> :
+  FormGroup<{ [ K in keyof T ]: AbstractControl<T[ K ], T[ K ]>; }> {
   const form = !!source && (typeof source === 'object' || typeof source === 'function') ?
     source instanceof Array<infer U> ?
       new FormArray(
@@ -131,7 +135,16 @@ export function makeForm<T,
       getValidatorsOrNull('mainFormValidators', keysValidator, false),
       getValidatorsOrNull('mainFormValidators', asyncKeysValidator, false)
     );
-  return <R> form;
+  return <T extends Array<infer U> ?
+    FormArray<
+      U extends Array<any> ?
+      FormArray<AbstractControl<U, U>> :
+      U extends string | number | boolean | symbol | null | undefined ? FormControl<U | null> :
+      FormGroup<{ [ KU in keyof U ]: AbstractControl<U[ KU ], U[ KU ]>; }>
+    > :
+    T extends string | number | boolean | symbol | null | undefined ?
+    FormControl<T | null> :
+    FormGroup<{ [ K in keyof T ]: AbstractControl<T[ K ], T[ K ]>; }>> form;
 };
 
 function liftErrors(control: AbstractControl): ValidationErrors | null {

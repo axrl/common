@@ -71,7 +71,7 @@ function makeNewMainFormValidatorsMap(key, oldMap) {
 }
 function makeForm(source, keysValidator, asyncKeysValidator) {
     const form = !!source && (typeof source === 'object' || typeof source === 'function') ?
-        source instanceof Array ?
+        source instanceof (Array) ?
             new FormArray(source.map(item => {
                 const itemForm = makeForm(item, makeNewMainFormValidatorsMap('mainFormValidatorsItems', keysValidator), makeNewMainFormValidatorsMap('mainFormValidatorsItems', asyncKeysValidator));
                 return itemForm;
