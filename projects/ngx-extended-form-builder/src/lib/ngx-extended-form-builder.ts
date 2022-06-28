@@ -1,6 +1,23 @@
 import { FormGroup, FormArray, FormControl } from "@angular/forms";
-import type { ValidatorFn, ValidationErrors, AbstractControl, AsyncValidatorFn } from "@angular/forms";
+import type { ValidatorFn, ValidationErrors, AsyncValidatorFn, AbstractControl } from "@angular/forms";
 import { Observable } from "rxjs";
+
+type ArrayElement<T> = T extends Array<infer U> ? U : never;
+
+type ScanFormType<T> = T extends FormGroup<infer U> ?
+  ScanFormType<U> :
+  T extends FormArray<infer U> ?
+  ScanFormType<U> :
+  T extends FormControl<infer U> ?
+  ScanFormType<U> :
+  T extends Array<infer U> ?
+  FormArray<ScanFormType<U>> :
+  T extends string | number | boolean | symbol | null | undefined ?
+  FormControl<T | null> : FormGroup<{ [ K in keyof T ]: ScanFormType<T[ K ]>; }>;
+
+type FormGroupType<T> = FormGroup<{ [ K in keyof T ]: ScanFormType<T[ K ]>; }>;
+
+type InnerType<T, K extends keyof T> = T[ K ];
 
 function getValidatorsOrNull<T extends ValidatorFn[] | AsyncValidatorFn[] | null>(
   key: string, keysValidator?: Map<string, T>, addLift: boolean = false
@@ -23,29 +40,33 @@ function makeFormGroup<T>(
   internalKey: string,
   keysValidator?: Map<string, ValidatorFn[] | null>,
   asyncKeysValidator?: Map<string, AsyncValidatorFn[] | null>
-): FormGroup<{ [ K in keyof T ]: AbstractControl<T[ K ], T[ K ]>; }> {
-  return source instanceof FormGroup ? source : Object.entries(source).reduce(
-    (accumulator: FormGroup, entry: [ string, unknown ]) => {
-      const key = entry[ 0 ];
-      const value = entry[ 1 ];
-      if (!(value instanceof Observable)) {
-        accumulator.addControl(
-          key,
-          !!value && value instanceof FormControl || value instanceof FormGroup || value instanceof FormArray ?
-            value :
-            makeForm(
-              value,
-              makeNewMainFormValidatorsMap(key, keysValidator),
-              makeNewMainFormValidatorsMap(key, asyncKeysValidator),
-            )
-        );
-      };
-      return accumulator;
-    }, new FormGroup({},
-      getValidatorsOrNull(internalKey, keysValidator, true),
-      getValidatorsOrNull(internalKey, asyncKeysValidator, false)
-    )
-  );
+): FormGroupType<T> {
+  return source instanceof FormGroup<{ [ K in keyof T ]: ScanFormType<T[ K ]>; }> ?
+    source :
+    (<[ string & keyof T, InnerType<T, string & keyof T> ][]> Object.entries(source)).reduce(
+      (accumulator: FormGroup, entry: [ string & keyof T, InnerType<T, string & keyof T> ]) => {
+        const key = entry[ 0 ];
+        const value = entry[ 1 ];
+        if (!(value instanceof Observable)) {
+          accumulator.addControl(
+            key,
+            !!value && (
+              value instanceof FormGroup || value instanceof FormArray || value instanceof FormControl<InnerType<T, string & keyof T> | null>
+            ) ?
+              <ScanFormType<InnerType<T, string & keyof T>>> <unknown> value :
+              makeForm<InnerType<T, string & keyof T>>(
+                value,
+                makeNewMainFormValidatorsMap(key, keysValidator),
+                makeNewMainFormValidatorsMap(key, asyncKeysValidator),
+              )
+          );
+        };
+        return <FormGroupType<T>> accumulator;
+      }, new FormGroup<{ [ K in keyof T ]: ScanFormType<T[ K ]>; }>(<{ [ K in keyof T ]: ScanFormType<T[ K ]>; }> {},
+        getValidatorsOrNull(internalKey, keysValidator, true),
+        getValidatorsOrNull(internalKey, asyncKeysValidator, false)
+      )
+    );
 }
 
 function makeNewMainFormValidatorsMap<T extends ValidatorFn[] | AsyncValidatorFn[] | null>(
@@ -102,22 +123,12 @@ export function makeForm<T>(
   source: T,
   keysValidator?: Map<string, ValidatorFn[] | null>,
   asyncKeysValidator?: Map<string, AsyncValidatorFn[] | null>,
-): T extends Array<infer U> ?
-  FormArray<
-    U extends Array<any> ?
-    FormArray<AbstractControl<U, U>> :
-    U extends string | number | boolean | symbol | null | undefined ?
-    FormControl<U | null> :
-    FormGroup<{ [ KU in keyof U ]: AbstractControl<U[ KU ], U[ KU ]>; }>
-  >:
-  T extends string | number | boolean | symbol | null | undefined ?
-  FormControl<T | null> :
-  FormGroup<{ [ K in keyof T ]: AbstractControl<T[ K ], T[ K ]>; }> {
+): ScanFormType<T> {
   const form = !!source && (typeof source === 'object' || typeof source === 'function') ?
-    source instanceof Array<infer U> ?
+    source instanceof Array<ArrayElement<T>> ?
       new FormArray(
         source.map(
-          item => {
+          (item: ArrayElement<T>) => {
             const itemForm = makeForm(
               item,
               makeNewMainFormValidatorsMap('mainFormValidatorsItems', keysValidator),
@@ -135,16 +146,7 @@ export function makeForm<T>(
       getValidatorsOrNull('mainFormValidators', keysValidator, false),
       getValidatorsOrNull('mainFormValidators', asyncKeysValidator, false)
     );
-  return <T extends Array<infer U> ?
-    FormArray<
-      U extends Array<any> ?
-      FormArray<AbstractControl<U, U>> :
-      U extends string | number | boolean | symbol | null | undefined ? FormControl<U | null> :
-      FormGroup<{ [ KU in keyof U ]: AbstractControl<U[ KU ], U[ KU ]>; }>
-    > :
-    T extends string | number | boolean | symbol | null | undefined ?
-    FormControl<T | null> :
-    FormGroup<{ [ K in keyof T ]: AbstractControl<T[ K ], T[ K ]>; }>> form;
+  return <ScanFormType<T>> form;
 };
 
 function liftErrors(control: AbstractControl): ValidationErrors | null {

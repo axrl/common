@@ -1,4 +1,4 @@
-import { FormGroup, FormControl, FormArray } from '@angular/forms';
+import { FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 
 function getValidatorsOrNull(key, keysValidator, addLift = false) {
@@ -18,17 +18,19 @@ function getValidatorsOrNull(key, keysValidator, addLift = false) {
     ;
 }
 function makeFormGroup(source, internalKey, keysValidator, asyncKeysValidator) {
-    return source instanceof FormGroup ? source : Object.entries(source).reduce((accumulator, entry) => {
-        const key = entry[0];
-        const value = entry[1];
-        if (!(value instanceof Observable)) {
-            accumulator.addControl(key, !!value && value instanceof FormControl || value instanceof FormGroup || value instanceof FormArray ?
-                value :
-                makeForm(value, makeNewMainFormValidatorsMap(key, keysValidator), makeNewMainFormValidatorsMap(key, asyncKeysValidator)));
-        }
-        ;
-        return accumulator;
-    }, new FormGroup({}, getValidatorsOrNull(internalKey, keysValidator, true), getValidatorsOrNull(internalKey, asyncKeysValidator, false)));
+    return source instanceof (FormGroup) ?
+        source :
+        Object.entries(source).reduce((accumulator, entry) => {
+            const key = entry[0];
+            const value = entry[1];
+            if (!(value instanceof Observable)) {
+                accumulator.addControl(key, !!value && (value instanceof FormGroup || value instanceof FormArray || value instanceof (FormControl)) ?
+                    value :
+                    makeForm(value, makeNewMainFormValidatorsMap(key, keysValidator), makeNewMainFormValidatorsMap(key, asyncKeysValidator)));
+            }
+            ;
+            return accumulator;
+        }, new FormGroup({}, getValidatorsOrNull(internalKey, keysValidator, true), getValidatorsOrNull(internalKey, asyncKeysValidator, false)));
 }
 function makeNewMainFormValidatorsMap(key, oldMap) {
     if (!oldMap || key === 'mainFormValidators' || key === 'mainFormValidatorsItems') {
@@ -72,7 +74,7 @@ function makeNewMainFormValidatorsMap(key, oldMap) {
 function makeForm(source, keysValidator, asyncKeysValidator) {
     const form = !!source && (typeof source === 'object' || typeof source === 'function') ?
         source instanceof (Array) ?
-            new FormArray(source.map(item => {
+            new FormArray(source.map((item) => {
                 const itemForm = makeForm(item, makeNewMainFormValidatorsMap('mainFormValidatorsItems', keysValidator), makeNewMainFormValidatorsMap('mainFormValidatorsItems', asyncKeysValidator));
                 return itemForm;
             }), getValidatorsOrNull('mainFormValidators', keysValidator, true), getValidatorsOrNull('mainFormValidators', asyncKeysValidator, false)) :

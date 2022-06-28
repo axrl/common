@@ -1,8 +1,8 @@
 import { FormGroup, FormArray, FormControl } from "@angular/forms";
-import type { ValidatorFn, ValidationErrors, AbstractControl, AsyncValidatorFn } from "@angular/forms";
-export declare function makeForm<T>(source: T, keysValidator?: Map<string, ValidatorFn[] | null>, asyncKeysValidator?: Map<string, AsyncValidatorFn[] | null>): T extends Array<infer U> ? FormArray<U extends Array<any> ? FormArray<AbstractControl<U, U>> : U extends string | number | boolean | symbol | null | undefined ? FormControl<U | null> : FormGroup<{
-    [KU in keyof U]: AbstractControl<U[KU], U[KU]>;
-}>> : T extends string | number | boolean | symbol | null | undefined ? FormControl<T | null> : FormGroup<{
-    [K in keyof T]: AbstractControl<T[K], T[K]>;
+import type { ValidatorFn, ValidationErrors, AsyncValidatorFn, AbstractControl } from "@angular/forms";
+declare type ScanFormType<T> = T extends FormGroup<infer U> ? ScanFormType<U> : T extends FormArray<infer U> ? ScanFormType<U> : T extends FormControl<infer U> ? ScanFormType<U> : T extends Array<infer U> ? FormArray<ScanFormType<U>> : T extends string | number | boolean | symbol | null | undefined ? FormControl<T | null> : FormGroup<{
+    [K in keyof T]: ScanFormType<T[K]>;
 }>;
+export declare function makeForm<T>(source: T, keysValidator?: Map<string, ValidatorFn[] | null>, asyncKeysValidator?: Map<string, AsyncValidatorFn[] | null>): ScanFormType<T>;
 export declare function liftValidationErrors(control: AbstractControl): ValidationErrors | null;
+export {};
