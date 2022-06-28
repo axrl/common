@@ -17,6 +17,7 @@
     "build": "ng build -c production",
     "watch": "ng build --watch --configuration development",
     "pub": "node updatePackageVersion.js && ng build -c production && cd dist && npm publish",
+    "local-test": "npm run build && rm -rf ~/Cmk/CodeMark/Cmk.Wex/Spa/node_modules/@axrl/ngx-extended-form-builder/* && cp -rf dist/* ~/Cmk/CodeMark/Cmk.Wex/Spa/node_modules/@axrl/ngx-extended-form-builder",
     "test": "ng test"
   },
   "homepage": "https://github.com/axrl/ngx-extended-form-builder/tree/main/projects/ngx-extended-form-builder",
