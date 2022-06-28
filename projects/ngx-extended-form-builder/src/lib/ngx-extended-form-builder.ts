@@ -5,18 +5,19 @@ import { Observable } from "rxjs";
 type ArrayElement<T> = T extends Array<infer U> ? U : never;
 
 type ScanFormType<T> = T extends FormGroup<infer U> ?
-  ScanFormType<U> :
+  FormGroup<U> :
   T extends FormArray<infer U> ?
-  ScanFormType<U> :
+  FormArray<U> :
   T extends FormControl<infer U> ?
-  ScanFormType<U> :
+  FormControl<U> :
   T extends Array<infer U> ?
   FormArray<ScanFormType<U>> :
   T extends null | undefined ?
   never :
-  T extends (string | number | boolean | symbol) ?
-  FormControl<T | null> :
-  FormGroup<{ [ K in keyof T ]: ScanFormType<T[ K ]>; }>;
+  T extends (string | number | boolean | symbol | null | undefined) ? FormControl<T> :
+  FormGroup<{
+    [ K in keyof T ]: ScanFormType<T[ K ]>;
+  }>;
 
 type FormGroupType<T> = FormGroup<{ [ K in keyof T ]: ScanFormType<T[ K ]>; }>;
 
