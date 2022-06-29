@@ -3,8 +3,9 @@ import type { ValidatorFn, ValidationErrors, AsyncValidatorFn, AbstractControl }
 import { Observable } from "rxjs";
 
 type ArrayElement<T> = T extends Array<infer U> ? U : never;
+export type FormGroupType<T> = FormGroup<{ [ K in keyof T ]: ScanFormType<T[ K ]>; }>;
 
-type ScanFormType<T> = T extends FormGroup<infer U> ?
+export type ScanFormType<T> = T extends FormGroup<infer U> ?
   FormGroup<U> :
   T extends FormArray<infer U> ?
   FormArray<U> :
@@ -15,11 +16,8 @@ type ScanFormType<T> = T extends FormGroup<infer U> ?
   T extends null | undefined ?
   never :
   T extends (string | number | boolean | symbol | null | undefined) ? FormControl<T> :
-  FormGroup<{
-    [ K in keyof T ]: ScanFormType<T[ K ]>;
-  }>;
+  FormGroupType<T>;
 
-type FormGroupType<T> = FormGroup<{ [ K in keyof T ]: ScanFormType<T[ K ]>; }>;
 
 type InnerType<T, K extends keyof T> = T[ K ];
 
