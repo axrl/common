@@ -2,6 +2,28 @@ import { FormGroup, FormArray, FormControl } from "@angular/forms";
 import type { ValidatorFn, ValidationErrors, AsyncValidatorFn, AbstractControl } from "@angular/forms";
 import { Observable } from "rxjs";
 
+export type ControlsNames<T> = T extends (string | number | boolean | symbol | null | undefined) ?
+  'mainFormValidatorsItems' :
+  T extends Array<infer U> ?
+  'mainFormValidatorsItems' | 'mainFormValidators' | PropertyesKeys<U> :
+  PropertyesKeys<T>;
+
+type PropertyesKeys<T> = T extends undefined | null ?
+  never :
+  T extends (string | number | boolean | symbol) ?
+  `${ T & string }` : {
+    [ K in keyof T ]: K extends string ?
+    T extends undefined | null ?
+    never :
+    T[ K ] extends (string | number | boolean | symbol) ?
+    `${ K }` :
+    T[ K ] extends Array<infer U> ?
+    `${ K }` | `${ K }.${ PropertyesKeys<U> }` :
+    `${ K }` | `${ K }.${ PropertyesKeys<T[ K ]> }` :
+    never
+  }[ keyof T ];
+
+
 type ArrayElement<T> = T extends Array<infer U> ? U : never;
 export type FormGroupType<T> = FormGroup<{ [ K in (keyof T & string) ]: ScanFormType<T[ K ]>; }>;
 
@@ -15,9 +37,8 @@ export type ScanFormType<T> = T extends FormGroup<infer U> ?
   FormArray<ScanFormType<U>> :
   T extends null | undefined ?
   never :
-  T extends (string | number | boolean | symbol | null | undefined) ? FormControl<T> :
+  T extends (string | number | boolean | symbol | null | undefined) ? FormControl<T | null> :
   FormGroupType<T>;
-
 
 type InnerType<T, K extends keyof T> = T[ K ];
 
