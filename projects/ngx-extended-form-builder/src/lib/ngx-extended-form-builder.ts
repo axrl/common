@@ -3,10 +3,10 @@ import type { ValidatorFn, ValidationErrors, AsyncValidatorFn, AbstractControl }
 import { Observable } from "rxjs";
 
 export type ControlsNames<T> = T extends (string | number | boolean | symbol | null | undefined) ?
-  'mainFormValidatorsItems' :
-  T extends Array<infer U> ?
-  'mainFormValidatorsItems' | 'mainFormValidators' | PropertyesKeys<U> :
-  PropertyesKeys<T>;
+  never : 'mainFormValidators' | (
+    T extends Array<infer U> ? PropertyesKeys<U> :
+    PropertyesKeys<T>
+  );
 
 type PropertyesKeys<T> = T extends undefined | null | number | boolean | symbol ?
   never :
