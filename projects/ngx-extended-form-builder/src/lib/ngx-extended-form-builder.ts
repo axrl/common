@@ -8,21 +8,21 @@ export type ControlsNames<T> = T extends (string | number | boolean | symbol | n
   'mainFormValidatorsItems' | 'mainFormValidators' | PropertyesKeys<U> :
   PropertyesKeys<T>;
 
-type PropertyesKeys<T> = T extends undefined | null ?
+type PropertyesKeys<T> = T extends undefined | null | number | boolean | symbol ?
   never :
-  T extends (string | number | boolean | symbol) ?
-  `${ T & string }` : {
+  T extends string ?
+  T :
+  {
     [ K in keyof T ]: K extends string ?
-    T extends undefined | null ?
+    T[ K ] extends undefined | null ?
     never :
     T[ K ] extends (string | number | boolean | symbol) ?
-    `${ K }` :
+    K :
     T[ K ] extends Array<infer U> ?
-    `${ K }` | `${ K }.${ PropertyesKeys<U> }` :
-    `${ K }` | `${ K }.${ PropertyesKeys<T[ K ]> }` :
+    K | `${ K }.${ PropertyesKeys<U> }` :
+    K | `${ K }.${ PropertyesKeys<T[ K ]> }` :
     never
   }[ keyof T ];
-
 
 type ArrayElement<T> = T extends Array<infer U> ? U : never;
 export type FormGroupType<T> = FormGroup<{ [ K in (keyof T & string) ]: ScanFormType<T[ K ]>; }>;
