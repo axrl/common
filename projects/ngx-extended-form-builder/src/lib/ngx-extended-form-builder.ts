@@ -2,24 +2,23 @@ import { FormGroup, FormArray, FormControl } from "@angular/forms";
 import type { ValidatorFn, ValidationErrors, AsyncValidatorFn, AbstractControl } from "@angular/forms";
 import { Observable } from "rxjs";
 
-export type ControlsNames<T> = T extends (string | number | boolean | symbol | null | undefined) ?
-  never : 'mainFormValidators' | (
-    T extends Array<infer U> ? PropertyesKeys<U> :
-    PropertyesKeys<T>
-  );
+export type ControlsNames<T> = 'mainFormValidators' | PropertyesKeys<T>;
 
 type PropertyesKeys<T> = T extends undefined | null | number | boolean | symbol ?
   never :
   T extends string ?
   T :
+  T extends Array<infer U> ? PropertyesKeys<U> :
   {
-    [ K in keyof T ]: K extends string ?
-    T[ K ] extends undefined | null ?
-    never :
+    [ K in keyof T ]-?: K extends string ?
     T[ K ] extends (string | number | boolean | symbol) ?
     K :
     T[ K ] extends Array<infer U> ?
     K | `${ K }.${ PropertyesKeys<U> }` :
+    T[ K ] extends undefined | null ?
+    K :
+    T[ K ] extends Observable<any> ?
+    never :
     K | `${ K }.${ PropertyesKeys<T[ K ]> }` :
     never
   }[ keyof T ];
@@ -61,8 +60,8 @@ function getValidatorsOrNull<T extends ValidatorFn[] | AsyncValidatorFn[] | null
 function makeFormGroup<T>(
   source: T,
   internalKey: string,
-  keysValidator?: Map<string, ValidatorFn[] | null>,
-  asyncKeysValidator?: Map<string, AsyncValidatorFn[] | null>
+  keysValidator?: Map<ControlsNames<T>, ValidatorFn[] | null>,
+  asyncKeysValidator?: Map<ControlsNames<T>, AsyncValidatorFn[] | null>
 ): FormGroupType<T> {
   return source instanceof FormGroup<{ [ K in keyof T ]: ScanFormType<T[ K ]>; }> ?
     source :
@@ -79,8 +78,8 @@ function makeFormGroup<T>(
               <ScanFormType<InnerType<T, string & keyof T>>> <unknown> value :
               makeForm<InnerType<T, string & keyof T>>(
                 value,
-                makeNewMainFormValidatorsMap(key, keysValidator),
-                makeNewMainFormValidatorsMap(key, asyncKeysValidator),
+                <Map<ControlsNames<InnerType<T, string & keyof T>>, ValidatorFn[] | null>> makeNewMainFormValidatorsMap<ValidatorFn[] | null, T>(key, keysValidator),
+                <Map<ControlsNames<InnerType<T, string & keyof T>>, AsyncValidatorFn[] | null>> makeNewMainFormValidatorsMap<AsyncValidatorFn[] | null, T>(key, asyncKeysValidator),
               )
           );
         };
@@ -92,8 +91,8 @@ function makeFormGroup<T>(
     );
 }
 
-function makeNewMainFormValidatorsMap<T extends ValidatorFn[] | AsyncValidatorFn[] | null>(
-  key: string, oldMap?: Map<string, T>,
+function makeNewMainFormValidatorsMap<T extends ValidatorFn[] | AsyncValidatorFn[] | null, P>(
+  key: string & keyof P, oldMap?: Map<string, T>,
 ): Map<string, T> | undefined {
   if (!oldMap || key === 'mainFormValidators' || key === 'mainFormValidatorsItems') {
     return oldMap;
@@ -144,8 +143,8 @@ function makeNewMainFormValidatorsMap<T extends ValidatorFn[] | AsyncValidatorFn
 
 export function makeForm<T>(
   source: T,
-  keysValidator?: Map<string, ValidatorFn[] | null>,
-  asyncKeysValidator?: Map<string, AsyncValidatorFn[] | null>,
+  keysValidator?: Map<ControlsNames<T>, ValidatorFn[] | null>,
+  asyncKeysValidator?: Map<ControlsNames<T>, AsyncValidatorFn[] | null>,
 ): ScanFormType<T> {
   const form = !!source && (typeof source === 'object' || typeof source === 'function') ?
     source instanceof Array<ArrayElement<T>> ?
@@ -154,8 +153,8 @@ export function makeForm<T>(
           (item: ArrayElement<T>) => {
             const itemForm = makeForm(
               item,
-              makeNewMainFormValidatorsMap('mainFormValidatorsItems', keysValidator),
-              makeNewMainFormValidatorsMap('mainFormValidatorsItems', asyncKeysValidator)
+              <Map<ControlsNames<ArrayElement<T>>, ValidatorFn[] | null>> makeNewMainFormValidatorsMap('mainFormValidatorsItems', keysValidator),
+              <Map<ControlsNames<ArrayElement<T>>, AsyncValidatorFn[] | null>> makeNewMainFormValidatorsMap('mainFormValidatorsItems', asyncKeysValidator)
             );
             return itemForm;
           }),
