@@ -2,23 +2,21 @@ import { FormGroup, FormArray, FormControl } from "@angular/forms";
 import type { ValidatorFn, ValidationErrors, AsyncValidatorFn, AbstractControl } from "@angular/forms";
 import { Observable } from "rxjs";
 
-export type ControlsNames<T> = 'mainFormValidators' | PropertyesKeys<T>;
+export type ControlsNames<T> = 'mainFormValidators' | 'mainFormValidatorsItems' | PropertyesKeys<T>;
 
 type PropertyesKeys<T> = T extends undefined | null | number | boolean | symbol ?
   never :
   T extends string ?
-  T :
-  T extends Array<infer U> ? PropertyesKeys<U> :
-  {
+  T :  {
     [ K in keyof T ]-?: K extends string ?
     T[ K ] extends (string | number | boolean | symbol) ?
     K :
-    T[ K ] extends Array<infer U> ?
-    K | `${ K }.${ PropertyesKeys<U> }` :
     T[ K ] extends undefined | null ?
     K :
     T[ K ] extends Observable<any> ?
     never :
+    T[ K ] extends Array<infer U> ?
+    K | `${ K }Items` | `${ K }.${ PropertyesKeys<U> }` :
     K | `${ K }.${ PropertyesKeys<T[ K ]> }` :
     never
   }[ keyof T ];
