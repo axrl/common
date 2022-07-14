@@ -45,3 +45,4 @@ export class SomeComponent {
 ```
 ## API
 
+См. в [документации.](docs/README.md)

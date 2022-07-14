@@ -24,7 +24,7 @@ function makeFormGroup(source, internalKey, keysValidator, asyncKeysValidator) {
             const key = entry[0];
             const value = entry[1];
             if (!(value instanceof Observable)) {
-                accumulator.addControl(key, !!value && (value instanceof FormGroup || value instanceof FormArray || value instanceof (FormControl)) ?
+                accumulator.addControl(key, !!value && (value instanceof FormGroup || value instanceof FormArray || value instanceof FormControl) ?
                     value :
                     makeForm(value, makeNewMainFormValidatorsMap(key, keysValidator), makeNewMainFormValidatorsMap(key, asyncKeysValidator)));
             }
@@ -71,6 +71,43 @@ function makeNewMainFormValidatorsMap(key, oldMap) {
     }
     ;
 }
+/**
+@function makeForm < T >
+  Фабричная функция для создания Angular Reactive Form.
+В отличие от стандартного FormBuilder - а в пакете @angular/forms, при создании формы из сложных объектов,
+сохраняется вложенность контролов - каждый вложенный объект превращается во вложенную FormGroup,
+  обычные свойства объектов становятся FormControl - ами, а массивы - FormArray - ми.
+При этом создаваемая форма имеет более строгую типизацию.
+
+  ВАЖНО!
+   Чтобы избежать ошибки переполнения стэка вызовов в рекурсивном процессе создания формы, для любых;
+Observable - значений(в т.ч., к примеру, Subject * и EventEmitter) соответствующий элемент формы не создается.
+ * @param source  источник данных типа T для создания формы.
+ * @param keysValidator объект Map с конфигурацией синхронных валидаторов контролов формы.
+ * В качестве ключей могут быть указаны следующие значения:
+ *  PropertyesKeys<T> - строковые ключи в типе T, включая строковые ключи всех вложенных типов, разделенные "." - точкой.
+    Например имеется такой тип:
+    ```ts
+                    interface User {
+                      firstname: string;
+                      lastname: string;
+                      phone:  {
+                        code: string;
+                        number: string;
+                        }
+                      };
+    ```
+    Для формы, которая будет создана из объекта User в конфигурации валидаторов названия контролов можно будет указать так:
+    `lastname` или`phone`, или`phone.code`.
+
+   'mainFormValidators' - специальное значение, являющееся признаком того, что массив валидаторов необходимо
+    назначить самому объекту формы, а не вложеным контролам.
+
+   'mainFormValidatorsItems' - используется только если source является массивом. Специальное значение, являющееся признаком того,
+  что массив валидаторов необходимо назначить для всех элементов массива FormArray.
+ * @param asyncKeysValidator объект Map, аналогичный keysValidator, но для асинхронных валидаторов
+ * @returns объект типизированной формы - FormGroup, FormArray или FormControl в зависимости от типа значения source.
+ */
 function makeForm(source, keysValidator, asyncKeysValidator) {
     const form = !!source && (typeof source === 'object' || typeof source === 'function') ?
         source instanceof (Array) ?

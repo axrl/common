@@ -6,5 +6,30 @@
   },
   "angularCompilerOptions": {
     "compilationMode": "partial"
+  },
+  "typedocOptions": {
+    "entryPoints": [
+      "./src/public-api.ts"
+    ],
+    "out": "docs",
+    "plugin": [
+      "typedoc-plugin-markdown"
+    ],
+    "excludePrivate": true,
+    "categorizeByGroup": false,
+    "exclude": [
+      "**/*+(.spec|.module).ts"
+    ],
+    "disableSources": true,
+    "readme": "none",
+    "emit": "docs",
+    "hideGenerator": true,
+    "cleanOutputDir": true,
+    "sort": "source-order",
+    "hideBreadcrumbs": true,
+    "darkHighlightTheme": "material-darker",
+    "theme": "markdown",
+    "entryPointStrategy": "expand",
+    "pretty": true,
   }
 }
