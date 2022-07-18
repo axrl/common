@@ -6,18 +6,18 @@ import { Observable } from "rxjs";
  * На вход принимает некий тип T, возвращает список только строковых ключей этого типа, при этом значения этих ключей не являются Observable.
  */
 export declare type StringKeys<T> = {
-    [K in keyof T]: K extends string ? T[K] extends Observable<unknown> ? never : K : never;
+    [K in keyof T]: T[K] extends Observable<unknown> ? never : K extends string ? K : never;
 }[keyof T];
 /**
  * Вспомогательный alias-тип ключей в объекте Map, содержащем конфигурацию валидаторов контролов.
  */
-export declare type ControlsNames<T> = 'mainFormValidators' | 'mainFormValidatorsItems' | PropertyesKeys<T>;
+export declare type ControlsNames<T> = T extends Array<infer U> ? 'main' | 'mainItems' | `mainItems.${PropertyesKeys<U>}` : T extends Observable<unknown> ? never : 'main' | PropertyesKeys<T>;
 /**
  * Вспомогательная утилита типа.
  * На вход принимает некий тип T, возвращает только строковые ключи этого типа.
  */
-export declare type PropertyesKeys<T> = T extends undefined | null | number | boolean | symbol | Observable<unknown> ? never : T extends string ? T : {
-    [K in keyof T]-?: K extends string ? T[K] extends (string | number | boolean | symbol | undefined | null) ? K : T[K] extends Observable<unknown> ? never : T[K] extends Array<infer U> ? K | `${K}Items` | `${K}.${PropertyesKeys<U>}` : K | `${K}.${PropertyesKeys<T[K]>}` : never;
+export declare type PropertyesKeys<T> = T extends undefined | null | number | boolean | symbol | Observable<unknown> ? never : T extends string ? T : T extends Array<infer U> ? PropertyesKeys<U> : {
+    [K in keyof T]-?: K extends string ? T[K] extends (string | number | boolean | symbol | undefined | null) ? K : T[K] extends Observable<unknown> ? never : T[K] extends Array<infer U> ? `${K}Items.${PropertyesKeys<U>}` | `${K}Items` | K : `${K}.${PropertyesKeys<T[K]>}` | K : never;
 }[keyof T];
 /**
  * Упрощенная запись для типа объекта FormGroup, образованного из типа T.
@@ -33,9 +33,9 @@ export declare type FormGroupType<T> = FormGroup<{
  * Observable-значений ( в т.ч., к примеру, Subject  * и EventEmitter) соответствующий элемент формы не создается.
  * ScanFormType это также учитывает.
  */
-export declare type ScanFormType<T> = T extends FormGroup | FormControl | FormArray ? T : T extends null | undefined ? never : T extends Array<infer U> ? FormArray<ScanFormType<U>> : T extends (string | number | boolean | symbol | null | undefined) ? FormControl<T> : FormGroupType<T>;
+export declare type ScanFormType<T> = T extends AbstractControl<unknown, unknown> ? T : T extends null | undefined ? never : T extends Array<infer U> ? FormArray<ScanFormType<U>> : T extends (string | number | boolean | symbol | null | undefined) ? FormControl<T> : FormGroupType<T>;
 /**
-@function makeForm < T >
+@function makeForm<T>
   Фабричная функция для создания Angular Reactive Form.
 В отличие от стандартного FormBuilder - а в пакете @angular/forms, при создании формы из сложных объектов,
 сохраняется вложенность контролов - каждый вложенный объект превращается во вложенную FormGroup,
@@ -63,13 +63,13 @@ Observable - значений(в т.ч., к примеру, Subject * и EventEm
     Для формы, которая будет создана из объекта User в конфигурации валидаторов названия контролов можно будет указать так:
     `lastname` или`phone`, или`phone.code`.
 
-   'mainFormValidators' - специальное значение, являющееся признаком того, что массив валидаторов необходимо
+   'main' - специальное значение, являющееся признаком того, что массив валидаторов необходимо
     назначить самому объекту формы, а не вложеным контролам.
 
-   'mainFormValidatorsItems' - используется только если source является массивом. Специальное значение, являющееся признаком того,
+   'mainItems' - используется только если source является массивом. Специальное значение, являющееся признаком того,
   что массив валидаторов необходимо назначить для всех элементов массива FormArray.
  * @param asyncKeysValidator объект Map, аналогичный keysValidator, но для асинхронных валидаторов
  * @returns объект типизированной формы - FormGroup, FormArray или FormControl в зависимости от типа значения source.
  */
-export declare function makeForm<T, E = T extends Array<infer U> ? U : never>(source: T, keysValidator?: Map<ControlsNames<T>, ValidatorFn[] | null>, asyncKeysValidator?: Map<ControlsNames<T>, AsyncValidatorFn[] | null>): ScanFormType<T>;
+export declare function makeForm<T>(source: T, keysValidator?: Map<ControlsNames<T>, ValidatorFn[] | null>, asyncKeysValidator?: Map<ControlsNames<T>, AsyncValidatorFn[] | null>): ScanFormType<T>;
 export declare function liftValidationErrors(control: AbstractControl): ValidationErrors | null;

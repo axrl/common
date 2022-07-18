@@ -6,13 +6,21 @@ import { Observable } from "rxjs";
  * Вспомогательная утилита типа.
  * На вход принимает некий тип T, возвращает список только строковых ключей этого типа, при этом значения этих ключей не являются Observable.
  */
-export type StringKeys<T> = { [ K in keyof T ]: K extends string ? T[ K ] extends Observable<unknown> ? never : K : never; }[ keyof T ];
+export type StringKeys<T> = {
+  [ K in keyof T ]: T[ K ] extends Observable<unknown> ?
+  never :
+  K extends string ?
+  K : never;
+}[ keyof T ];
 
 /**
  * Вспомогательный alias-тип ключей в объекте Map, содержащем конфигурацию валидаторов контролов.
  */
-export type ControlsNames<T> = 'mainFormValidators' | 'mainFormValidatorsItems' | PropertyesKeys<T>;
-
+export type ControlsNames<T> = T extends Array<infer U> ?
+  'main' | 'mainItems' | `mainItems.${ PropertyesKeys<U> }` :
+  T extends Observable<unknown> ?
+  never :
+  'main' | PropertyesKeys<T>;
 /**
  * Вспомогательная утилита типа.
  * На вход принимает некий тип T, возвращает только строковые ключи этого типа.
@@ -20,18 +28,18 @@ export type ControlsNames<T> = 'mainFormValidators' | 'mainFormValidatorsItems' 
 export type PropertyesKeys<T> = T extends undefined | null | number | boolean | symbol | Observable<unknown> ?
   never :
   T extends string ?
-  T : {
+  T : T extends Array<infer U> ?
+  PropertyesKeys<U> :
+  {
     [ K in keyof T ]-?: K extends string ?
     T[ K ] extends (string | number | boolean | symbol | undefined | null) ?
     K :
     T[ K ] extends Observable<unknown> ?
     never :
     T[ K ] extends Array<infer U> ?
-    K | `${ K }Items` | `${ K }.${ PropertyesKeys<U> }` :
-    K | `${ K }.${ PropertyesKeys<T[ K ]> }` :
-    never
+    `${ K }Items.${ PropertyesKeys<U> }` | `${ K }Items` | K :
+    `${ K }.${ PropertyesKeys<T[ K ]> }` | K : never
   }[ keyof T ];
-
 /**
  * Упрощенная запись для типа объекта FormGroup, образованного из типа T.
  */
@@ -45,7 +53,7 @@ export type FormGroupType<T> = FormGroup<{ [ K in StringKeys<T> ]: ScanFormType<
  * Observable-значений ( в т.ч., к примеру, Subject  * и EventEmitter) соответствующий элемент формы не создается.
  * ScanFormType это также учитывает.
  */
-export type ScanFormType<T> = T extends FormGroup | FormControl | FormArray ?
+export type ScanFormType<T> = T extends AbstractControl<unknown, unknown> ?
   T :
   T extends null | undefined ?
   never :
@@ -89,11 +97,11 @@ function makeFormGroup<T>(
             !!value && (
               value instanceof FormGroup || value instanceof FormArray || value instanceof FormControl
             ) ?
-              value :
+              <ScanFormType<T[ StringKeys<T> ]>> value :
               makeForm<T[ StringKeys<T> ]>(
                 value,
-                <Map<ControlsNames<T[ StringKeys<T> ]>, ValidatorFn[] | null>> makeNewMainFormValidatorsMap<ValidatorFn[] | null, T>(key, keysValidator),
-                <Map<ControlsNames<T[ StringKeys<T> ]>, AsyncValidatorFn[] | null>> makeNewMainFormValidatorsMap<AsyncValidatorFn[] | null, T>(key, asyncKeysValidator),
+                <Map<ControlsNames<T[ StringKeys<T> ]>, ValidatorFn[] | null>> makeNewmainMap<ValidatorFn[] | null, T>(key, keysValidator),
+                <Map<ControlsNames<T[ StringKeys<T> ]>, AsyncValidatorFn[] | null>> makeNewmainMap<AsyncValidatorFn[] | null, T>(key, asyncKeysValidator),
               )
           );
         };
@@ -105,10 +113,10 @@ function makeFormGroup<T>(
     );
 }
 
-function makeNewMainFormValidatorsMap<T extends ValidatorFn[] | AsyncValidatorFn[] | null, P>(
+function makeNewmainMap<T extends ValidatorFn[] | AsyncValidatorFn[] | null, P>(
   key: StringKeys<P>, oldMap?: Map<string, T>,
 ): Map<string, T> | undefined {
-  if (!oldMap || key === 'mainFormValidators' || key === 'mainFormValidatorsItems') {
+  if (!oldMap || key === 'main' || key === 'mainItems') {
     return oldMap;
   } else {
     if (!oldMap.has(key) && !oldMap.has(`${ key }Items`)) {
@@ -116,31 +124,31 @@ function makeNewMainFormValidatorsMap<T extends ValidatorFn[] | AsyncValidatorFn
         Array.from(
           oldMap.entries()
         ).filter(
-          item => item[ 0 ] !== 'mainFormValidators' && item[ 0 ] !== 'mainFormValidatorsItems'
+          item => item[ 0 ] !== 'main' && item[ 0 ] !== 'mainItems'
         ).map(
           ([ entryKey, entryValue ]) => [ entryKey.startsWith(`${ key }.`) ? entryKey.replace(`${ key }.`, '') : entryKey, entryValue ]
         )
       );
     } else {
-      const filterPredicate = oldMap.has('mainFormValidators') ?
-        oldMap.has('mainFormValidatorsItems') ?
-          (item: [ string, T ]) => item[ 0 ] !== key && item[ 0 ] !== 'mainFormValidators' && item[ 0 ] !== 'mainFormValidatorsItems' :
-          (item: [ string, T ]) => item[ 0 ] !== key && item[ 0 ] !== 'mainFormValidators' :
-        oldMap.has('mainFormValidatorsItems') ?
-          (item: [ string, T ]) => item[ 0 ] !== key && item[ 0 ] !== 'mainFormValidatorsItems' :
+      const filterPredicate = oldMap.has('main') ?
+        oldMap.has('mainItems') ?
+          (item: [ string, T ]) => item[ 0 ] !== key && item[ 0 ] !== 'main' && item[ 0 ] !== 'mainItems' :
+          (item: [ string, T ]) => item[ 0 ] !== key && item[ 0 ] !== 'main' :
+        oldMap.has('mainItems') ?
+          (item: [ string, T ]) => item[ 0 ] !== key && item[ 0 ] !== 'mainItems' :
           (item: [ string, T ]) => item[ 0 ] !== key;
       const newMainValidatorsArray: [ string, T ][] = oldMap.has(key) ?
         oldMap.has(`${ key }Items`) ?
           [
-            [ 'mainFormValidators', oldMap.get(key)! ],
-            [ 'mainFormValidatorsItems', oldMap.get(`${ key }Items`)! ]
+            [ 'main', oldMap.get(key)! ],
+            [ 'mainItems', oldMap.get(`${ key }Items`)! ]
           ] :
           [
-            [ 'mainFormValidators', oldMap.get(key)! ],
+            [ 'main', oldMap.get(key)! ],
           ] :
         oldMap.has(`${ key }Items`) ?
           [
-            [ 'mainFormValidatorsItems', oldMap.get(`${ key }Items`)! ]
+            [ 'mainItems', oldMap.get(`${ key }Items`)! ]
           ] :
           [];
       return new Map<string, T>([
@@ -156,7 +164,7 @@ function makeNewMainFormValidatorsMap<T extends ValidatorFn[] | AsyncValidatorFn
 }
 
 /**
-@function makeForm < T >
+@function makeForm<T>
   Фабричная функция для создания Angular Reactive Form.
 В отличие от стандартного FormBuilder - а в пакете @angular/forms, при создании формы из сложных объектов,
 сохраняется вложенность контролов - каждый вложенный объект превращается во вложенную FormGroup,
@@ -184,40 +192,40 @@ Observable - значений(в т.ч., к примеру, Subject * и EventEm
     Для формы, которая будет создана из объекта User в конфигурации валидаторов названия контролов можно будет указать так:
     `lastname` или`phone`, или`phone.code`.
 
-   'mainFormValidators' - специальное значение, являющееся признаком того, что массив валидаторов необходимо
+   'main' - специальное значение, являющееся признаком того, что массив валидаторов необходимо
     назначить самому объекту формы, а не вложеным контролам.
 
-   'mainFormValidatorsItems' - используется только если source является массивом. Специальное значение, являющееся признаком того,
+   'mainItems' - используется только если source является массивом. Специальное значение, являющееся признаком того,
   что массив валидаторов необходимо назначить для всех элементов массива FormArray.
  * @param asyncKeysValidator объект Map, аналогичный keysValidator, но для асинхронных валидаторов
  * @returns объект типизированной формы - FormGroup, FormArray или FormControl в зависимости от типа значения source.
  */
-export function makeForm<T, E = T extends Array<infer U> ? U : never>(
+export function makeForm<T>(
   source: T,
   keysValidator?: Map<ControlsNames<T>, ValidatorFn[] | null>,
   asyncKeysValidator?: Map<ControlsNames<T>, AsyncValidatorFn[] | null>,
 ): ScanFormType<T> {
   const form = !!source && (typeof source === 'object' || typeof source === 'function') ?
-    source instanceof Array<E> ?
+    source instanceof Array<unknown> ?
       new FormArray(
         source.map(
-          (item: E) => {
+          (item: unknown) => {
             const itemForm = makeForm(
               item,
-              <Map<ControlsNames<E>, ValidatorFn[] | null>> makeNewMainFormValidatorsMap('mainFormValidatorsItems', keysValidator),
-              <Map<ControlsNames<E>, AsyncValidatorFn[] | null>> makeNewMainFormValidatorsMap('mainFormValidatorsItems', asyncKeysValidator)
+              <Map<ControlsNames<unknown>, ValidatorFn[] | null>> makeNewmainMap('mainItems', keysValidator),
+              <Map<ControlsNames<unknown>, AsyncValidatorFn[] | null>> makeNewmainMap('mainItems', asyncKeysValidator)
             );
             return itemForm;
           }),
-        getValidatorsOrNull('mainFormValidators', keysValidator, true),
-        getValidatorsOrNull('mainFormValidators', asyncKeysValidator, false)
+        getValidatorsOrNull('main', keysValidator, true),
+        getValidatorsOrNull('main', asyncKeysValidator, false)
       ) :
-      makeFormGroup<T>(source, 'mainFormValidators', keysValidator, asyncKeysValidator) :
+      makeFormGroup<T>(source, 'main', keysValidator, asyncKeysValidator) :
     new FormControl<T | null>(
       !!source && typeof source == 'string' && (source.includes('0001-01-01') || source.includes('1970-01-01')) ? null : source
       ,
-      getValidatorsOrNull('mainFormValidators', keysValidator, false),
-      getValidatorsOrNull('mainFormValidators', asyncKeysValidator, false)
+      getValidatorsOrNull('main', keysValidator, false),
+      getValidatorsOrNull('main', asyncKeysValidator, false)
     );
   return <ScanFormType<T>> form;
 };

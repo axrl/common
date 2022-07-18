@@ -26,40 +26,40 @@ function makeFormGroup(source, internalKey, keysValidator, asyncKeysValidator) {
             if (!(value instanceof Observable)) {
                 accumulator.addControl(key, !!value && (value instanceof FormGroup || value instanceof FormArray || value instanceof FormControl) ?
                     value :
-                    makeForm(value, makeNewMainFormValidatorsMap(key, keysValidator), makeNewMainFormValidatorsMap(key, asyncKeysValidator)));
+                    makeForm(value, makeNewmainMap(key, keysValidator), makeNewmainMap(key, asyncKeysValidator)));
             }
             ;
             return accumulator;
         }, new FormGroup({}, getValidatorsOrNull(internalKey, keysValidator, true), getValidatorsOrNull(internalKey, asyncKeysValidator, false)));
 }
-function makeNewMainFormValidatorsMap(key, oldMap) {
-    if (!oldMap || key === 'mainFormValidators' || key === 'mainFormValidatorsItems') {
+function makeNewmainMap(key, oldMap) {
+    if (!oldMap || key === 'main' || key === 'mainItems') {
         return oldMap;
     }
     else {
         if (!oldMap.has(key) && !oldMap.has(`${key}Items`)) {
-            return new Map(Array.from(oldMap.entries()).filter(item => item[0] !== 'mainFormValidators' && item[0] !== 'mainFormValidatorsItems').map(([entryKey, entryValue]) => [entryKey.startsWith(`${key}.`) ? entryKey.replace(`${key}.`, '') : entryKey, entryValue]));
+            return new Map(Array.from(oldMap.entries()).filter(item => item[0] !== 'main' && item[0] !== 'mainItems').map(([entryKey, entryValue]) => [entryKey.startsWith(`${key}.`) ? entryKey.replace(`${key}.`, '') : entryKey, entryValue]));
         }
         else {
-            const filterPredicate = oldMap.has('mainFormValidators') ?
-                oldMap.has('mainFormValidatorsItems') ?
-                    (item) => item[0] !== key && item[0] !== 'mainFormValidators' && item[0] !== 'mainFormValidatorsItems' :
-                    (item) => item[0] !== key && item[0] !== 'mainFormValidators' :
-                oldMap.has('mainFormValidatorsItems') ?
-                    (item) => item[0] !== key && item[0] !== 'mainFormValidatorsItems' :
+            const filterPredicate = oldMap.has('main') ?
+                oldMap.has('mainItems') ?
+                    (item) => item[0] !== key && item[0] !== 'main' && item[0] !== 'mainItems' :
+                    (item) => item[0] !== key && item[0] !== 'main' :
+                oldMap.has('mainItems') ?
+                    (item) => item[0] !== key && item[0] !== 'mainItems' :
                     (item) => item[0] !== key;
             const newMainValidatorsArray = oldMap.has(key) ?
                 oldMap.has(`${key}Items`) ?
                     [
-                        ['mainFormValidators', oldMap.get(key)],
-                        ['mainFormValidatorsItems', oldMap.get(`${key}Items`)]
+                        ['main', oldMap.get(key)],
+                        ['mainItems', oldMap.get(`${key}Items`)]
                     ] :
                     [
-                        ['mainFormValidators', oldMap.get(key)],
+                        ['main', oldMap.get(key)],
                     ] :
                 oldMap.has(`${key}Items`) ?
                     [
-                        ['mainFormValidatorsItems', oldMap.get(`${key}Items`)]
+                        ['mainItems', oldMap.get(`${key}Items`)]
                     ] :
                     [];
             return new Map([
@@ -72,7 +72,7 @@ function makeNewMainFormValidatorsMap(key, oldMap) {
     ;
 }
 /**
-@function makeForm < T >
+@function makeForm<T>
   Фабричная функция для создания Angular Reactive Form.
 В отличие от стандартного FormBuilder - а в пакете @angular/forms, при создании формы из сложных объектов,
 сохраняется вложенность контролов - каждый вложенный объект превращается во вложенную FormGroup,
@@ -100,10 +100,10 @@ Observable - значений(в т.ч., к примеру, Subject * и EventEm
     Для формы, которая будет создана из объекта User в конфигурации валидаторов названия контролов можно будет указать так:
     `lastname` или`phone`, или`phone.code`.
 
-   'mainFormValidators' - специальное значение, являющееся признаком того, что массив валидаторов необходимо
+   'main' - специальное значение, являющееся признаком того, что массив валидаторов необходимо
     назначить самому объекту формы, а не вложеным контролам.
 
-   'mainFormValidatorsItems' - используется только если source является массивом. Специальное значение, являющееся признаком того,
+   'mainItems' - используется только если source является массивом. Специальное значение, являющееся признаком того,
   что массив валидаторов необходимо назначить для всех элементов массива FormArray.
  * @param asyncKeysValidator объект Map, аналогичный keysValidator, но для асинхронных валидаторов
  * @returns объект типизированной формы - FormGroup, FormArray или FormControl в зависимости от типа значения source.
@@ -112,11 +112,11 @@ function makeForm(source, keysValidator, asyncKeysValidator) {
     const form = !!source && (typeof source === 'object' || typeof source === 'function') ?
         source instanceof (Array) ?
             new FormArray(source.map((item) => {
-                const itemForm = makeForm(item, makeNewMainFormValidatorsMap('mainFormValidatorsItems', keysValidator), makeNewMainFormValidatorsMap('mainFormValidatorsItems', asyncKeysValidator));
+                const itemForm = makeForm(item, makeNewmainMap('mainItems', keysValidator), makeNewmainMap('mainItems', asyncKeysValidator));
                 return itemForm;
-            }), getValidatorsOrNull('mainFormValidators', keysValidator, true), getValidatorsOrNull('mainFormValidators', asyncKeysValidator, false)) :
-            makeFormGroup(source, 'mainFormValidators', keysValidator, asyncKeysValidator) :
-        new FormControl(!!source && typeof source == 'string' && (source.includes('0001-01-01') || source.includes('1970-01-01')) ? null : source, getValidatorsOrNull('mainFormValidators', keysValidator, false), getValidatorsOrNull('mainFormValidators', asyncKeysValidator, false));
+            }), getValidatorsOrNull('main', keysValidator, true), getValidatorsOrNull('main', asyncKeysValidator, false)) :
+            makeFormGroup(source, 'main', keysValidator, asyncKeysValidator) :
+        new FormControl(!!source && typeof source == 'string' && (source.includes('0001-01-01') || source.includes('1970-01-01')) ? null : source, getValidatorsOrNull('main', keysValidator, false), getValidatorsOrNull('main', asyncKeysValidator, false));
     return form;
 }
 ;

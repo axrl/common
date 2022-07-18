@@ -19,7 +19,7 @@
 
 ### StringKeys
 
-Ƭ **StringKeys**<`T`\>: { [K in keyof T]: K extends string ? T[K] extends Observable<unknown\> ? never : K : never }[keyof `T`]
+Ƭ **StringKeys**<`T`\>: { [K in keyof T]: T[K] extends Observable<unknown\> ? never : K extends string ? K : never }[keyof `T`]
 
 Вспомогательная утилита типа.
 На вход принимает некий тип T, возвращает список только строковых ключей этого типа, при этом значения этих ключей не являются Observable.
@@ -34,7 +34,7 @@ ___
 
 ### ControlsNames
 
-Ƭ **ControlsNames**<`T`\>: ``"mainFormValidators"`` \| ``"mainFormValidatorsItems"`` \| [`PropertyesKeys`](README.md#propertyeskeys)<`T`\>
+Ƭ **ControlsNames**<`T`\>: `T` extends infer U[] ? ``"main"`` \| ``"mainItems"`` \| \`mainItems.${PropertyesKeys<U\>}\` : `T` extends `Observable`<`unknown`\> ? `never` : ``"main"`` \| [`PropertyesKeys`](README.md#propertyeskeys)<`T`\>
 
 Вспомогательный alias-тип ключей в объекте Map, содержащем конфигурацию валидаторов контролов.
 
@@ -48,7 +48,7 @@ ___
 
 ### PropertyesKeys
 
-Ƭ **PropertyesKeys**<`T`\>: `T` extends `undefined` \| ``null`` \| `number` \| `boolean` \| `symbol` \| `Observable`<`unknown`\> ? `never` : `T` extends `string` ? `T` : { [K in keyof T]-?: K extends string ? T[K] extends string \| number \| boolean \| symbol \| undefined \| null ? K : T[K] extends Observable<unknown\> ? never : T[K] extends (infer U)[] ? K \| \`${K}Items\` \| \`${K}.${PropertyesKeys<U\>}\` : K \| \`${K}.${PropertyesKeys<T[K]\>}\` : never }[keyof `T`]
+Ƭ **PropertyesKeys**<`T`\>: `T` extends `undefined` \| ``null`` \| `number` \| `boolean` \| `symbol` \| `Observable`<`unknown`\> ? `never` : `T` extends `string` ? `T` : `T` extends infer U[] ? [`PropertyesKeys`](README.md#propertyeskeys)<`U`\> : { [K in keyof T]-?: K extends string ? T[K] extends string \| number \| boolean \| symbol \| undefined \| null ? K : T[K] extends Observable<unknown\> ? never : T[K] extends (infer U)[] ? \`${K}Items.${PropertyesKeys<U\>}\` \| \`${K}Items\` \| K : \`${K}.${PropertyesKeys<T[K]\>}\` \| K : never }[keyof `T`]
 
 Вспомогательная утилита типа.
 На вход принимает некий тип T, возвращает только строковые ключи этого типа.
@@ -77,7 +77,7 @@ ___
 
 ### ScanFormType
 
-Ƭ **ScanFormType**<`T`\>: `T` extends `FormGroup` \| `FormControl` \| `FormArray` ? `T` : `T` extends ``null`` \| `undefined` ? `never` : `T` extends infer U[] ? `FormArray`<[`ScanFormType`](README.md#scanformtype)<`U`\>\> : `T` extends `string` \| `number` \| `boolean` \| `symbol` \| ``null`` \| `undefined` ? `FormControl`<`T`\> : [`FormGroupType`](README.md#formgrouptype)<`T`\>
+Ƭ **ScanFormType**<`T`\>: `T` extends `AbstractControl`<`unknown`, `unknown`\> ? `T` : `T` extends ``null`` \| `undefined` ? `never` : `T` extends infer U[] ? `FormArray`<[`ScanFormType`](README.md#scanformtype)<`U`\>\> : `T` extends `string` \| `number` \| `boolean` \| `symbol` \| ``null`` \| `undefined` ? `FormControl`<`T`\> : [`FormGroupType`](README.md#formgrouptype)<`T`\>
 
 Универсальный тип-утилита.
 Для любого типа Т выводит правильный тип создаваемой формы, включая любой уровень вложенности.
@@ -96,11 +96,11 @@ ScanFormType это также учитывает.
 
 ### makeForm
 
-▸ **makeForm**<`T`, `E`\>(`source`, `keysValidator?`, `asyncKeysValidator?`): [`ScanFormType`](README.md#scanformtype)<`T`\>
+▸ **makeForm**<`T`\>(`source`, `keysValidator?`, `asyncKeysValidator?`): [`ScanFormType`](README.md#scanformtype)<`T`\>
 
 **`Function`**
 
-makeForm < T >
+makeForm<T>
   Фабричная функция для создания Angular Reactive Form.
 В отличие от стандартного FormBuilder - а в пакете @angular/forms, при создании формы из сложных объектов,
 сохраняется вложенность контролов - каждый вложенный объект превращается во вложенную FormGroup,
@@ -114,17 +114,16 @@ Observable - значений(в т.ч., к примеру, Subject * и EventEm
 
 #### Type parameters
 
-| Name | Type |
-| :------ | :------ |
-| `T` | `T` |
-| `E` | `T` extends `U`[] ? `U` : `never` |
+| Name |
+| :------ |
+| `T` |
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `source` | `T` | источник данных типа T для создания формы.  * |
-| `keysValidator?` | `Map`<[`ControlsNames`](README.md#controlsnames)<`T`\>, ``null`` \| `ValidatorFn`[]\> | объект Map с конфигурацией синхронных валидаторов контролов формы.  * В качестве ключей могут быть указаны следующие значения:  *  PropertyesKeys<T> - строковые ключи в типе T, включая строковые ключи всех вложенных типов, разделенные "." - точкой.     Например имеется такой тип:     ```ts                     interface User {                       firstname: string;                       lastname: string;                       phone:  {                         code: string;                         number: string;                         }                       };     ```     Для формы, которая будет создана из объекта User в конфигурации валидаторов названия контролов можно будет указать так:     `lastname` или`phone`, или`phone.code`.     'mainFormValidators' - специальное значение, являющееся признаком того, что массив валидаторов необходимо     назначить самому объекту формы, а не вложеным контролам.     'mainFormValidatorsItems' - используется только если source является массивом. Специальное значение, являющееся признаком того,   что массив валидаторов необходимо назначить для всех элементов массива FormArray.  * |
+| `keysValidator?` | `Map`<[`ControlsNames`](README.md#controlsnames)<`T`\>, ``null`` \| `ValidatorFn`[]\> | объект Map с конфигурацией синхронных валидаторов контролов формы.  * В качестве ключей могут быть указаны следующие значения:  *  PropertyesKeys<T> - строковые ключи в типе T, включая строковые ключи всех вложенных типов, разделенные "." - точкой.     Например имеется такой тип:     ```ts                     interface User {                       firstname: string;                       lastname: string;                       phone:  {                         code: string;                         number: string;                         }                       };     ```     Для формы, которая будет создана из объекта User в конфигурации валидаторов названия контролов можно будет указать так:     `lastname` или`phone`, или`phone.code`.     'main' - специальное значение, являющееся признаком того, что массив валидаторов необходимо     назначить самому объекту формы, а не вложеным контролам.     'mainItems' - используется только если source является массивом. Специальное значение, являющееся признаком того,   что массив валидаторов необходимо назначить для всех элементов массива FormArray.  * |
 | `asyncKeysValidator?` | `Map`<[`ControlsNames`](README.md#controlsnames)<`T`\>, ``null`` \| `AsyncValidatorFn`[]\> | объект Map, аналогичный keysValidator, но для асинхронных валидаторов  * |
 
 #### Returns
