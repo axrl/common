@@ -79,7 +79,7 @@ function getValidatorsOrNull<T extends ValidatorFn[] | AsyncValidatorFn[] | null
   };
 }
 
-function makeFormGroup<T>(
+function makeFormGroup<T extends object = object>(
   source: T,
   internalKey: string,
   keysValidator?: Map<ControlsNames<T>, ValidatorFn[] | null>,
@@ -200,7 +200,7 @@ Observable - значений(в т.ч., к примеру, Subject * и EventEm
  * @param asyncKeysValidator объект Map, аналогичный keysValidator, но для асинхронных валидаторов
  * @returns объект типизированной формы - FormGroup, FormArray или FormControl в зависимости от типа значения source.
  */
-export function makeForm<T>(
+export function makeForm<T extends unknown>(
   source: T,
   keysValidator?: Map<ControlsNames<T>, ValidatorFn[] | null>,
   asyncKeysValidator?: Map<ControlsNames<T>, AsyncValidatorFn[] | null>,
@@ -220,7 +220,7 @@ export function makeForm<T>(
         getValidatorsOrNull('main', keysValidator, true),
         getValidatorsOrNull('main', asyncKeysValidator, false)
       ) :
-      makeFormGroup<T>(source, 'main', keysValidator, asyncKeysValidator) :
+      makeFormGroup(<object> source, 'main', keysValidator, asyncKeysValidator) :
     new FormControl<T | null>(
       !!source && typeof source == 'string' && (source.includes('0001-01-01') || source.includes('1970-01-01')) ? null : source
       ,
