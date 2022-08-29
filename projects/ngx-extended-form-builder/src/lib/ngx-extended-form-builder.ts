@@ -1,6 +1,8 @@
 import { FormGroup, FormArray, FormControl } from "@angular/forms";
-import type { ValidatorFn, ValidationErrors, AsyncValidatorFn, AbstractControl } from "@angular/forms";
+import type { ValidatorFn, ValidationErrors, AsyncValidatorFn, AbstractControl, AbstractControlOptions } from "@angular/forms";
 import { Observable } from "rxjs";
+
+type ArrayElement<T> = T extends Array<infer U> ? U : never;
 
 /**
  * Вспомогательная утилита типа.
@@ -63,27 +65,41 @@ export type ScanFormType<T> = T extends AbstractControl<unknown, unknown> ?
   FormControl<T> :
   FormGroupType<T>;
 
-function getValidatorsOrNull<T extends ValidatorFn[] | AsyncValidatorFn[] | null>(
-  key: string, keysValidator?: Map<string, T>, addLift: boolean = false
-): T | undefined | null {
-  const result = keysValidator && keysValidator.has(key) ? keysValidator.get(key) : null;
+function getValidatorsOrNull(
+  key: string,
+  keysValidator?: Map<string, MakeControlOptions | null>,
+  addLift: boolean = false
+): MakeControlOptions | null {
+  const result: MakeControlOptions | null = keysValidator && keysValidator.has(key) ? keysValidator.get(key)! : null;
   if (addLift) {
-    if (result && Array.isArray(result)) {
-      (<ValidatorFn[]> result).push(<ValidatorFn> liftErrors);
-      return <T> result;
+    if (result && result.keysValidator) {
+      result.keysValidator.push(<ValidatorFn> liftErrors);
+      return result;
     } else {
-      return result ? result : <T>[ liftErrors ];
+      if (result) {
+        result.keysValidator = [ liftErrors ];
+        return result;
+      } else {
+        return {
+          keysValidator: [ liftErrors ]
+        };
+      }
     }
   } else {
     return result;
   };
 }
 
+interface MakeControlOptions {
+  keysValidator?: ValidatorFn[] | null;
+  asyncKeysValidator?: AsyncValidatorFn[] | null;
+  abstractControlOptions?: AbstractControlOptions;
+}
+
 function makeFormGroup<T>(
   source: T,
   internalKey: string,
-  keysValidator?: Map<ControlsNames<T>, ValidatorFn[] | null>,
-  asyncKeysValidator?: Map<ControlsNames<T>, AsyncValidatorFn[] | null>
+  options?: Map<ControlsNames<T>, MakeControlOptions | null>
 ): FormGroupType<T> {
   return source instanceof FormGroup<{ [ K in StringKeys<T> ]: ScanFormType<T[ K ]>; }> ?
     source :
@@ -206,14 +222,14 @@ export function makeForm<T>(
   asyncKeysValidator?: Map<ControlsNames<T>, AsyncValidatorFn[] | null>,
 ): ScanFormType<T> {
   const form = !!source && (typeof source === 'object' || typeof source === 'function') ?
-    source instanceof Array<unknown> ?
+    source instanceof Array<ArrayElement<T>> ?
       new FormArray(
         source.map(
-          (item: unknown) => {
+          (item: ArrayElement<T>) => {
             const itemForm = makeForm(
               item,
-              <Map<ControlsNames<unknown>, ValidatorFn[] | null>> makeNewmainMap('mainItems', keysValidator),
-              <Map<ControlsNames<unknown>, AsyncValidatorFn[] | null>> makeNewmainMap('mainItems', asyncKeysValidator)
+              <Map<ControlsNames<ArrayElement<T>>, ValidatorFn[] | null>> makeNewmainMap('mainItems', keysValidator),
+              <Map<ControlsNames<ArrayElement<T>>, AsyncValidatorFn[] | null>> makeNewmainMap('mainItems', asyncKeysValidator)
             );
             return itemForm;
           }),
