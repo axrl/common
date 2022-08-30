@@ -1,5 +1,5 @@
 import { FormGroup, FormArray, FormControl } from "@angular/forms";
-import type { ValidatorFn, ValidationErrors, AsyncValidatorFn, AbstractControl } from "@angular/forms";
+import type { ValidatorFn, ValidationErrors, AsyncValidatorFn, AbstractControl, FormControlOptions } from "@angular/forms";
 import { Observable } from "rxjs";
 /**
  * Вспомогательная утилита типа.
@@ -11,7 +11,7 @@ export declare type StringKeys<T> = {
 /**
  * Вспомогательный alias-тип ключей в объекте Map, содержащем конфигурацию валидаторов контролов.
  */
-export declare type ControlsNames<T> = T extends Array<infer U> ? 'main' | 'mainItems' | `mainItems.${PropertyesKeys<U>}` : T extends Observable<unknown> ? never : 'main' | PropertyesKeys<T>;
+export declare type ControlsNames<T> = T extends Observable<unknown> ? never : T extends Array<infer U> ? 'main' | 'mainItems' | `mainItems.${PropertyesKeys<U>}` : 'main' | PropertyesKeys<T>;
 /**
  * Вспомогательная утилита типа.
  * На вход принимает некий тип T, возвращает только строковые ключи этого типа.
@@ -34,6 +34,11 @@ export declare type FormGroupType<T> = FormGroup<{
  * ScanFormType это также учитывает.
  */
 export declare type ScanFormType<T> = T extends AbstractControl<unknown, unknown> ? T : T extends null | undefined ? never : T extends Array<infer U> ? FormArray<ScanFormType<U>> : T extends (string | number | boolean | symbol | null | undefined) ? FormControl<T> : FormGroupType<T>;
+declare type MakeControlOptions = Omit<FormControlOptions, 'validators' | 'asyncValidators'> & {
+    disabled?: boolean;
+    validators?: ValidatorFn[];
+    asyncValidators?: AsyncValidatorFn[];
+};
 /**
 @function makeForm<T>
   Фабричная функция для создания Angular Reactive Form.
@@ -71,5 +76,6 @@ Observable - значений(в т.ч., к примеру, Subject * и EventEm
  * @param asyncKeysValidator объект Map, аналогичный keysValidator, но для асинхронных валидаторов
  * @returns объект типизированной формы - FormGroup, FormArray или FormControl в зависимости от типа значения source.
  */
-export declare function makeForm<T>(source: T, keysValidator?: Map<ControlsNames<T>, ValidatorFn[] | null>, asyncKeysValidator?: Map<ControlsNames<T>, AsyncValidatorFn[] | null>): ScanFormType<T>;
+export declare function makeForm<T extends unknown>(source: T, options?: Map<ControlsNames<T>, MakeControlOptions>): ScanFormType<T>;
 export declare function liftValidationErrors(control: AbstractControl): ValidationErrors | null;
+export {};

@@ -1,15 +1,24 @@
-import { FormGroup, FormArray, FormControl } from '@angular/forms';
+import { FormControl, FormGroup, FormArray } from '@angular/forms';
 import { Observable } from 'rxjs';
 
-function getValidatorsOrNull(key, keysValidator, addLift = false) {
-    const result = keysValidator && keysValidator.has(key) ? keysValidator.get(key) : null;
+function getValidatorsOrNull(key, options, addLift = false) {
+    const result = options && options.has(key) ? options.get(key) : null;
     if (addLift) {
-        if (result && Array.isArray(result)) {
-            result.push(liftErrors);
+        if (result && result.validators) {
+            result.validators.push(liftErrors);
             return result;
         }
         else {
-            return result ? result : [liftErrors];
+            if (result) {
+                result.validators = [liftErrors];
+                return result;
+            }
+            else {
+                return {
+                    validators: [liftErrors]
+                };
+            }
+            ;
         }
     }
     else {
@@ -17,37 +26,34 @@ function getValidatorsOrNull(key, keysValidator, addLift = false) {
     }
     ;
 }
-function makeFormGroup(source, internalKey, keysValidator, asyncKeysValidator) {
-    return source instanceof (FormGroup) ?
-        source :
-        Object.entries(source).reduce((accumulator, entry) => {
-            const key = entry[0];
-            const value = entry[1];
-            if (!(value instanceof Observable)) {
-                accumulator.addControl(key, !!value && (value instanceof FormGroup || value instanceof FormArray || value instanceof FormControl) ?
-                    value :
-                    makeForm(value, makeNewmainMap(key, keysValidator), makeNewmainMap(key, asyncKeysValidator)));
-            }
-            ;
-            return accumulator;
-        }, new FormGroup({}, getValidatorsOrNull(internalKey, keysValidator, true), getValidatorsOrNull(internalKey, asyncKeysValidator, false)));
-}
-function makeNewmainMap(key, oldMap) {
-    if (!oldMap || key === 'main' || key === 'mainItems') {
+function makeNewMainMap(key, oldMap) {
+    if (!oldMap || key === 'main') {
         return oldMap;
     }
     else {
         if (!oldMap.has(key) && !oldMap.has(`${key}Items`)) {
-            return new Map(Array.from(oldMap.entries()).filter(item => item[0] !== 'main' && item[0] !== 'mainItems').map(([entryKey, entryValue]) => [entryKey.startsWith(`${key}.`) ? entryKey.replace(`${key}.`, '') : entryKey, entryValue]));
+            return new Map(Array.from(oldMap.entries()).filter(item => item[0] !== 'main' && item[0] !== 'mainItems').map(([entryKey, entryValue]) => [(entryKey.startsWith(`${key}.`) ? entryKey.replace(`${key}.`, '') : entryKey), entryValue]));
         }
         else {
             const filterPredicate = oldMap.has('main') ?
                 oldMap.has('mainItems') ?
-                    (item) => item[0] !== key && item[0] !== 'main' && item[0] !== 'mainItems' :
-                    (item) => item[0] !== key && item[0] !== 'main' :
+                    (item) => {
+                        const pre = item[0] !== (key + 'Items');
+                        return item[0] !== key && pre && item[0] !== 'main' && item[0] !== 'mainItems';
+                    } :
+                    (item) => {
+                        const pre = item[0] !== (key + 'Items');
+                        return item[0] !== key && key[0] !== (key + 'Items') && item[0] !== 'main';
+                    } :
                 oldMap.has('mainItems') ?
-                    (item) => item[0] !== key && item[0] !== 'mainItems' :
-                    (item) => item[0] !== key;
+                    (item) => {
+                        const pre = item[0] !== (key + 'Items');
+                        return item[0] !== key && pre && item[0] !== 'mainItems';
+                    } :
+                    (item) => {
+                        const pre = item[0] !== (key + 'Items');
+                        return item[0] !== key && pre;
+                    };
             const newMainValidatorsArray = oldMap.has(key) ?
                 oldMap.has(`${key}Items`) ?
                     [
@@ -62,10 +68,17 @@ function makeNewmainMap(key, oldMap) {
                         ['mainItems', oldMap.get(`${key}Items`)]
                     ] :
                     [];
-            return new Map([
+            const filtered = Array.from(oldMap.entries()).filter(filterPredicate);
+            const result = new Map([
                 ...newMainValidatorsArray,
-                ...Array.from(oldMap.entries()).filter(filterPredicate).map(([entryKey, entryValue]) => [entryKey.startsWith(`${key}.`) ? entryKey.replace(`${key}.`, '') : entryKey, entryValue])
+                ...filtered.map(([entryKey, entryValue]) => [(entryKey.startsWith(`${key}.`) ?
+                        entryKey.replace(`${key}.`, '') :
+                        entryKey.startsWith(`${key}Items.`) ?
+                            entryKey.replace(`${key}Items.`, '') :
+                            entryKey), entryValue])
             ]);
+            console.log(key, oldMap, filtered, result);
+            return result;
         }
         ;
     }
@@ -108,15 +121,12 @@ Observable - значений(в т.ч., к примеру, Subject * и EventEm
  * @param asyncKeysValidator объект Map, аналогичный keysValidator, но для асинхронных валидаторов
  * @returns объект типизированной формы - FormGroup, FormArray или FormControl в зависимости от типа значения source.
  */
-function makeForm(source, keysValidator, asyncKeysValidator) {
+function makeForm(source, options) {
     const form = !!source && (typeof source === 'object' || typeof source === 'function') ?
         source instanceof (Array) ?
-            new FormArray(source.map((item) => {
-                const itemForm = makeForm(item, makeNewmainMap('mainItems', keysValidator), makeNewmainMap('mainItems', asyncKeysValidator));
-                return itemForm;
-            }), getValidatorsOrNull('main', keysValidator, true), getValidatorsOrNull('main', asyncKeysValidator, false)) :
-            makeFormGroup(source, 'main', keysValidator, asyncKeysValidator) :
-        new FormControl(!!source && typeof source == 'string' && (source.includes('0001-01-01') || source.includes('1970-01-01')) ? null : source, getValidatorsOrNull('main', keysValidator, false), getValidatorsOrNull('main', asyncKeysValidator, false));
+            makeArray(source, options) :
+            makeGroup(source, 'main', options) :
+        makeControl(source, options);
     return form;
 }
 ;
@@ -164,6 +174,65 @@ function liftValidationErrors(control) {
 ;
 function addValidationErrors(additionErrors, currentErrors) {
     Object.entries(additionErrors).forEach(entry => currentErrors[entry[0]] = entry[1]);
+}
+function makeControl(source, options) {
+    const controlOptions = getValidatorsOrNull('main', options, false);
+    const result = source instanceof FormControl ?
+        source :
+        new FormControl(!!source && typeof source == 'string' && (source.includes('0001-01-01') || source.includes('1970-01-01')) ? null : source, {
+            validators: controlOptions?.validators,
+            asyncValidators: controlOptions?.asyncValidators,
+            updateOn: controlOptions?.updateOn,
+            nonNullable: controlOptions?.nonNullable
+        });
+    if (controlOptions?.disabled) {
+        result.disable();
+    }
+    ;
+    return result;
+}
+function makeGroup(source, internalKey, options) {
+    const controlOptions = getValidatorsOrNull(internalKey, options, false);
+    const result = source instanceof (FormGroup) ?
+        source :
+        Object.entries(source).reduce((accumulator, entry) => {
+            const key = entry[0];
+            const value = entry[1];
+            if (!(value instanceof Observable)) {
+                accumulator.addControl(key, !!value && (value instanceof FormGroup || value instanceof FormArray || value instanceof FormControl) ?
+                    value :
+                    makeForm(value, makeNewMainMap(key, options)));
+            }
+            ;
+            return accumulator;
+        }, new FormGroup({}, {
+            validators: controlOptions?.validators,
+            asyncValidators: controlOptions?.asyncValidators,
+            updateOn: controlOptions?.updateOn,
+        }));
+    if (controlOptions?.disabled) {
+        result.disable();
+    }
+    ;
+    return result;
+}
+function makeArray(source, options) {
+    const controlOptions = getValidatorsOrNull('main', options, false);
+    const result = source instanceof FormArray ?
+        source :
+        new FormArray(source.map((item) => {
+            const itemForm = makeForm(item, makeNewMainMap('mainItems', options));
+            return itemForm;
+        }), {
+            validators: controlOptions?.validators,
+            asyncValidators: controlOptions?.asyncValidators,
+            updateOn: controlOptions?.updateOn
+        });
+    if (controlOptions?.disabled) {
+        result.disable();
+    }
+    ;
+    return result;
 }
 
 /*
