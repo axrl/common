@@ -77,7 +77,6 @@ function makeNewMainMap(key, oldMap) {
                             entryKey.replace(`${key}Items.`, '') :
                             entryKey), entryValue])
             ]);
-            console.log(key, oldMap, filtered, result);
             return result;
         }
         ;

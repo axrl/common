@@ -161,7 +161,6 @@ function makeNewMainMap<I, O>(
           ), entryValue ]
         )
       ]);
-      console.log(key, oldMap, filtered, result);
       return result;
     };
   };
