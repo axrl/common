@@ -33,7 +33,7 @@ export declare type FormGroupType<T> = FormGroup<{
  * Observable-значений ( в т.ч., к примеру, Subject  * и EventEmitter) соответствующий элемент формы не создается.
  * ScanFormType это также учитывает.
  */
-export declare type ScanFormType<T> = T extends AbstractControl<unknown, unknown> ? T : T extends null | undefined ? never : T extends Array<infer U> ? FormArray<ScanFormType<U>> : T extends (string | number | boolean | symbol | null | undefined) ? FormControl<T> : FormGroupType<T>;
+export declare type ScanFormType<T> = T extends AbstractControl ? T : T extends null | undefined ? never : T extends Array<infer U> ? FormArray<ScanFormType<U>> : T extends (string | number | boolean | symbol | null | undefined) ? FormControl<T> : FormGroupType<T>;
 declare type MakeControlOptions = Omit<FormControlOptions, 'validators' | 'asyncValidators'> & {
     disabled?: boolean;
     validators?: ValidatorFn[];
