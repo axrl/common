@@ -54,7 +54,7 @@ export type FormGroupType<T> = FormGroup<{ [ K in StringKeys<T> ]: ScanFormType<
  * Observable-значений ( в т.ч., к примеру, Subject  * и EventEmitter) соответствующий элемент формы не создается.
  * ScanFormType это также учитывает.
  */
-export type ScanFormType<T> = T extends AbstractControl<unknown, unknown> ?
+export type ScanFormType<T> = T extends AbstractControl ?
   T :
   T extends null | undefined ?
   never :
