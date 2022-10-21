@@ -16,14 +16,14 @@ export declare type ControlsNames<T> = T extends Observable<unknown> ? never : T
  * Вспомогательная утилита типа.
  * На вход принимает некий тип T, возвращает только строковые ключи этого типа.
  */
-export declare type PropertyesKeys<T> = T extends undefined | null | number | boolean | symbol | Observable<unknown> ? never : T extends Readonly<string> ? T : T extends string ? T : T extends Array<infer U> ? PropertyesKeys<U> : {
+export declare type PropertyesKeys<T> = T extends undefined | null | number | boolean | symbol | Observable<unknown> ? never : T extends string ? T : T extends Array<infer U> ? PropertyesKeys<U> : {
     [K in keyof T]-?: K extends string ? T[K] extends (string | number | boolean | symbol | undefined | null) ? K : T[K] extends Observable<unknown> ? never : T[K] extends Array<infer U> ? `${K}Items.${PropertyesKeys<U>}` | `${K}Items` | K : `${K}.${PropertyesKeys<T[K]>}` | K : never;
 }[keyof T];
 /**
  * Упрощенная запись для типа объекта FormGroup, образованного из типа T.
  */
-export declare type FormGroupType<T extends object> = FormGroup<{
-    [K in keyof T]: ScanFormType<T[K]>;
+export declare type FormGroupType<T> = FormGroup<{
+    [K in StringKeys<T>]: T[K] extends string ? FormControl<T[K]> : T[K] extends boolean ? FormControl<boolean> : T[K] extends number ? FormControl<number> : T extends symbol ? FormControl<T[K]> : ScanFormType<T[K]>;
 }>;
 /**
  * Универсальный тип-утилита.
@@ -33,7 +33,7 @@ export declare type FormGroupType<T extends object> = FormGroup<{
  * Observable-значений ( в т.ч., к примеру, Subject  * и EventEmitter) соответствующий элемент формы не создается.
  * ScanFormType это также учитывает.
  */
-export declare type ScanFormType<T> = T extends (null | undefined) ? never : T extends Readonly<string> ? FormControl<string | null> : T extends (string | symbol) ? FormControl<T | null> : T extends boolean ? FormControl<boolean | null> : T extends number ? FormControl<number | null> : T extends AbstractControl ? T : T extends Array<infer U> ? FormArray<ScanFormType<U>> : T extends object ? FormGroupType<T> : never;
+export declare type ScanFormType<T> = T extends AbstractControl<unknown, unknown> ? T : T extends null | undefined ? never : T extends Array<infer U> ? FormArray<ScanFormType<U>> : T extends object ? FormGroupType<T> : FormControl<T>;
 declare type MakeControlOptions = Omit<FormControlOptions, 'validators' | 'asyncValidators'> & {
     disabled?: boolean;
     validators?: ValidatorFn[];

@@ -27,8 +27,6 @@ export type ControlsNames<T> = T extends Observable<unknown> ?
  */
 export type PropertyesKeys<T> = T extends undefined | null | number | boolean | symbol | Observable<unknown> ?
   never :
-  T extends Readonly<string> ?
-  T :
   T extends string ?
   T :
   T extends Array<infer U> ?
@@ -46,7 +44,30 @@ export type PropertyesKeys<T> = T extends undefined | null | number | boolean | 
 /**
  * Упрощенная запись для типа объекта FormGroup, образованного из типа T.
  */
-export type FormGroupType<T extends object> = FormGroup<{ [K in keyof T]: ScanFormType<T[K]>; }>;
+export type FormGroupType<T> = FormGroup<{
+  [K in StringKeys<T>]: T[K] extends string ?
+  FormControl<T[K]> :
+  T[K] extends boolean ?
+  FormControl<boolean> :
+  T[K] extends number ?
+  FormControl<number> :
+  T extends symbol ?
+  FormControl<T[K]> :
+  ScanFormType<T[K]>
+}>;
+
+/*
+export type FormGroupType<T extends object> = FormGroup<{
+  [K in keyof T]: T[K] extends string ?
+  FormControl<T[K]> :
+  T[K] extends boolean ?
+  FormControl<T[K]> :
+  T[K] extends number ?
+  FormControl<number> :
+  T extends symbol ?
+  FormControl<T> :
+  ScanFormType<T[K]>;
+}>;*/
 
 /**
  * Универсальный тип-утилита.
@@ -56,24 +77,16 @@ export type FormGroupType<T extends object> = FormGroup<{ [K in keyof T]: ScanFo
  * Observable-значений ( в т.ч., к примеру, Subject  * и EventEmitter) соответствующий элемент формы не создается.
  * ScanFormType это также учитывает.
  */
-export type ScanFormType<T> =
-  T extends (null | undefined) ?
-  never :
-  T extends Readonly<string> ?
-  FormControl<string | null> :
-  T extends (string | symbol) ?
-  FormControl<T | null> :
-  T extends boolean ?
-  FormControl<boolean | null> :
-  T extends number ?
-  FormControl<number | null> :
-  T extends AbstractControl ?
+export type ScanFormType<T> = T extends AbstractControl<unknown, unknown> ?
   T :
+  T extends null | undefined ?
+  never :
   T extends Array<infer U> ?
   FormArray<ScanFormType<U>> :
   T extends object ?
   FormGroupType<T> :
-  never;
+  FormControl<T>
+  ;
 
 type MakeControlOptions = Omit<FormControlOptions, 'validators' | 'asyncValidators'> & {
   disabled?: boolean;
