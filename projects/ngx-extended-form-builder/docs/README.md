@@ -34,7 +34,7 @@ ___
 
 ### ControlsNames
 
-Ƭ **ControlsNames**<`T`\>: `T` extends infer U[] ? ``"main"`` \| ``"mainItems"`` \| \`mainItems.${PropertyesKeys<U\>}\` : `T` extends `Observable`<`unknown`\> ? `never` : ``"main"`` \| [`PropertyesKeys`](README.md#propertyeskeys)<`T`\>
+Ƭ **ControlsNames**<`T`\>: `T` extends `Observable`<`unknown`\> ? `never` : `T` extends infer U[] ? ``"main"`` \| ``"mainItems"`` \| \`mainItems.${PropertyesKeys<U\>}\` : ``"main"`` \| [`PropertyesKeys`](README.md#propertyeskeys)<`T`\>
 
 Вспомогательный alias-тип ключей в объекте Map, содержащем конфигурацию валидаторов контролов.
 
@@ -63,7 +63,7 @@ ___
 
 ### FormGroupType
 
-Ƭ **FormGroupType**<`T`\>: `FormGroup`<{ [K in StringKeys<T\>]: ScanFormType<T[K]\> }\>
+Ƭ **FormGroupType**<`T`\>: `FormGroup`<{ [K in StringKeys<T\>]: T[K] extends string ? FormControl<T[K]\> : T[K] extends boolean ? FormControl<boolean\> : T[K] extends number ? FormControl<number\> : T extends symbol ? FormControl<T[K]\> : ScanFormType<T[K]\> }\>
 
 Упрощенная запись для типа объекта FormGroup, образованного из типа T.
 
@@ -77,7 +77,7 @@ ___
 
 ### ScanFormType
 
-Ƭ **ScanFormType**<`T`\>: `T` extends `AbstractControl`<`unknown`, `unknown`\> ? `T` : `T` extends ``null`` \| `undefined` ? `never` : `T` extends infer U[] ? `FormArray`<[`ScanFormType`](README.md#scanformtype)<`U`\>\> : `T` extends `string` \| `number` \| `boolean` \| `symbol` \| ``null`` \| `undefined` ? `FormControl`<`T`\> : [`FormGroupType`](README.md#formgrouptype)<`T`\>
+Ƭ **ScanFormType**<`T`\>: `T` extends `AbstractControl`<`unknown`, `unknown`\> ? `T` : `T` extends ``null`` \| `undefined` ? `never` : `T` extends infer U[] ? `FormArray`<[`ScanFormType`](README.md#scanformtype)<`U`\>\> : `T` extends `object` ? [`FormGroupType`](README.md#formgrouptype)<`T`\> : `FormControl`<`T`\>
 
 Универсальный тип-утилита.
 Для любого типа Т выводит правильный тип создаваемой формы, включая любой уровень вложенности.
@@ -96,7 +96,7 @@ ScanFormType это также учитывает.
 
 ### makeForm
 
-▸ **makeForm**<`T`\>(`source`, `keysValidator?`, `asyncKeysValidator?`): [`ScanFormType`](README.md#scanformtype)<`T`\>
+▸ **makeForm**<`T`\>(`source`, `options?`): [`ScanFormType`](README.md#scanformtype)<`T`\>
 
 **`Function`**
 
@@ -114,17 +114,16 @@ Observable - значений(в т.ч., к примеру, Subject * и EventEm
 
 #### Type parameters
 
-| Name |
-| :------ |
-| `T` |
+| Name | Type |
+| :------ | :------ |
+| `T` | extends `unknown` |
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `source` | `T` | источник данных типа T для создания формы.  * |
-| `keysValidator?` | `Map`<[`ControlsNames`](README.md#controlsnames)<`T`\>, ``null`` \| `ValidatorFn`[]\> | объект Map с конфигурацией синхронных валидаторов контролов формы.  * В качестве ключей могут быть указаны следующие значения:  *  PropertyesKeys<T> - строковые ключи в типе T, включая строковые ключи всех вложенных типов, разделенные "." - точкой.     Например имеется такой тип:     ```ts                     interface User {                       firstname: string;                       lastname: string;                       phone:  {                         code: string;                         number: string;                         }                       };     ```     Для формы, которая будет создана из объекта User в конфигурации валидаторов названия контролов можно будет указать так:     `lastname` или`phone`, или`phone.code`.     'main' - специальное значение, являющееся признаком того, что массив валидаторов необходимо     назначить самому объекту формы, а не вложеным контролам.     'mainItems' - используется только если source является массивом. Специальное значение, являющееся признаком того,   что массив валидаторов необходимо назначить для всех элементов массива FormArray.  * |
-| `asyncKeysValidator?` | `Map`<[`ControlsNames`](README.md#controlsnames)<`T`\>, ``null`` \| `AsyncValidatorFn`[]\> | объект Map, аналогичный keysValidator, но для асинхронных валидаторов  * |
+| `source` | `T` | источник данных типа T для создания формы.   * |
+| `options?` | `Map`<[`ControlsNames`](README.md#controlsnames)<`T`\>, `MakeControlOptions`\> | - |
 
 #### Returns
 
