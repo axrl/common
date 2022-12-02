@@ -2,7 +2,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../out-tsc/lib",
+    "outDir": "../../out-tsc/ngx-extended-form-builder/lib",
     "declaration": true,
     "declarationMap": true,
     "inlineSources": true,

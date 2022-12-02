@@ -1,6 +1,5 @@
 {
   "name": "@axrl/common",
-  "description": "Библиотека для облегчения создания Angular Reactive Form из объекта, как расширенная альтернатива встроенному FormBuilder.\n В отличие от стандартного FormBuilder-а, при создании формы из сложных объектов, сохраняется вложенность контролов - каждый вложенный объект превращается во вложенную FormGroup, обычные свойства обёектов становятся FormControl-ами, а массивы - FormArray-ми.",
   "author": {
     "name": "Axrl",
     "email": "axrl@mail.ru"
@@ -18,7 +17,10 @@
     "watch:form-builder": "ng build --watch --configuration development",
     "gen-doc:form-builder": "typedoc --tsconfig projects/ngx-extended-form-builder/tsconfig.lib.prod.json",
     "pub:form-builder": "node updatePackageVersion.js && ng build -c production && cd dist/ngx-extended-form-builder && npm publish",
-    "local-test": "npm run build && rm -rf ~/Cmk/CodeMark/Cmk.Wex/Spa/node_modules/@axrl/ngx-extended-form-builder/* && cp -rf dist/* ~/Cmk/CodeMark/Cmk.Wex/Spa/node_modules/@axrl/ngx-extended-form-builder",
+    "build:common": "ng build common -c production",
+    "watch:common": "ng build common --watch --configuration development",
+    "gen-doc:common": "typedoc --tsconfig projects/common/tsconfig.lib.prod.json",
+    "local-test::form-builder": "npm run build && rm -rf ~/Cmk/CodeMark/Cmk.Wex/Spa/node_modules/@axrl/ngx-extended-form-builder/* && cp -rf dist/* ~/Cmk/CodeMark/Cmk.Wex/Spa/node_modules/@axrl/ngx-extended-form-builder",
     "test": "ng test"
   },
   "homepage": "https://github.com/axrl/common",

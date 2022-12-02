@@ -1,14 +1,28 @@
 {
-  "name": "common",
-  "version": "0.0.1",
+  "name": "@axrl/common",
+  "description": "Библиотека с набором различных удобных функций-хелперов, Angular-сервисов и т.п., постоянно используемых в работе и, постоянно перекопируемых от проекта к проекту.\n  Теперь - всё собрано в одном месте.",
+  "author": {
+    "name": "Axrl",
+    "email": "axrl@mail.ru"
+  },
+  "homepage": "https://github.com/axrl/common/blob/main/projects/common",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:axrl/common.git"
+  },
+  "version": "1.0.0",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "tslib": "^2.4.1"
+  },
   "peerDependencies": {
     "@angular/common": "^15.0.2",
     "@angular/core": "^15.0.2",
     "@angular/cdk": "^15.0.1",
     "@angular/material": "^15.0.1",
     "rxjs": "^7.5.7"
-  },
-  "dependencies": {
-    "tslib": "^2.3.0"
   }
 }

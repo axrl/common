@@ -1,4 +1,4 @@
-# NgxExtendedFormBuilder
+# @axrl/ngx-extended-form-builder
 
 Библиотека для облегчения создания Angular Reactive Form из объекта, как расширенная альтернатива встроенному FormBuilder.
 

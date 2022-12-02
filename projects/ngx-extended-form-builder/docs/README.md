@@ -122,7 +122,7 @@ Observable - значений(в т.ч., к примеру, Subject * и EventEm
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `source` | `T` | источник данных типа T для создания формы.   * |
+| `source` | `T` | источник данных типа T для создания формы. * |
 | `options?` | `Map`<[`ControlsNames`](README.md#controlsnames)<`T`\>, `MakeControlOptions`\> | - |
 
 #### Returns
