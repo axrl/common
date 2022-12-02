@@ -5,10 +5,10 @@
     "name": "Axrl",
     "email": "axrl@mail.ru"
   },
-  "homepage": "https://github.com/axrl/ngx-extended-form-builder/tree/main/projects/ngx-extended-form-builder",
+  "homepage": "https://github.com/axrl/common/blob/main/projects/ngx-extended-form-builder",
   "repository": {
     "type": "git",
-    "url": "git@github.com:axrl/ngx-extended-form-builder.git"
+    "url": "git@github.com:axrl/common.git"
   },
   "version": "1.2.6",
   "license": "MIT",
