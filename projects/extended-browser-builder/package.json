@@ -1,0 +1,36 @@
+{
+  "name": "@axrl/extended-browser-builder",
+  "version": "1.0.4-beta",
+  "description": "Custom browser Angular CLI Builder",
+  "main": "src/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "homepage": "https://github.com/axrl/common/blob/main/projects/extended-browser-builder",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/axrl/common"
+  },
+  "scripts": {
+    "build": "tsc -p ./tsconfig.lib.json"
+  },
+  "builders": "./builders.json",
+  "author": {
+    "name": "Axrl",
+    "email": "axrl@mail.ru"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "@types/listr": "^0.14.4",
+    "@types/node": "^18.11.10",
+    "typescript": "^4.9.3"
+  },
+  "peerDependencies": {
+    "@angular-devkit/architect": "0.1500.2",
+    "@angular-devkit/build-angular": "^15.0.2",
+    "rxjs": "^7.5.7"
+  },
+  "dependencies": {
+    "listr": "^0.14.3"
+  }
+}

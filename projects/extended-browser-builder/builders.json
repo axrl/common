@@ -1,0 +1,10 @@
+{
+  "$schema": "./builders-schema.json",
+  "builders": {
+    "extended-ng-builder": {
+      "implementation": "./src/index.js",
+      "schema": "./schema.json",
+      "description": "Execute commands before ng build"
+    }
+  }
+}

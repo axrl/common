@@ -37,8 +37,22 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var promises_1 = require("fs/promises");
-var libraryPackageJsonPath = './projects/ngx-extended-form-builder/package.json';
-var mainPackageJsonPath = './package.json';
+var path_1 = require("path");
+var libraryPackageJsonPath = process.argv[2];
+if (libraryPackageJsonPath === null || libraryPackageJsonPath === undefined) {
+    throw new Error("Не передан путь к файлу package.json, который требуется обновить.");
+}
+else {
+    if (typeof libraryPackageJsonPath !== 'string') {
+        throw new Error("Путь к обновляемому файлу package.json должен быть строкой.");
+    }
+    else {
+        if ((0, path_1.extname)(libraryPackageJsonPath) !== '.json') {
+            throw new Error("Указанный файл - не json.");
+        }
+    }
+}
+var mainPackageJsonPath = (0, path_1.join)(process.cwd(), 'package.json');
 function main() {
     var _a;
     return __awaiter(this, void 0, void 0, function () {
