@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { makeHttpParams } from './params-and-header';
 import type { ParamsAndHeaders } from './params-and-header';
-import { map, catchError, throwError, BehaviorSubject } from 'rxjs';
+import { map, catchError, throwError, BehaviorSubject, exhaustMap } from 'rxjs';
 import type { Observable, } from 'rxjs';
 import { SnackService } from '../snack.service';
 
@@ -34,41 +34,45 @@ export class ApiService {
   ) { }
 
   private _isLoadingResults: BehaviorSubject<LoadingIndicator> = new BehaviorSubject<LoadingIndicator>(new LoadingIndicator());
-  isLoadingResults$ = this._isLoadingResults.asObservable().pipe(
+  loadingIndicator$ = this._isLoadingResults.asObservable();
+  isLoadingResults$ = this.loadingIndicator$.pipe(
     map(
       indicator => indicator.isLoading
     )
   );
 
-  changeLoadingStatus(start: boolean = false) {
-    const loading = this._isLoadingResults.value;
-    if (start) {
-      loading.increment();
-    } else {
-      loading.decrement();
-    };
-    this._isLoadingResults.next(loading);
-  };
+  updateLoadingIndicator(newIndicator: LoadingIndicator) {
+    this._isLoadingResults.next(newIndicator);
+  }
 
   getData<T>(
     url: string,
     options: ParamsAndHeaders & { responseType?: 'json' | 'blob'; } = {}
   ): Observable<T> {
-    this.changeLoadingStatus(true);
-    return this.http.get<T>(url, {
-      headers: options.headers,
-      params: makeHttpParams(options?.params!, {})
-    }).pipe(
-      map(
-        res => {
-          this.changeLoadingStatus();
-          return res;
-        }),
-      catchError(
-        (message: string) => {
-          this.snack.showText(message, true);
-          this.changeLoadingStatus();
-          return throwError(() => message);
+
+    return this._isLoadingResults.pipe(
+      exhaustMap(
+        loading => {
+          loading.increment();
+          this.updateLoadingIndicator(loading);
+          return this.http.get<T>(url, {
+            headers: options.headers,
+            params: makeHttpParams(options?.params!, {})
+          }).pipe(
+            map(
+              res => {
+                loading.decrement();
+                this.updateLoadingIndicator(loading);
+                return res;
+              }),
+            catchError(
+              (message: string) => {
+                this.snack.showText(message, true);
+                loading.decrement();
+                this.updateLoadingIndicator(loading);
+                return throwError(() => message);
+              })
+          );
         })
     );
   }
@@ -83,18 +87,27 @@ export class ApiService {
         options.params = makeHttpParams(options.params, {});
       }
     };
-    this.changeLoadingStatus(true);
-    return this.http.post<TResponse>(url, body, options).pipe(
-      map(
-        res => {
-          this.changeLoadingStatus();
-          return res;
-        }),
-      catchError(
-        (message: string) => {
-          this.snack.showText(message, true);
-          this.changeLoadingStatus();
-          return throwError(() => message);
+
+    return this._isLoadingResults.pipe(
+      exhaustMap(
+        loading => {
+          loading.increment();
+          this.updateLoadingIndicator(loading);
+          return this.http.post<TResponse>(url, body, options).pipe(
+            map(
+              res => {
+                loading.decrement();
+                this.updateLoadingIndicator(loading);;
+                return res;
+              }),
+            catchError(
+              (message: string) => {
+                this.snack.showText(message, true);
+                loading.decrement();
+                this.updateLoadingIndicator(loading);;
+                return throwError(() => message);
+              })
+          );
         })
     );
   }
@@ -109,18 +122,27 @@ export class ApiService {
         options.params = makeHttpParams(options.params, {});
       }
     };
-    this.changeLoadingStatus(true);
-    return this.http.post(url, body, { ...options, responseType: 'blob' }).pipe(
-      map(
-        res => {
-          this.changeLoadingStatus();
-          return <File>res;
-        }),
-      catchError(
-        (message: string) => {
-          this.snack.showText(message, true);
-          this.changeLoadingStatus();
-          return throwError(() => message);
+
+    return this._isLoadingResults.pipe(
+      exhaustMap(
+        loading => {
+          loading.increment();
+          this.updateLoadingIndicator(loading);
+          return this.http.post(url, body, { ...options, responseType: 'blob' }).pipe(
+            map(
+              res => {
+                loading.decrement();
+                this.updateLoadingIndicator(loading);;
+                return <File>res;
+              }),
+            catchError(
+              (message: string) => {
+                this.snack.showText(message, true);
+                loading.decrement();
+                this.updateLoadingIndicator(loading);;
+                return throwError(() => message);
+              })
+          );
         })
     );
   }
@@ -129,18 +151,27 @@ export class ApiService {
     url: string,
     options: ParamsAndHeaders = {}
   ): Observable<TResponse> {
-    this.changeLoadingStatus(true);
-    return this.postData<TResponse, null>(url, null, options ? options : {}).pipe(
-      map(
-        res => {
-          this.changeLoadingStatus();
-          return res;
-        }),
-      catchError(
-        (message: string) => {
-          this.snack.showText(message, true);
-          this.changeLoadingStatus();
-          return throwError(() => message);
+
+    return this._isLoadingResults.pipe(
+      exhaustMap(
+        loading => {
+          loading.increment();
+          this.updateLoadingIndicator(loading);
+          return this.postData<TResponse, null>(url, null, options ? options : {}).pipe(
+            map(
+              res => {
+                loading.decrement();
+                this.updateLoadingIndicator(loading);;
+                return res;
+              }),
+            catchError(
+              (message: string) => {
+                this.snack.showText(message, true);
+                loading.decrement();
+                this.updateLoadingIndicator(loading);;
+                return throwError(() => message);
+              })
+          );
         })
     );
   }
@@ -148,18 +179,27 @@ export class ApiService {
   delete<T>(url: string,
     params: { [param: string]: string | any; }
       = {}): Observable<T> {
-    this.changeLoadingStatus(true);
-    return this.http.delete<T>(url, { params: makeHttpParams(params, {}) }).pipe(
-      map(
-        res => {
-          this.changeLoadingStatus();
-          return res;
-        }),
-      catchError(
-        (message: string) => {
-          this.snack.showText(message, true);
-          this.changeLoadingStatus();
-          return throwError(() => message);
+
+    return this._isLoadingResults.pipe(
+      exhaustMap(
+        loading => {
+          loading.increment();
+          this.updateLoadingIndicator(loading);
+          return this.http.delete<T>(url, { params: makeHttpParams(params, {}) }).pipe(
+            map(
+              res => {
+                loading.decrement();
+                this.updateLoadingIndicator(loading);;
+                return res;
+              }),
+            catchError(
+              (message: string) => {
+                this.snack.showText(message, true);
+                loading.decrement();
+                this.updateLoadingIndicator(loading);;
+                return throwError(() => message);
+              })
+          );
         })
     );
   }
@@ -172,18 +212,27 @@ export class ApiService {
     if (options && options.params) {
       options.params = makeHttpParams(options.params, {});
     };
-    this.changeLoadingStatus(true);
-    return this.http.put<TResponse>(url, body, options).pipe(
-      map(
-        res => {
-          this.changeLoadingStatus();
-          return res;
-        }),
-      catchError(
-        (message: string) => {
-          this.snack.showText(message, true);
-          this.changeLoadingStatus();
-          return throwError(() => message);
+
+    return this._isLoadingResults.pipe(
+      exhaustMap(
+        loading => {
+          loading.increment();
+          this.updateLoadingIndicator(loading);
+          return this.http.put<TResponse>(url, body, options).pipe(
+            map(
+              res => {
+                loading.decrement();
+                this.updateLoadingIndicator(loading);;
+                return res;
+              }),
+            catchError(
+              (message: string) => {
+                this.snack.showText(message, true);
+                loading.decrement();
+                this.updateLoadingIndicator(loading);;
+                return throwError(() => message);
+              })
+          );
         })
     );
   }
@@ -195,18 +244,27 @@ export class ApiService {
     if (headers) {
       options['headers'] = headers;
     };
-    this.changeLoadingStatus(true);
-    return this.http.get<File>(url, options).pipe(
-      map(
-        res => {
-          this.changeLoadingStatus();
-          return res;
-        }),
-      catchError(
-        (message: string) => {
-          this.snack.showText(message, true);
-          this.changeLoadingStatus();
-          return throwError(() => message);
+
+    return this._isLoadingResults.pipe(
+      exhaustMap(
+        loading => {
+          loading.increment();
+          this.updateLoadingIndicator(loading);
+          return this.http.get<File>(url, options).pipe(
+            map(
+              res => {
+                loading.decrement();
+                this.updateLoadingIndicator(loading);;
+                return res;
+              }),
+            catchError(
+              (message: string) => {
+                this.snack.showText(message, true);
+                loading.decrement();
+                this.updateLoadingIndicator(loading);;
+                return throwError(() => message);
+              })
+          );
         })
     );
   }

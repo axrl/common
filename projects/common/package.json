@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git@github.com:axrl/common.git"
   },
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -23,6 +23,6 @@
     "@angular/core": "^15.0.2",
     "@angular/cdk": "^15.0.1",
     "@angular/material": "^15.0.1",
-    "rxjs": "^7.5.7"
+    "rxjs": "^7.6.0"
   }
 }

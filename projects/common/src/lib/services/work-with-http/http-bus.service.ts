@@ -63,7 +63,7 @@ export class HttpBusService {
         return this.reducer(event).pipe(
           map(
             result => {
-              event.cb?.(result);
+              event.cb(result);
             }),
           catchError(
             err => {
@@ -71,7 +71,7 @@ export class HttpBusService {
                 event.errCb(err);
               };
               return createObservable<void>(
-                function () { }()
+                (() => { })()
               );
             })
         );

@@ -8,11 +8,12 @@
 
 ### Properties
 
+- [loadingIndicator$](ApiService.md#loadingindicator$)
 - [isLoadingResults$](ApiService.md#isloadingresults$)
 
 ### Methods
 
-- [changeLoadingStatus](ApiService.md#changeloadingstatus)
+- [updateLoadingIndicator](ApiService.md#updateloadingindicator)
 - [getData](ApiService.md#getdata)
 - [postData](ApiService.md#postdata)
 - [postBlobData](ApiService.md#postblobdata)
@@ -36,21 +37,27 @@
 
 ## Properties
 
+### loadingIndicator$
+
+• **loadingIndicator$**: `Observable`<`LoadingIndicator`\>
+
+___
+
 ### isLoadingResults$
 
 • **isLoadingResults$**: `Observable`<`boolean`\>
 
 ## Methods
 
-### changeLoadingStatus
+### updateLoadingIndicator
 
-▸ **changeLoadingStatus**(`start?`): `void`
+▸ **updateLoadingIndicator**(`newIndicator`): `void`
 
 #### Parameters
 
-| Name | Type | Default value |
-| :------ | :------ | :------ |
-| `start` | `boolean` | `false` |
+| Name | Type |
+| :------ | :------ |
+| `newIndicator` | `LoadingIndicator` |
 
 #### Returns
 

@@ -12,12 +12,15 @@
     "declaration": false,
     "downlevelIteration": true,
     "paths": {
-      "common": [
+      "@axrl/common": [
         "dist/common"
       ],
-      "ngx-extended-form-builder": [
+      "@axrl/ngx-extended-form-builder": [
         "dist/ngx-extended-form-builder/ngx-extended-form-builder",
         "dist/ngx-extended-form-builder"
+      ],
+      "@axrl/one-table": [
+        "dist/one-table"
       ]
     },
     "experimentalDecorators": true,
