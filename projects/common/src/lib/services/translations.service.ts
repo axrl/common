@@ -7,7 +7,7 @@ import { ApiService } from './work-with-http/api.service';
  * InjectionToken со строкой URL, по которому расположен файл со словарем переводов.
  * По умолчанию - 'assets/translations/ru.json';
  */
-export const TRANSLATIONS_JSON_URL = new InjectionToken('TRANSLATIONS_JSON_URL', {
+export const TRANSLATIONS_JSON_URL = new InjectionToken<string>('TRANSLATIONS_JSON_URL', {
   providedIn: 'root',
   factory: () => 'assets/translations/ru.json'
 });

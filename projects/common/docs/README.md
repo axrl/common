@@ -25,6 +25,10 @@
 ### Variables
 
 - [TRANSLATIONS\_JSON\_URL](README.md#translations_json_url)
+- [API\_SERVICE\_GET\_MAP\_FN](README.md#api_service_get_map_fn)
+- [API\_SERVICE\_POST\_MAP\_FN](README.md#api_service_post_map_fn)
+- [API\_SERVICE\_PUT\_MAP\_FN](README.md#api_service_put_map_fn)
+- [API\_SERVICE\_DELETE\_MAP\_FN](README.md#api_service_delete_map_fn)
 
 ### Interfaces
 
@@ -200,6 +204,62 @@ ___
 
 InjectionToken со строкой URL, по которому расположен файл со словарем переводов.
 По умолчанию - 'assets/translations/ru.json';
+
+___
+
+### API\_SERVICE\_GET\_MAP\_FN
+
+• `Const` **API\_SERVICE\_GET\_MAP\_FN**: `InjectionToken`<`TransformIncomingDataFn`\>
+
+InjectionToken с функцией, которая будет применяться ко всем данным, полученным при использовании
+
+**`Method`**
+
+`ApiService.getData<T>` .
+По умолчанию -  (data) => data (преобразование данных не происходит) ;
+
+___
+
+### API\_SERVICE\_POST\_MAP\_FN
+
+• `Const` **API\_SERVICE\_POST\_MAP\_FN**: `InjectionToken`<`TransformIncomingDataFn`\>
+
+InjectionToken с функцией, которая будет применяться ко всем данным, полученным при использовании
+
+**`Method`**
+
+`ApiService.postData<TResponse,TBody>` и
+
+**`Method`**
+
+`ApiService.postNoData<TResponse>` .
+По умолчанию -  (data) => data (преобразование данных не происходит) ;
+
+___
+
+### API\_SERVICE\_PUT\_MAP\_FN
+
+• `Const` **API\_SERVICE\_PUT\_MAP\_FN**: `InjectionToken`<`TransformIncomingDataFn`\>
+
+InjectionToken с функцией, которая будет применяться ко всем данным, полученным при использовании
+
+**`Method`**
+
+`ApiService.putData<TResponse,TBody>` .
+По умолчанию -  (data) => data (преобразование данных не происходит) ;
+
+___
+
+### API\_SERVICE\_DELETE\_MAP\_FN
+
+• `Const` **API\_SERVICE\_DELETE\_MAP\_FN**: `InjectionToken`<`TransformIncomingDataFn`\>
+
+InjectionToken с функцией, которая будет применяться ко всем данным, полученным при использовании
+
+**`Method`**
+
+`ApiService.delete<T>` .
+По умолчанию -  (data) => data (преобразование данных не происходит) ;
 
 ## Type Aliases
 

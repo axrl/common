@@ -18,15 +18,15 @@
 - [postData](ApiService.md#postdata)
 - [postBlobData](ApiService.md#postblobdata)
 - [postNoData](ApiService.md#postnodata)
-- [delete](ApiService.md#delete)
 - [putData](ApiService.md#putdata)
+- [delete](ApiService.md#delete)
 - [getBlobData](ApiService.md#getblobdata)
 
 ## Constructors
 
 ### constructor
 
-• **new ApiService**(`http`, `snack`)
+• **new ApiService**(`http`, `snack`, `methodGetMapFn`, `methodPostMapFn`, `methodPutMapFn`, `methodDeleteMapFn`)
 
 #### Parameters
 
@@ -34,6 +34,10 @@
 | :------ | :------ |
 | `http` | `HttpClient` |
 | `snack` | [`SnackService`](SnackService.md) |
+| `methodGetMapFn` | `TransformIncomingDataFn` |
+| `methodPostMapFn` | `TransformIncomingDataFn` |
+| `methodPutMapFn` | `TransformIncomingDataFn` |
+| `methodDeleteMapFn` | `TransformIncomingDataFn` |
 
 ## Properties
 
@@ -160,29 +164,6 @@ ___
 
 ___
 
-### delete
-
-▸ **delete**<`T`\>(`url`, `params?`): `Observable`<`T`\>
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `T` |
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `url` | `string` |
-| `params` | `Object` |
-
-#### Returns
-
-`Observable`<`T`\>
-
-___
-
 ### putData
 
 ▸ **putData**<`TResponse`, `TBody`\>(`url`, `body`, `options?`): `Observable`<`TResponse`\>
@@ -205,6 +186,29 @@ ___
 #### Returns
 
 `Observable`<`TResponse`\>
+
+___
+
+### delete
+
+▸ **delete**<`T`\>(`url`, `params?`): `Observable`<`T`\>
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `url` | `string` |
+| `params` | `Object` |
+
+#### Returns
+
+`Observable`<`T`\>
 
 ___
 
