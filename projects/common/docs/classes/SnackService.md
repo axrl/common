@@ -26,7 +26,7 @@
 
 ### showText
 
-▸ **showText**(`message`, `isError?`): `void`
+▸ **showText**(`message`, `isError?`, `config?`): `void`
 
 #### Parameters
 
@@ -34,6 +34,7 @@
 | :------ | :------ | :------ |
 | `message` | `string` | `undefined` |
 | `isError` | `boolean` | `false` |
+| `config?` | `MatSnackBarConfig`<`any`\> | `undefined` |
 
 #### Returns
 

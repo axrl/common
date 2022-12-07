@@ -20,13 +20,14 @@
 
 ### constructor
 
-• **new TranslationsService**(`api`)
+• **new TranslationsService**(`api`, `translationsJsonUrl`)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `api` | [`ApiService`](ApiService.md) |
+| `translationsJsonUrl` | `string` |
 
 ## Properties
 

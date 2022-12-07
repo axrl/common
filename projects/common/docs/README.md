@@ -22,6 +22,10 @@
 - [ApiService](classes/ApiService.md)
 - [HttpBusService](classes/HttpBusService.md)
 
+### Variables
+
+- [TRANSLATIONS\_JSON\_URL](README.md#translations_json_url)
+
 ### Interfaces
 
 - [SendEventToBusFnParams](interfaces/SendEventToBusFnParams.md)
@@ -187,6 +191,15 @@ ___
 #### Returns
 
 `number`
+
+## Variables
+
+### TRANSLATIONS\_JSON\_URL
+
+• `Const` **TRANSLATIONS\_JSON\_URL**: `InjectionToken`<`string`\>
+
+InjectionToken со строкой URL, по которому расположен файл со словарем переводов.
+По умолчанию - 'assets/translations/ru.json';
 
 ## Type Aliases
 

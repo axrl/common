@@ -1,19 +1,32 @@
-import { Injectable } from '@angular/core';
+import { Injectable, InjectionToken, Inject } from '@angular/core';
 import { shareReplay } from 'rxjs';
 import { ApiService } from './work-with-http/api.service';
+
+
+/**
+ * InjectionToken со строкой URL, по которому расположен файл со словарем переводов.
+ * По умолчанию - 'assets/translations/ru.json';
+ */
+export const TRANSLATIONS_JSON_URL = new InjectionToken('TRANSLATIONS_JSON_URL', {
+  providedIn: 'root',
+  factory: () => 'assets/translations/ru.json'
+});
 
 @Injectable({
   providedIn: 'root'
 })
 export class TranslationsService {
 
-  constructor(private api: ApiService) { }
+  constructor(
+    private api: ApiService,
+    @Inject(TRANSLATIONS_JSON_URL) private translationsJsonUrl: string
+  ) { }
 
-  translations$ = this.api.getData<Record<string, string>>('assets/translations/ru.json').pipe(
+  translations$ = this.api.getData<Record<string, string>>(this.translationsJsonUrl).pipe(
     shareReplay(1)
   );
 
-  translate(translations: Record<string, string>, value?: string):string {
+  translate(translations: Record<string, string>, value?: string): string {
     /** если в пайп не передано значение - вернем пустую строку */
     if (value === undefined) {
 
