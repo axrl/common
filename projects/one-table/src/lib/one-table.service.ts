@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, distinctUntilKeyChanged, map } from 'rxjs';
+import { Inject, InjectionToken, Injectable, EventEmitter } from '@angular/core';
+import { BehaviorSubject, distinctUntilKeyChanged, filter, map } from 'rxjs';
 import type { Observable } from 'rxjs';
 import { OneTableData, TableFilterOptions } from './models';
 import type { ActionButton, BaseListRequest, ColumnsType, ColumnType, ColumnName, CountAndRows, TableFilterUpdateFn, TableFilterOptionsData } from './models';
@@ -7,34 +7,24 @@ import { isValue } from '@axrl/common';
 
 export interface BasePersonSettings<T extends {}, Q extends BaseListRequest = BaseListRequest> {
   paginatorDefaultSize: number;
-  uiLayouts: {
-    [componentName: string]: {
-      columns: ColumnsType<T>;
-      req?: Q;
-    };
-  };
+  uiLayouts: Record<string, {
+    columns: ColumnsType<T>;
+    req?: Q;
+  }>;
 }
 
-@Injectable({
-  providedIn: 'root'
-})
-export class OneTableService {
-
-  constructor() { }
-
-  private memory = new Map<string | number | Date, string>([]);
-
-  getFromMemory(key: string) {
-    return this.memory.get(key);
-  }
-
-  saveToMemory(key: string, value: string) {
-    this.memory.set(key, value);
-  }
-
-  private get storageBasePersonSettings(): BasePersonSettings<{}, BaseListRequest> {
+/**
+ * InjectionToken со стартовым значением для потока с настройками пользователя.
+ * По умолчанию - использются данные, хранящиеся в localStorage, при их отсутствии - значение по умолчанию.
+ * 
+ * Если в приложении определена собственная логика хранения пользовательских настроек и стартовое значение 
+ * будет передаваться в сервис извне - рекомендуется определить токен, используя в качестве стартового значения - null.
+ */
+export const PERSON_SETTINGS_START_VALUE = new InjectionToken<BasePersonSettings<{}, BaseListRequest> | null>('PERSON_SETTINGS_START_VALUE', {
+  providedIn: 'root',
+  factory: () => {
     const storageValue = window.localStorage.getItem('one-table:user-settings');
-    const defaultSettings = {
+    const defaultSettings: BasePersonSettings<{}, BaseListRequest> = {
       paginatorDefaultSize: 10,
       uiLayouts: {}
     };
@@ -51,26 +41,64 @@ export class OneTableService {
       return defaultSettings;
     }
   }
+});
 
+@Injectable({
+  providedIn: 'root'
+})
+export class OneTableService {
 
-  private _basePersonSettings$: BehaviorSubject<BasePersonSettings<{}, BaseListRequest>> = new BehaviorSubject<BasePersonSettings<{}, BaseListRequest>>(this.storageBasePersonSettings);
-  basePersonSettings$: Observable<BasePersonSettings<{}, BaseListRequest>> = this._basePersonSettings$.asObservable();
+  constructor(
+    @Inject(PERSON_SETTINGS_START_VALUE) private defaultPersonSettingsValue: BasePersonSettings<{}, BaseListRequest> | null
+  ) { }
 
-  updatePersonSettings<S extends BasePersonSettings<{}, BaseListRequest>>(newSettings: S) {
-    this._basePersonSettings$.next(newSettings);
+  private memory = new Map<string | number | Date, string>([]);
+
+  getFromMemory(key: string) {
+    return this.memory.get(key);
+  }
+
+  saveToMemory(key: string, value: string) {
+    this.memory.set(key, value);
+  }
+
+  private _basePersonSettings$: BehaviorSubject<
+    BasePersonSettings<{}, BaseListRequest> | null
+  > = new BehaviorSubject<BasePersonSettings<{}, BaseListRequest> | null>(this.defaultPersonSettingsValue);
+
+  basePersonSettings$: Observable<
+    BasePersonSettings<{}, BaseListRequest> | null
+  > = this._basePersonSettings$.asObservable();
+
+  basePersonSettingsFiltered$: Observable<
+    BasePersonSettings<{}, BaseListRequest>
+  > = this.basePersonSettings$.pipe(
+    filter(
+      (s): s is BasePersonSettings<{}, BaseListRequest> => isValue(s)
+    )
+  );
+
+  /** Поток с данными об обновлениях настроек. */
+  settingsChanges = new EventEmitter<BasePersonSettings<{}, BaseListRequest>>();
+
+  updatePersonSettings<T extends {}, Q extends BaseListRequest>(newSettings: BasePersonSettings<T, Q>, emitEvent: boolean = true) {
+    localStorage.setItem('one-table:user-settings', JSON.stringify(newSettings));
+    this._basePersonSettings$.next(<BasePersonSettings<{}, BaseListRequest>>newSettings);
+    if (emitEvent) {
+      this.settingsChanges.emit(<BasePersonSettings<{}, BaseListRequest>>newSettings);
+    };
   }
 
   updateUiLayoutFn<T extends {}, Q extends BaseListRequest = BaseListRequest>(
     componentName: string,
     newComponentLayout: BasePersonSettings<T, Q>['uiLayouts'][keyof BasePersonSettings<T, Q>['uiLayouts']]
   ) {
-    const settings: BasePersonSettings<T, Q> = <BasePersonSettings<T, Q>>this._basePersonSettings$.value;
+    const settings = <BasePersonSettings<T, Q>>this._basePersonSettings$.value;
     if (settings) {
       const layout = settings.uiLayouts ? settings.uiLayouts : {};
       layout[componentName] = newComponentLayout;
       settings.uiLayouts = layout;
-      localStorage.setItem('one-table:user-settings', JSON.stringify(settings));
-      this._basePersonSettings$.next(<BasePersonSettings<{}, BaseListRequest>>settings);
+      this.updatePersonSettings(<BasePersonSettings<{}, BaseListRequest>>settings);
     };
   }
 
@@ -93,7 +121,7 @@ export class OneTableService {
     columnsForCopy?: ColumnName<T>[]
   }): Observable<OneTableData<T, Q>> {
     const filterOptions = config.filterOptions ? new TableFilterOptions<Q>(config.filterOptions, config.updateFilterFn) : undefined;
-    return this.basePersonSettings$.pipe(
+    return this.basePersonSettingsFiltered$.pipe(
       distinctUntilKeyChanged('paginatorDefaultSize'),
       map(
         res => new OneTableData<T, Q>({
@@ -123,7 +151,7 @@ export class OneTableService {
     componentName: string,
     defaultColumns: ColumnsType<T>
   ): Observable<ColumnsType<T>> {
-    return this.basePersonSettings$.pipe(
+    return this.basePersonSettingsFiltered$.pipe(
       map(
         settings => {
           const uiLayouts = settings.uiLayouts;
