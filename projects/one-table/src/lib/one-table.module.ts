@@ -71,7 +71,7 @@ import { ColumnPipe } from './column.pipe';
     ClipboardModule,
     MatCardModule,
     MatMenuModule,
-
+    MatCheckboxModule,
     OneTableExpandedRowContentProjectDirective,
     OneTableComponent,
   ]

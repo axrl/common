@@ -56,6 +56,10 @@ export class OneTableService {
   private _basePersonSettings$: BehaviorSubject<BasePersonSettings<{}, BaseListRequest>> = new BehaviorSubject<BasePersonSettings<{}, BaseListRequest>>(this.storageBasePersonSettings);
   basePersonSettings$: Observable<BasePersonSettings<{}, BaseListRequest>> = this._basePersonSettings$.asObservable();
 
+  updatePersonSettings<S extends BasePersonSettings<{}, BaseListRequest>>(newSettings: S) {
+    this._basePersonSettings$.next(newSettings);
+  }
+
   updateUiLayoutFn<T extends {}, Q extends BaseListRequest = BaseListRequest>(
     componentName: string,
     newComponentLayout: BasePersonSettings<T, Q>['uiLayouts'][keyof BasePersonSettings<T, Q>['uiLayouts']]
