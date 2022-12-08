@@ -24,6 +24,7 @@
 
 ### Variables
 
+- [SNACK\_SERVICE\_COMPONENT](README.md#snack_service_component)
 - [TRANSLATIONS\_JSON\_URL](README.md#translations_json_url)
 - [API\_SERVICE\_GET\_MAP\_FN](README.md#api_service_get_map_fn)
 - [API\_SERVICE\_POST\_MAP\_FN](README.md#api_service_post_map_fn)
@@ -197,6 +198,15 @@ ___
 `number`
 
 ## Variables
+
+### SNACK\_SERVICE\_COMPONENT
+
+• `Const` **SNACK\_SERVICE\_COMPONENT**: `InjectionToken`<`undefined` \| `SnackServiceConfig`<`unknown`, `any`\>\>
+
+InjectionToken с компонентом, который будет отображаться в качестве Snackbar.
+По умолчанию задано значение undefined - сервис использует встроенный в Angular Material компонент по умолчанию, иначе - используется компонент из токена.
+
+___
 
 ### TRANSLATIONS\_JSON\_URL
 

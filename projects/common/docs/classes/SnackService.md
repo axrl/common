@@ -14,19 +14,20 @@
 
 ### constructor
 
-• **new SnackService**(`snackBar`)
+• **new SnackService**(`snackBar`, `snackServiceConfig`)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `snackBar` | `MatSnackBar` |
+| `snackServiceConfig` | `undefined` \| `SnackServiceConfig`<`unknown`, `any`\> |
 
 ## Methods
 
 ### showText
 
-▸ **showText**(`message`, `isError?`, `config?`): `void`
+▸ **showText**(`message`, `isError?`, `config?`): `MatSnackBarRef`<`unknown`\>
 
 #### Parameters
 
@@ -38,4 +39,4 @@
 
 #### Returns
 
-`void`
+`MatSnackBarRef`<`unknown`\>
