@@ -50,23 +50,6 @@ export const API_SERVICE_DELETE_MAP_FN = new InjectionToken<TransformIncomingDat
   factory: () => noTransFormIncomingDataFn
 });
 
-class LoadingIndicator {
-  private count: number = 0;
-  get isLoading(): boolean {
-    return this.count > 0
-  };
-
-  increment() {
-    this.count += 1;
-  };
-
-  decrement() {
-    if (this.count !== 0) {
-      this.count -= 1;
-    };
-  };
-}
-
 @Injectable({
   providedIn: 'root',
 })
@@ -81,16 +64,23 @@ export class ApiService {
     @Inject(API_SERVICE_DELETE_MAP_FN) private methodDeleteMapFn: TransformIncomingDataFn
   ) { }
 
-  private _isLoadingResults: BehaviorSubject<LoadingIndicator> = new BehaviorSubject<LoadingIndicator>(new LoadingIndicator());
-  loadingIndicator$ = this._isLoadingResults.asObservable();
-  isLoadingResults$ = this.loadingIndicator$.pipe(
+  private _isLoadingResults: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  isLoadingResults$ = this._isLoadingResults.asObservable().pipe(
     map(
-      indicator => indicator.isLoading
+      indicator => indicator > 0
     )
   );
 
-  updateLoadingIndicator(newIndicator: LoadingIndicator) {
-    this._isLoadingResults.next(newIndicator);
+  updateLoadingIndicator(start: boolean = true) {
+    let count = this._isLoadingResults.value;
+    if (start) {
+      count += 1;
+    } else {
+      if (count > 0) {
+        count -= 1;
+      };
+    };
+    this._isLoadingResults.next(count);
   }
 
   getData<T>(url: string, options: ParamsAndHeaders & { responseType: 'text' },): Observable<string>;
@@ -103,12 +93,11 @@ export class ApiService {
       params: makeHttpParams(options?.params!, {}),
       responseType: options.responseType ?? 'json'
     };
-    const loading = this._isLoadingResults.value;
+
     return of(null).pipe(
       switchMap(
         () => {
-          loading.increment();
-          this.updateLoadingIndicator(loading);
+          this.updateLoadingIndicator(true);
           return options.responseType === 'text' ?
             this.http.get(url, { ...config, responseType: options.responseType }) :
             options.responseType === 'arraybuffer' ?
@@ -119,8 +108,7 @@ export class ApiService {
         }),
       map(
         res => {
-          loading.decrement();
-          this.updateLoadingIndicator(loading);
+          this.updateLoadingIndicator();
           return isValue(options.responseType) && ['text', 'arraybuffer', 'blob'].includes(options.responseType) ?
             res :
             this.methodGetMapFn<T>(res);
@@ -128,8 +116,7 @@ export class ApiService {
       catchError(
         (message: string) => {
           this.snack.showText(message, true);
-          loading.decrement();
-          this.updateLoadingIndicator(loading);
+          this.updateLoadingIndicator();
           return throwError(() => message);
         })
 
@@ -158,13 +145,12 @@ export class ApiService {
       params: makeHttpParams(options?.params!, {}),
       responseType: options.responseType ?? 'json'
     };
-    const loading = this._isLoadingResults.value;
+
 
     return of(null).pipe(
       switchMap(
         () => {
-          loading.increment();
-          this.updateLoadingIndicator(loading);
+          this.updateLoadingIndicator(true);
           return options.responseType === 'text' ?
             this.http.post(url, body, { ...config, responseType: 'text' }) :
             options.responseType === 'arraybuffer' ?
@@ -175,15 +161,13 @@ export class ApiService {
         }),
       map(
         res => {
-          loading.decrement();
-          this.updateLoadingIndicator(loading);;
+          this.updateLoadingIndicator();
           return this.methodPostMapFn<TResponse>(res);
         }),
       catchError(
         (message: string) => {
           this.snack.showText(message, true);
-          loading.decrement();
-          this.updateLoadingIndicator(loading);;
+          this.updateLoadingIndicator();
           return throwError(() => message);
         })
     );
@@ -222,25 +206,22 @@ export class ApiService {
     if (options && options.params) {
       options.params = makeHttpParams(options.params, {});
     };
-    const loading = this._isLoadingResults.value;
+
     return of(null).pipe(
       switchMap(
         () => {
-          loading.increment();
-          this.updateLoadingIndicator(loading);
+          this.updateLoadingIndicator(true);
           return this.http.put<TResponse>(url, body, options);
         }),
       map(
         res => {
-          loading.decrement();
-          this.updateLoadingIndicator(loading);;
+          this.updateLoadingIndicator();
           return this.methodPutMapFn<TResponse>(res);
         }),
       catchError(
         (message: string) => {
           this.snack.showText(message, true);
-          loading.decrement();
-          this.updateLoadingIndicator(loading);;
+          this.updateLoadingIndicator();
           return throwError(() => message);
         })
     );
@@ -249,26 +230,23 @@ export class ApiService {
   delete<T>(url: string,
     params: { [param: string]: string | any; }
       = {}): Observable<T> {
-    const loading = this._isLoadingResults.value;
+
 
     return of(null).pipe(
       switchMap(
         () => {
-          loading.increment();
-          this.updateLoadingIndicator(loading);
+          this.updateLoadingIndicator(true);
           return this.http.delete<T>(url, { params: makeHttpParams(params, {}) });
         }),
       map(
         res => {
-          loading.decrement();
-          this.updateLoadingIndicator(loading);
+          this.updateLoadingIndicator();
           return this.methodDeleteMapFn<T>(res);
         }),
       catchError(
         (message: string) => {
           this.snack.showText(message, true);
-          loading.decrement();
-          this.updateLoadingIndicator(loading);
+          this.updateLoadingIndicator();
           return throwError(() => message);
         })
     );

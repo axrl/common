@@ -8,7 +8,6 @@
 
 ### Properties
 
-- [loadingIndicator$](ApiService.md#loadingindicator$)
 - [isLoadingResults$](ApiService.md#isloadingresults$)
 
 ### Methods
@@ -41,12 +40,6 @@
 
 ## Properties
 
-### loadingIndicator$
-
-• **loadingIndicator$**: `Observable`<`LoadingIndicator`\>
-
-___
-
 ### isLoadingResults$
 
 • **isLoadingResults$**: `Observable`<`boolean`\>
@@ -55,13 +48,13 @@ ___
 
 ### updateLoadingIndicator
 
-▸ **updateLoadingIndicator**(`newIndicator`): `void`
+▸ **updateLoadingIndicator**(`start?`): `void`
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `newIndicator` | `LoadingIndicator` |
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `start` | `boolean` | `true` |
 
 #### Returns
 
