@@ -71,7 +71,7 @@ export class ApiService {
     )
   );
 
-  updateLoadingIndicator(start: boolean = true) {
+  updateLoadingIndicator(start: boolean = false) {
     let count = this._isLoadingResults.value;
     if (start) {
       count += 1;
