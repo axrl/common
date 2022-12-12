@@ -275,7 +275,7 @@ InjectionToken с функцией, которая будет применять
 
 ### HttpBusEventData
 
-Ƭ **HttpBusEventData**<`T`\>: `HttpBusBaseEventData`<`T`\> & { `method`: ``"post"`` \| ``"post-blob"`` \| ``"put"`` ; `url`: `string` ; `body?`: `unknown` \| ``null`` ; `options`: [`ParamsAndHeaders`](README.md#paramsandheaders) ; `filename?`: `string`  } \| { `method`: ``"custom"`` ; `customObservable`: `Observable`<`T`\>  } \| { `method`: ``"get-blob"`` \| ``"get"`` \| ``"delete"`` ; `url`: `string` ; `options`: [`ParamsAndHeaders`](README.md#paramsandheaders) ; `filename?`: `string`  }
+Ƭ **HttpBusEventData**<`T`\>: `HttpBusBaseEventData`<`T`\> & { `method`: ``"post"`` \| ``"post-blob"`` \| ``"post-text"`` \| ``"put"`` ; `url`: `string` ; `body?`: `unknown` \| ``null`` ; `options`: [`ParamsAndHeaders`](README.md#paramsandheaders) ; `filename?`: `string`  } \| { `method`: ``"custom"`` ; `customObservable`: `Observable`<`T`\>  } \| { `method`: ``"get"`` \| ``"get-blob"`` \| ``"get-text"`` \| ``"delete"`` ; `url`: `string` ; `options`: [`ParamsAndHeaders`](README.md#paramsandheaders) ; `filename?`: `string`  }
 
 #### Type parameters
 

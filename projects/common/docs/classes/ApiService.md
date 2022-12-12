@@ -15,12 +15,12 @@
 
 - [updateLoadingIndicator](ApiService.md#updateloadingindicator)
 - [getData](ApiService.md#getdata)
+- [getBlobData](ApiService.md#getblobdata)
 - [postData](ApiService.md#postdata)
 - [postBlobData](ApiService.md#postblobdata)
 - [postNoData](ApiService.md#postnodata)
 - [putData](ApiService.md#putdata)
 - [delete](ApiService.md#delete)
-- [getBlobData](ApiService.md#getblobdata)
 
 ## Constructors
 
@@ -71,6 +71,63 @@ ___
 
 ### getData
 
+▸ **getData**<`T`\>(`url`, `options`): `Observable`<`string`\>
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `url` | `string` |
+| `options` | [`ParamsAndHeaders`](../README.md#paramsandheaders) & { `responseType`: ``"text"``  } |
+
+#### Returns
+
+`Observable`<`string`\>
+
+▸ **getData**<`T`\>(`url`, `options`): `Observable`<`ArrayBuffer`\>
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `url` | `string` |
+| `options` | [`ParamsAndHeaders`](../README.md#paramsandheaders) & { `responseType`: ``"arraybuffer"``  } |
+
+#### Returns
+
+`Observable`<`ArrayBuffer`\>
+
+▸ **getData**<`T`\>(`url`, `options`): `Observable`<`File`\>
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `url` | `string` |
+| `options` | [`ParamsAndHeaders`](../README.md#paramsandheaders) & { `responseType`: ``"blob"``  } |
+
+#### Returns
+
+`Observable`<`File`\>
+
 ▸ **getData**<`T`\>(`url`, `options?`): `Observable`<`T`\>
 
 #### Type parameters
@@ -84,7 +141,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `url` | `string` |
-| `options` | [`ParamsAndHeaders`](../README.md#paramsandheaders) & { `responseType?`: ``"json"`` \| ``"blob"``  } |
+| `options?` | [`ParamsAndHeaders`](../README.md#paramsandheaders) & { `responseType?`: ``"json"``  } |
 
 #### Returns
 
@@ -92,7 +149,88 @@ ___
 
 ___
 
+### getBlobData
+
+▸ **getBlobData**(`url`, `params?`, `headers?`): `Observable`<`File`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `url` | `string` |
+| `params` | `Object` |
+| `headers?` | `Object` |
+
+#### Returns
+
+`Observable`<`File`\>
+
+___
+
 ### postData
+
+▸ **postData**<`TResponse`, `TBody`\>(`url`, `body`, `options`): `Observable`<`string`\>
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `TResponse` |
+| `TBody` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `url` | `string` |
+| `body` | `TBody` |
+| `options` | [`ParamsAndHeaders`](../README.md#paramsandheaders) & { `responseType`: ``"text"``  } |
+
+#### Returns
+
+`Observable`<`string`\>
+
+▸ **postData**<`TResponse`, `TBody`\>(`url`, `body`, `options`): `Observable`<`ArrayBuffer`\>
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `TResponse` |
+| `TBody` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `url` | `string` |
+| `body` | `TBody` |
+| `options` | [`ParamsAndHeaders`](../README.md#paramsandheaders) & { `responseType`: ``"arraybuffer"``  } |
+
+#### Returns
+
+`Observable`<`ArrayBuffer`\>
+
+▸ **postData**<`TResponse`, `TBody`\>(`url`, `body`, `options`): `Observable`<`File`\>
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `TResponse` |
+| `TBody` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `url` | `string` |
+| `body` | `TBody` |
+| `options` | [`ParamsAndHeaders`](../README.md#paramsandheaders) & { `responseType`: ``"blob"``  } |
+
+#### Returns
+
+`Observable`<`File`\>
 
 ▸ **postData**<`TResponse`, `TBody`\>(`url`, `body`, `options?`): `Observable`<`TResponse`\>
 
@@ -109,7 +247,7 @@ ___
 | :------ | :------ |
 | `url` | `string` |
 | `body` | `TBody` |
-| `options` | [`ParamsAndHeaders`](../README.md#paramsandheaders) |
+| `options?` | [`ParamsAndHeaders`](../README.md#paramsandheaders) & { `responseType?`: ``"json"``  } |
 
 #### Returns
 
@@ -209,21 +347,3 @@ ___
 #### Returns
 
 `Observable`<`T`\>
-
-___
-
-### getBlobData
-
-▸ **getBlobData**(`url`, `params?`, `headers?`): `Observable`<`File`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `url` | `string` |
-| `params` | `Object` |
-| `headers?` | `Object` |
-
-#### Returns
-
-`Observable`<`File`\>

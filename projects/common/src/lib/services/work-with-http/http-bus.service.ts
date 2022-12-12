@@ -12,7 +12,7 @@ interface HttpBusBaseEventData<T> {
 }
 
 export interface SendEventToBusFnParams<TResponse> {
-  method: 'post' | 'post-blob' | 'put' | 'delete' | 'get-blob' | 'get',
+  method: 'post' | 'post-blob' | 'post-text' | 'put' | 'delete' | 'get' | 'get-blob' | 'get-text',
   url: string,
   body?: any | null | undefined,
   cb?: AdditionalActionCallbackFn<TResponse>,
@@ -23,7 +23,7 @@ export interface SendEventToBusFnParams<TResponse> {
 }
 
 export type HttpBusEventData<T> = HttpBusBaseEventData<T> & ({
-  method: 'post' | 'post-blob' | 'put';
+  method: 'post' | 'post-blob' | 'post-text' | 'put';
   url: string;
   body?: unknown | null;
   options: ParamsAndHeaders;
@@ -32,7 +32,7 @@ export type HttpBusEventData<T> = HttpBusBaseEventData<T> & ({
   method: 'custom';
   customObservable: Observable<T>;
 } | {
-  method: 'get-blob' | 'get' | 'delete';
+  method: 'get' | 'get-blob' | 'get-text' | 'delete';
   url: string,
   options: ParamsAndHeaders;
   filename?: string;
@@ -80,10 +80,10 @@ export class HttpBusService {
 
   private reducer<T>(e: HttpBusEventData<T>) {
     switch (e.method) {
-      case 'post': return this.api.postData(e.url, e.body, e.options);
       case 'put': return this.api.putData(e.url, e.body!, e.options);
       case 'delete': return this.api.delete(e.url, e.options.params);
-      case 'get': return this.api.getData(e.url, e.options);
+      case 'post': return this.api.postData(e.url, e.body, e.options);
+      case 'post-text': return this.api.postData(e.url, e.body!, { ...e.options, responseType: 'text' });
       case 'post-blob': return this.api.postBlobData(e.url, e.body!, e.options).pipe(
         map(
           result => {
@@ -91,6 +91,8 @@ export class HttpBusService {
             return { IsOk: true };
           })
       );
+      case 'get': return this.api.getData(e.url, e.options);
+      case 'get-text': return this.api.getData(e.url, { ...e.options, responseType: 'text' });
       case 'get-blob': return this.api.getBlobData(e.url, e.options.params, e.options.headers).pipe(
         map(
           result => {

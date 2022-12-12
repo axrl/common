@@ -92,47 +92,15 @@ export class ApiService {
     this._isLoadingResults.next(newIndicator);
   }
 
-  getData<T>(
-    url: string,
-    options: ParamsAndHeaders & { responseType?: 'json' | 'blob'; } = {}
-  ): Observable<T> {
-
-    return this._isLoadingResults.pipe(
-      exhaustMap(
-        loading => {
-          loading.increment();
-          this.updateLoadingIndicator(loading);
-          return this.http.get<T>(url, {
-            headers: options.headers,
-            params: makeHttpParams(options?.params!, {})
-          }).pipe(
-            map(
-              res => {
-                loading.decrement();
-                this.updateLoadingIndicator(loading);
-                return this.methodGetMapFn<T>(res);
-              }),
-            catchError(
-              (message: string) => {
-                this.snack.showText(message, true);
-                loading.decrement();
-                this.updateLoadingIndicator(loading);
-                return throwError(() => message);
-              })
-          );
-        })
-    );
-  }
-
-  postData<TResponse, TBody>(
-    url: string,
-    body: TBody,
-    options: ParamsAndHeaders = {},
-  ): Observable<TResponse> {
-    if (options) {
-      if (options.params) {
-        options.params = makeHttpParams(options.params, {});
-      }
+  getData<T>(url: string, options: ParamsAndHeaders & { responseType: 'text' },): Observable<string>;
+  getData<T>(url: string, options: ParamsAndHeaders & { responseType: 'arraybuffer' },): Observable<ArrayBuffer>;
+  getData<T>(url: string, options: ParamsAndHeaders & { responseType: 'blob' },): Observable<File>;
+  getData<T>(url: string, options?: ParamsAndHeaders & { responseType?: 'json' },): Observable<T>;
+  getData<T>(url: string, options: ParamsAndHeaders & { responseType?: 'json' | 'blob' | 'text' | 'arraybuffer' } = {}) {
+    const config = {
+      headers: options.headers,
+      params: makeHttpParams(options?.params!, {}),
+      responseType: options.responseType ?? 'json'
     };
 
     return this._isLoadingResults.pipe(
@@ -140,21 +108,163 @@ export class ApiService {
         loading => {
           loading.increment();
           this.updateLoadingIndicator(loading);
-          return this.http.post<TResponse>(url, body, options).pipe(
-            map(
-              res => {
-                loading.decrement();
-                this.updateLoadingIndicator(loading);;
-                return this.methodPostMapFn<TResponse>(res);
-              }),
-            catchError(
-              (message: string) => {
-                this.snack.showText(message, true);
-                loading.decrement();
-                this.updateLoadingIndicator(loading);;
-                return throwError(() => message);
-              })
-          );
+          return options.responseType === 'text' ?
+            this.http.get(url, { ...config, responseType: options.responseType }).pipe(
+              map(
+                res => {
+                  loading.decrement();
+                  this.updateLoadingIndicator(loading);
+                  return res;
+                }),
+              catchError(
+                (message: string) => {
+                  this.snack.showText(message, true);
+                  loading.decrement();
+                  this.updateLoadingIndicator(loading);
+                  return throwError(() => message);
+                })
+            ) :
+            options.responseType === 'arraybuffer' ?
+              this.http.get(url, { ...config, responseType: 'arraybuffer' }).pipe(
+                map(
+                  res => {
+                    loading.decrement();
+                    this.updateLoadingIndicator(loading);
+                    return res;
+                  }),
+                catchError(
+                  (message: string) => {
+                    this.snack.showText(message, true);
+                    loading.decrement();
+                    this.updateLoadingIndicator(loading);
+                    return throwError(() => message);
+                  })
+              ) :
+              options.responseType === 'blob' ?
+                this.http.get(url, { ...config, responseType: 'blob' }).pipe(
+                  map(
+                    res => {
+                      loading.decrement();
+                      this.updateLoadingIndicator(loading);
+                      return res;
+                    }),
+                  catchError(
+                    (message: string) => {
+                      this.snack.showText(message, true);
+                      loading.decrement();
+                      this.updateLoadingIndicator(loading);
+                      return throwError(() => message);
+                    })
+                ) :
+                this.http.get<T>(url, { ...config, responseType: 'json' }).pipe(
+                  map(
+                    res => {
+                      loading.decrement();
+                      this.updateLoadingIndicator(loading);
+                      return this.methodGetMapFn<T>(res);
+                    }),
+                  catchError(
+                    (message: string) => {
+                      this.snack.showText(message, true);
+                      loading.decrement();
+                      this.updateLoadingIndicator(loading);
+                      return throwError(() => message);
+                    })
+                );
+        })
+    );
+  }
+
+  getBlobData(url: string, params: { [param: string]: string | any; } = {}, headers?: { [header: string]: string; }) {
+    const options: Record<string, string | any> = {
+      responseType: 'blob', params: makeHttpParams(params, {})
+    };
+    if (headers) {
+      options['headers'] = headers;
+    };
+
+    return this.getData<File>(url, options);
+  }
+
+  postData<TResponse, TBody>(url: string, body: TBody, options: ParamsAndHeaders & { responseType: 'text' },): Observable<string>;
+  postData<TResponse, TBody>(url: string, body: TBody, options: ParamsAndHeaders & { responseType: 'arraybuffer' },): Observable<ArrayBuffer>;
+  postData<TResponse, TBody>(url: string, body: TBody, options: ParamsAndHeaders & { responseType: 'blob' },): Observable<File>;
+  postData<TResponse, TBody>(url: string, body: TBody, options?: ParamsAndHeaders & { responseType?: 'json' },): Observable<TResponse>;
+  postData<TResponse, TBody>(url: string, body: TBody, options: ParamsAndHeaders & { responseType?: 'json' | 'blob' | 'text' | 'arraybuffer' } = {},) {
+    const config = {
+      headers: options.headers,
+      params: makeHttpParams(options?.params!, {}),
+      responseType: options.responseType ?? 'json'
+    };
+
+    return this._isLoadingResults.pipe(
+      exhaustMap(
+        loading => {
+          loading.increment();
+          this.updateLoadingIndicator(loading);
+          return options.responseType === 'text' ?
+            this.http.post(url, body, { ...config, responseType: 'text' }).pipe(
+              map(
+                res => {
+                  loading.decrement();
+                  this.updateLoadingIndicator(loading);
+                  return res;
+                }),
+              catchError(
+                (message: string) => {
+                  this.snack.showText(message, true);
+                  loading.decrement();
+                  this.updateLoadingIndicator(loading);
+                  return throwError(() => message);
+                })
+            ) :
+            options.responseType === 'arraybuffer' ?
+              this.http.post(url, body, { ...config, responseType: 'arraybuffer' }).pipe(
+                map(
+                  res => {
+                    loading.decrement();
+                    this.updateLoadingIndicator(loading);
+                    return res;
+                  }),
+                catchError(
+                  (message: string) => {
+                    this.snack.showText(message, true);
+                    loading.decrement();
+                    this.updateLoadingIndicator(loading);
+                    return throwError(() => message);
+                  })
+              ) :
+              options.responseType === 'blob' ?
+                this.http.post(url, body, { ...config, responseType: 'blob' }).pipe(
+                  map(
+                    res => {
+                      loading.decrement();
+                      this.updateLoadingIndicator(loading);
+                      return res;
+                    }),
+                  catchError(
+                    (message: string) => {
+                      this.snack.showText(message, true);
+                      loading.decrement();
+                      this.updateLoadingIndicator(loading);
+                      return throwError(() => message);
+                    })
+                ) :
+                this.http.post<TResponse>(url, body, { ...config, responseType: 'json' }).pipe(
+                  map(
+                    res => {
+                      loading.decrement();
+                      this.updateLoadingIndicator(loading);;
+                      return this.methodPostMapFn<TResponse>(res);
+                    }),
+                  catchError(
+                    (message: string) => {
+                      this.snack.showText(message, true);
+                      loading.decrement();
+                      this.updateLoadingIndicator(loading);;
+                      return throwError(() => message);
+                    })
+                );
         })
     );
   }
@@ -169,29 +279,7 @@ export class ApiService {
         options.params = makeHttpParams(options.params, {});
       }
     };
-
-    return this._isLoadingResults.pipe(
-      exhaustMap(
-        loading => {
-          loading.increment();
-          this.updateLoadingIndicator(loading);
-          return this.http.post(url, body, { ...options, responseType: 'blob' }).pipe(
-            map(
-              res => {
-                loading.decrement();
-                this.updateLoadingIndicator(loading);;
-                return <File>res;
-              }),
-            catchError(
-              (message: string) => {
-                this.snack.showText(message, true);
-                loading.decrement();
-                this.updateLoadingIndicator(loading);;
-                return throwError(() => message);
-              })
-          );
-        })
-    );
+    return this.postData<File, TBody>(url, body, { ...options, responseType: 'blob' });
   }
 
   postNoData<TResponse>(
@@ -260,38 +348,6 @@ export class ApiService {
                 this.snack.showText(message, true);
                 loading.decrement();
                 this.updateLoadingIndicator(loading);;
-                return throwError(() => message);
-              })
-          );
-        })
-    );
-  }
-
-  getBlobData(url: string, params: { [param: string]: string | any; } = {}, headers?: { [header: string]: string; }) {
-    const options: { [params: string]: string | any; } = {
-      responseType: 'blob', params: makeHttpParams(params, {})
-    };
-    if (headers) {
-      options['headers'] = headers;
-    };
-
-    return this._isLoadingResults.pipe(
-      exhaustMap(
-        loading => {
-          loading.increment();
-          this.updateLoadingIndicator(loading);
-          return this.http.get<File>(url, options).pipe(
-            map(
-              res => {
-                loading.decrement();
-                this.updateLoadingIndicator(loading);
-                return res;
-              }),
-            catchError(
-              (message: string) => {
-                this.snack.showText(message, true);
-                loading.decrement();
-                this.updateLoadingIndicator(loading);
                 return throwError(() => message);
               })
           );

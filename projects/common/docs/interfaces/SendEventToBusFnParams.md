@@ -23,7 +23,7 @@
 
 ### method
 
-• **method**: ``"post"`` \| ``"post-blob"`` \| ``"put"`` \| ``"delete"`` \| ``"get-blob"`` \| ``"get"``
+• **method**: ``"post"`` \| ``"post-blob"`` \| ``"post-text"`` \| ``"put"`` \| ``"delete"`` \| ``"get"`` \| ``"get-blob"`` \| ``"get-text"``
 
 ___
 
