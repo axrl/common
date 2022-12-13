@@ -1,6 +1,6 @@
 import { Pipe } from '@angular/core';
 import type { PipeTransform } from '@angular/core';
-import type { ColumnType } from './models';
+import type { ColumnType } from '../models';
 
 @Pipe({
   name: 'helperColumn',

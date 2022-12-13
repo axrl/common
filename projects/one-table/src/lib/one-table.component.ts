@@ -11,7 +11,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import type { BaseListRequest, OneTableData, ActionEvent, ColumnType, ActionButton, ColumnsType, ColumnConfig } from './models';
 import { createObservable, ExcelService, SnackService, isValue, trackByFn } from '@axrl/common';
 import { OneTableService } from './one-table.service';
-import { ColumnPipe } from './column.pipe';
+import { ColumnPipe } from './pipes/column.pipe';
 
 interface TableIconsDataFn {
   getIconName?: <T extends {}>(value: string, row: T, key?: ColumnType<T>) => string | null;

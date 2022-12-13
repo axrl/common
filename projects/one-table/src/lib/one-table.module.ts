@@ -20,7 +20,7 @@ import { RouterLink } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { OneTableExpandedRowContentProjectDirective, CmkTableKeyboardListenerDirective } from './directives';
 import { OneTableComponent } from './one-table.component';
-import { ColumnPipe } from './column.pipe';
+import { ColumnPipe } from './pipes';
 
 @NgModule({
   declarations:
@@ -59,6 +59,9 @@ import { ColumnPipe } from './column.pipe';
     ReactiveFormsModule
   ],
   exports: [
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule,
     MatDividerModule,
     MatIconModule,
     MatButtonModule,

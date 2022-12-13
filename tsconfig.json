@@ -11,18 +11,6 @@
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
-    "paths": {
-      "@axrl/common": [
-        "dist/common"
-      ],
-      "@axrl/ngx-extended-form-builder": [
-        "dist/ngx-extended-form-builder/ngx-extended-form-builder",
-        "dist/ngx-extended-form-builder"
-      ],
-      "@axrl/one-table": [
-        "dist/one-table"
-      ]
-    },
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
