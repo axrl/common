@@ -11,6 +11,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import type { BaseListRequest, OneTableData, ActionEvent, ColumnType, ActionButton, ColumnsType, ColumnConfig } from './models';
 import { createObservable, ExcelService, SnackService, isValue, trackByFn } from '@axrl/common';
 import { OneTableService } from './one-table.service';
+import type { IconColumnData } from './one-table.service';
 import { ColumnPipe } from './pipes/column.pipe';
 
 interface TableIconsDataFn {
@@ -27,12 +28,6 @@ export const TABLE_ICON_DATA_FN = new InjectionToken<TableIconsDataFn>('TABLE_IC
   })
 });
 
-interface IconColumnData {
-  icon: string;
-  tooltip: string;
-  color: string;
-}
-
 type ExportXlsxEvent<T extends {}, Q extends BaseListRequest> = {
   mode: 'current' | 'all';
   inputData: OneTableData<T, Q>,
@@ -45,6 +40,81 @@ type ExportXlsxEvent<T extends {}, Q extends BaseListRequest> = {
   selector: 'one-table',
   templateUrl: './one-table.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styles: [`
+@keyframes from_void {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translate3d(100%, 0, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.column.rigth-column {
+  overflow-x: hidden;
+}
+
+.fadeInRight {
+  animation-name: fadeInRight;
+  animation-delay: 0s;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: none;
+}
+
+.table-container {
+  height: auto;
+  overflow: auto;
+  box-sizing: border-box;
+  animation: 0.5s ease-in-out 0s from_void;
+}
+
+.table-container tr.mat-mdc-row td.mat-mdc-cell,
+.table-container tr.mat-mdc-header-row td.mat-mdc-cell {
+  word-break: break-word;
+  height: auto;
+  white-space: pre-line;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+button.mat-icon-button.show_hide_button {
+  margin-top: -1.25rem;
+}
+
+.table-filter-form-field {
+  width: 15rem;
+}
+
+.table-filter-form-field.required-field {
+  width: 16rem;
+}
+
+button.mat-icon-button.delete-table-filter {
+  width: 1rem;
+  height: 1rem;
+  line-height: normal;
+  margin-top: 0.75rem;
+}
+
+.is-fullwidth {
+  width: 100% !important;
+}
+
+`],
   animations: [
     trigger('openClose', [
       state('open', style({ height: '*', maxHeight: '*', minHeight: '*', opacity: 1, })),
@@ -171,10 +241,10 @@ export class OneTableComponent<T extends {}, Q extends BaseListRequest> implemen
 
     return inputData.withExtendedRow() ?
       index === currentSelected ?
-        'isDarkBackground no-bottom-border' :
+        'mdc-data-table__row--selected no-bottom-border' :
         'no-bottom-border' :
       index === currentSelected ?
-        'isDarkBackground' :
+        'mdc-data-table__row--selected' :
         '';
   }
 
@@ -190,34 +260,21 @@ export class OneTableComponent<T extends {}, Q extends BaseListRequest> implemen
   }
 
   getIconData(id: string, row: T, column: ColumnType<T>): IconColumnData {
-    const getIconName = (id: string): string => {
-      const icon = this.tableIconsDataFn.getIconName ? this.tableIconsDataFn.getIconName(id, row, column) : null;
-      if (isValue(icon)) {
-        return icon;
-      } else {
-        return '';
+    const memoryKey = JSON.stringify({ id, row, column });
+    const cachedResult = this.oneTableService.getFromMemory(memoryKey);
+
+    if (isValue(cachedResult)) {
+
+      return cachedResult;
+    } else {
+
+      const result = {
+        icon: (this.tableIconsDataFn.getIconName ? this.tableIconsDataFn.getIconName(id, row, column) : null) ?? '',
+        tooltip: (this.tableIconsDataFn.getTooltip ? this.tableIconsDataFn.getTooltip(id, row, column) : null) ?? '',
+        color: (this.tableIconsDataFn.getColor ? this.tableIconsDataFn.getColor(id, row, column) : null) ?? ''
       };
-    };
-    const getTooltip = (id: string): string => {
-      const tooltip = this.tableIconsDataFn.getTooltip ? this.tableIconsDataFn.getTooltip(id, row, column) : null;
-      if (isValue(tooltip)) {
-        return tooltip;
-      } else {
-        return '';
-      };
-    };
-    const getColor = (id: string): string => {
-      const color = this.tableIconsDataFn.getColor ? this.tableIconsDataFn.getColor(id, row, column) : null;
-      if (isValue(color)) {
-        return color;
-      } else {
-        return '';
-      };
-    };
-    return {
-      icon: getIconName(id),
-      tooltip: getTooltip(id),
-      color: getColor(id)
+      this.oneTableService.saveToMemory(memoryKey, result);
+      return result;
     };
   }
 

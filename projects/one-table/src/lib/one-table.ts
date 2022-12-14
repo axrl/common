@@ -173,7 +173,9 @@ export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequ
       );
 
       this.filterForm = makeForm<FilterFormValueType>(triggerFilter, new Map(optionsValidators));
-    }
+    };
+
+    console.log(this);
 
   };
 

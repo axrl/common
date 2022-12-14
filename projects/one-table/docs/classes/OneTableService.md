@@ -36,7 +36,7 @@
 
 ### getFromMemory
 
-▸ **getFromMemory**(`key`): `undefined` \| `string`
+▸ **getFromMemory**(`key`): `undefined` \| `IconColumnData`
 
 #### Parameters
 
@@ -46,7 +46,7 @@
 
 #### Returns
 
-`undefined` \| `string`
+`undefined` \| `IconColumnData`
 
 ___
 
@@ -59,7 +59,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `key` | `string` |
-| `value` | `string` |
+| `value` | `IconColumnData` |
 
 #### Returns
 

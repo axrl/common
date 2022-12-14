@@ -5,6 +5,12 @@ import { OneTableData, TableFilterOptions } from './models';
 import type { ActionButton, BaseListRequest, ColumnsType, ColumnType, ColumnName, CountAndRows, TableFilterUpdateFn, TableFilterOptionsData } from './models';
 import { isValue } from '@axrl/common';
 
+export interface IconColumnData {
+  icon: string;
+  tooltip: string;
+  color: string;
+}
+
 export interface BasePersonSettings<T extends {}, Q extends BaseListRequest = BaseListRequest> {
   paginatorDefaultSize: number;
   uiLayouts: Record<string, {
@@ -52,13 +58,13 @@ export class OneTableService {
     @Inject(PERSON_SETTINGS_START_VALUE) private defaultPersonSettingsValue: BasePersonSettings<{}, BaseListRequest> | null
   ) { }
 
-  private memory = new Map<string | number | Date, string>([]);
+  private memory = new Map<string, IconColumnData>([]);
 
   getFromMemory(key: string) {
     return this.memory.get(key);
   }
 
-  saveToMemory(key: string, value: string) {
+  saveToMemory(key: string, value: IconColumnData) {
     this.memory.set(key, value);
   }
 

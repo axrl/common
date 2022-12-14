@@ -1,9 +1,9 @@
-<ng-container *ngIf="inputData$ |async as inputData">
-  <ng-container *ngIf="inputData.showedColumns$ |async as showedColumns">
+<ng-container *ngIf="inputData$ | async as inputData">
+  <ng-container *ngIf="inputData.showedColumns$ | async as showedColumns">
     <ng-container *ngIf="inputData.filterOptions && inputData.filterForm">
       <mat-card class="is-flex is-flex-direction-row is-align-items-center"
         style="border-top-left-radius: 0;border-top-right-radius: 0;"
-        [@openClose]="(openTrigger |async) === true ? 'open' : 'closed'"
+        [@openClose]="(openTrigger | async) === true ? 'open' : 'closed'"
         *ngIf="inputData.filterForm && inputData._trigger">
         <form class="column pb-0" (submit)="inputData.submit()" [formGroup]="inputData.filterForm">
           <div class="columns is-mobile is-multiline">
@@ -11,21 +11,21 @@
               <div class="column is-narrow py-1">
                 <mat-form-field appearance="fill" [ngSwitch]="true" class="table-filter-form-field"
                   [class]="inputData.getOption(item)?.required ? ' required-field':''">
-                  <mat-label>{{ inputData.getOption(item)?.translateName | translate| async }}
+                  <mat-label>{{ inputData.getOption(item)?.translateName | translate | async }}
                     {{inputData.isDateControl(item)?
-                    (inputData.getOption(item)?.translateKey(item) | translate| async ) :'' }}
+                    (inputData.getOption(item)?.translateKey(item) | translate | async ) :'' }}
                   </mat-label>
                   <input *ngSwitchCase="inputData.isDateControl(item)" matInput type="date" [formControlName]="item">
                   <mat-select [formControlName]="item" *ngSwitchCase="inputData.isSelectable(item)"
                     (selectionChange)="inputData.submit()">
                     <mat-option *ngFor="let option of (inputData.getOption(item)?.values  ?? []); trackBy: trackByFn"
                       [value]="option">
-                      {{inputData.getOption(item)?.translateKey(option) | translate| async }}
+                      {{inputData.getOption(item)?.translateKey(option) | translate | async }}
                     </mat-option>
                   </mat-select>
                   <input matInput [formControlName]="item" *ngSwitchDefault>
                   <mat-error *ngIf="inputData.filterForm.controls?.[item]?.errors"> {{
-                    inputData.filterForm.controls[item] |controlErrorMessage | translate| async }} </mat-error>
+                    inputData.filterForm.controls[item] | controlErrorMessage | translate | async }} </mat-error>
                 </mat-form-field>
                 <button type="button" mat-icon-button class="is-pulled-right delete-table-filter"
                   *ngIf="!inputData.getOption(item)?.required" (click)="inputData.delFilter(item)">
@@ -48,7 +48,7 @@
       </mat-card>
       <div class="is-flex is-justify-content-center mb-0" *ngIf="openTrigger">
         <button class="show_hide_button" mat-icon-button color="accent" (click)="openTrigger.next(!openTrigger.value)"
-          [matTooltip]="(((openTrigger | async) === true ? 'collapse':'expand')|translate|async ) ?? ''"
+          [matTooltip]="(((openTrigger | async) === true ? 'collapse':'expand') | translate | async ) ?? ''"
           matTooltipPosition="above">
           <mat-icon
             [style]="(openTrigger | async) === true ? 'transform: rotate(180deg);' : 'transform: rotate(0deg);'">
@@ -59,148 +59,152 @@
         <mat-card-subtitle class="ml-2 mb-4">Доступные фильтры:</mat-card-subtitle>
         <button mat-menu-item class="is-fullwidth" *ngFor="let item of inputData.availableFilters; trackBy: trackByFn"
           (click)="inputData.addFilter(item.key)">
-          {{ item.translateName | translate| async }}
+          {{ item.translateName | translate | async }}
         </button>
       </mat-menu>
     </ng-container>
 
     <div class="columns m-0 is-fullwidth">
       <div class="column" [class]="!!inputData.shortColumns ? 'is-half': 'is-full'">
-        <table mat-table [id]="inputData.id" [dataSource]="inputData.dataSourceRows" matSort
-          [matSortDisableClear]="true" [matSortActive]="(inputData.trigger |async)?.orderBy|| ''"
-          [matSortDirection]="(inputData.trigger |async)?.orderDirection || ''"
-          (matSortChange)="sortEvent($event,inputData._trigger)" [multiTemplateDataRows]="inputData.withExtendedRow()"
-          [isInnerTable]="inputData.isInnerTable" appCmkTableKeyboardListener
-          [sourceData]="(inputData.dataSource | async)" [dataSourceTrigger]="inputData._trigger"
-          (spaceEvent)="onDblClick(selectedItemIndex$.value,$event,inputData)"
-          [selectedItemIndexSubject]="selectedItemIndex$" cdkDropList cdkDropListOrientation="horizontal"
-          (cdkDropListDropped)="drop($event, inputData,showedColumns)"
-          class=" table-container mat-elevation-z8 is-fullwidth one-table">
-          <ng-container *ngFor="let column of inputData.defaultColumns;let columnIndex=index;trackBy:trackByFn"
-            [matColumnDef]="getColumnName(column)">
-            <ng-container *ngIf="isSortedColumn(column);else noSortHeader">
-              <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header [id]="'th-'+column">
-                {{ getTranslatedColumnName(column)| translate |async }}
-              </th>
-            </ng-container>
-            <ng-template #noSortHeader>
-              <th mat-header-cell cdkDrag *matHeaderCellDef [id]="'th-'+column">
-                {{ ['select','action'].includes(getColumnName(column)) ? '':
-                (getTranslatedColumnName(column) | translate|async)}}
-              </th>
-            </ng-template>
-            <td mat-cell [ngSwitch]="true" *matCellDef="let row;let i=dataIndex" class="is-clearfix"
-              (dblclick)="onDblClick(i,row,inputData)">
-              <ng-container *ngSwitchCase="getColumnName(column).includes('Icon-')">
-                <button mat-icon-button *ngIf="getIconData(row|helperColumn:column, row,column) as iconData">
-                  <mat-icon *ngIf="iconData.color;else noColorIcon"
-                    [matTooltip]="(iconData.tooltip | translate| async ) ?? ''" [style.color]="iconData.color">
-                    {{iconData.icon}}
-                  </mat-icon>
-                  <ng-template #noColorIcon>
-                    <mat-icon [matTooltip]="(iconData.tooltip | translate| async ) ?? ''" color="accent">
-                      {{iconData.icon}}
-                    </mat-icon>
-                  </ng-template>
-                </button>
+        <div class="table-container">
+          <table mat-table [id]="inputData.id" [dataSource]="inputData.dataSourceRows" matSort
+            [matSortDisableClear]="true" [matSortActive]="(inputData.trigger | async)?.orderBy|| ''"
+            [matSortDirection]="(inputData.trigger | async)?.orderDirection || ''"
+            (matSortChange)="sortEvent($event,inputData._trigger)" [multiTemplateDataRows]="inputData.withExtendedRow()"
+            [isInnerTable]="inputData.isInnerTable" appCmkTableKeyboardListener
+            [sourceData]="(inputData.dataSource | async)" [dataSourceTrigger]="inputData._trigger"
+            (spaceEvent)="onDblClick(selectedItemIndex$.value,$event,inputData)"
+            [selectedItemIndexSubject]="selectedItemIndex$" cdkDropList cdkDropListOrientation="horizontal"
+            (cdkDropListDropped)="drop($event, inputData,showedColumns)"
+            class="mat-elevation-z8 is-fullwidth one-table">
+            <ng-container *ngFor="let column of inputData.defaultColumns;let columnIndex=index;trackBy:trackByFn"
+              [matColumnDef]="getColumnName(column)">
+              <ng-container *ngIf="isSortedColumn(column);else noSortHeader">
+                <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header [id]="'th-'+column">
+                  {{ getTranslatedColumnName(column) | translate | async }}
+                </th>
               </ng-container>
-              <ng-container *ngSwitchCase="column === 'select'">
-                <mat-checkbox *ngIf="isAvailableAction('selectItem', inputData.action);else elseBlock"
-                  (change)="clickedAction('selectItem',row, inputData)" [checked]='row?.selected'></mat-checkbox>
-                <ng-template #elseBlock>
-                  <button (click)="clickedAction('selectSingle',row, inputData)" mat-stroked-button
-                    color="accent">{{'select' | translate}}</button>
-                </ng-template>
-              </ng-container>
-              <ng-container *ngSwitchCase="column === 'action'">
-                <ng-container *ngIf="getActualAction(row,inputData.action) as actualActions">
-                  <button class="is-pulled-right" mat-icon-button [matMenuTriggerData]="{actualActions}"
-                    *ngIf="actualActions.length > 0" [matMenuTriggerFor]="menu" color="accent">
-                    <mat-icon>more_vert</mat-icon>
-                  </button>
+              <ng-template #noSortHeader>
+                <th mat-header-cell cdkDrag *matHeaderCellDef [id]="'th-'+column">
+                  {{ ['select','action'].includes(getColumnName(column)) ? '':
+                  (getTranslatedColumnName(column) | translate | async)}}
+                </th>
+              </ng-template>
+              <td mat-cell [ngSwitch]="true" *matCellDef="let row;let i=dataIndex" class="is-clearfix"
+                (dblclick)="onDblClick(i,row,inputData)">
+                <ng-container *ngSwitchCase="getColumnName(column).includes('Icon-')">
+                  <ng-container *ngIf="getIconData(row | helperColumn:column, row,column) as iconData">
+                    <button mat-icon-button
+                      [matTooltip]="iconData.tooltip ? (iconData.tooltip | translate | async ) ?? '' : ''">
+                      <mat-icon *ngIf="iconData.color;else noColorIcon" [style.color]="iconData.color">
+                        {{iconData.icon}}
+                      </mat-icon>
+                      <ng-template #noColorIcon>
+                        <mat-icon color="accent"> {{iconData.icon}} </mat-icon>
+                      </ng-template>
+                    </button>
+                  </ng-container>
                 </ng-container>
+                <ng-container *ngSwitchCase="column === 'select'">
+                  <mat-checkbox *ngIf="isAvailableAction('selectItem', inputData.action);else elseBlock"
+                    (change)="clickedAction('selectItem',row, inputData)" [checked]='row?.selected'></mat-checkbox>
+                  <ng-template #elseBlock>
+                    <button (click)="clickedAction('selectSingle',row, inputData)" mat-stroked-button
+                      color="accent">{{'select' | translate | async}}</button>
+                  </ng-template>
+                </ng-container>
+                <ng-container *ngSwitchCase="column === 'action'">
+                  <ng-container *ngIf="getActualAction(row,inputData.action) as actualActions">
+                    <button class="is-pulled-right" mat-icon-button [matMenuTriggerData]="{actualActions}"
+                      *ngIf="actualActions.length > 0" [matMenuTriggerFor]="menu" color="accent">
+                      <mat-icon>more_vert</mat-icon>
+                    </button>
+                  </ng-container>
 
-                <mat-menu #menu="matMenu">
-                  <ng-template matMenuContent let-actualActions="actualActions">
-                    <ng-container *ngFor="let act of actualActions; trackBy:trackByFn">
-                      <button mat-menu-item (click)="clickedAction(act.action,row, inputData)"
-                        *ngIf="!act.routerLink; else linkAction">
-                        <mat-icon matListItemIcon *ngIf="act.iconName" color="accent">
-                          {{act.iconName}}
-                        </mat-icon>
-                        <span>{{act.action | translate| async }}</span>
-                      </button>
-                      <ng-template #linkAction>
-                        <a mat-menu-item [routerLink]="act.routerLink!(row)">
+                  <mat-menu #menu="matMenu">
+                    <ng-template matMenuContent let-actualActions="actualActions">
+                      <ng-container *ngFor="let act of actualActions; trackBy:trackByFn">
+                        <button mat-menu-item (click)="clickedAction(act.action,row, inputData)"
+                          *ngIf="!act.routerLink; else linkAction">
                           <mat-icon matListItemIcon *ngIf="act.iconName" color="accent">
                             {{act.iconName}}
-                          </mat-icon> {{act.action | translate| async }}
-                        </a>
-                      </ng-template>
-                    </ng-container>
-                  </ng-template>
-                </mat-menu>
-              </ng-container>
-              <ng-container *ngSwitchDefault>
-                <button mat-icon-button *ngIf="inputData.columnsForCopy.includes(getColumnName(column)) && row[column]"
-                  (click)="copy(row[column])" color="accent"
-                  [matTooltip]="('copy' | translate|async) + ' ' + ( getTranslatedColumnName(column) | translate)">
-                  <mat-icon>content_copy</mat-icon>
-                </button>{{ (row|helperColumn:column| ruDateMedium| translate |async ) || "" }}
-              </ng-container>
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="expandedDetail">
-            <td mat-cell *matCellDef="let row" [attr.colspan]="showedColumns.length"
-              [@openClose]="inputData?.extendedRowPredicate(row) ? 'open' : 'closed'">
-              <ng-container *ngIf="expandedRowContent">
-                <ng-content></ng-content>
-                <ng-container [ngTemplateOutlet]="expandedRowContent.templateRef"
-                  [ngTemplateOutletContext]="{row,tableAction,inputData}">
+                          </mat-icon>
+                          <span>{{act.action | translate | async }}</span>
+                        </button>
+                        <ng-template #linkAction>
+                          <a mat-menu-item [routerLink]="act.routerLink!(row)">
+                            <mat-icon matListItemIcon *ngIf="act.iconName" color="accent">
+                              {{act.iconName}}
+                            </mat-icon> {{act.action | translate | async }}
+                          </a>
+                        </ng-template>
+                      </ng-container>
+                    </ng-template>
+                  </mat-menu>
                 </ng-container>
-              </ng-container>
-            </td>
-          </ng-container>
+                <ng-container *ngSwitchDefault>
+                  <button mat-icon-button
+                    *ngIf="inputData.columnsForCopy.includes(getColumnName(column)) && row[column]"
+                    (click)="copy(row[column])" color="accent"
+                    [matTooltip]="('copy' | translate | async) + ' ' + ( getTranslatedColumnName(column) | translate | async)">
+                    <mat-icon>content_copy</mat-icon>
+                  </button>{{ (row | helperColumn:column | ruDateMedium | translate | async ) || "" }}
+                </ng-container>
+              </td>
+            </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="inputData.shortColumnsNames ?? (inputData.showedColumnsNames$|async);">
-          </tr>
-          <tr mat-row *matRowDef="let row; columns: inputData.shortColumnsNames ?? (inputData.showedColumnsNames$|async);
+            <ng-container matColumnDef="expandedDetail">
+              <td mat-cell *matCellDef="let row" [attr.colspan]="showedColumns.length" class="px-0"
+                [@openClose]="inputData?.extendedRowPredicate(row) ? 'open' : 'closed'">
+                <ng-container *ngIf="expandedRowContent">
+                  <ng-content></ng-content>
+                  <ng-container [ngTemplateOutlet]="expandedRowContent.templateRef"
+                    [ngTemplateOutletContext]="{row,tableAction,inputData}">
+                  </ng-container>
+                </ng-container>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row
+              *matHeaderRowDef="inputData.shortColumnsNames ?? (inputData.showedColumnsNames$| async);">
+            </tr>
+            <tr mat-row *matRowDef="let row; columns: inputData.shortColumnsNames ?? (inputData.showedColumnsNames$| async);
             let index = index; let dataIndex = dataIndex" (click)="onSelect(index ?? dataIndex)" class="mainRow"
-            [class]="getMainRowClass(inputData,row, index ?? dataIndex , selectedItemIndex$ |async)">
-          </tr>
-          <tr mat-row *matRowDef="let row;columns: ['expandedDetail'];when:inputData.withExtendedRow" class="expandRow"
-            [@openClose]="inputData?.extendedRowPredicate(row) ? 'open' : 'closed'">
-          </tr>
-        </table>
+              [class]="getMainRowClass(inputData,row, index ?? dataIndex , selectedItemIndex$ | async)">
+            </tr>
+            <tr mat-row *matRowDef="let row;columns: ['expandedDetail'];when:inputData.withExtendedRow"
+              class="expandRow" [@openClose]="inputData?.extendedRowPredicate(row) ? 'open' : 'closed'">
+            </tr>
+          </table>
+        </div>
         <div class="mat-elevation-z8 mt-1">
           <mat-card class=" is-fullwidth is-flex is-align-items-center is-flex-direction-row ">
             <button *ngIf="!inputData.shortColumns" mat-icon-button [matMenuTriggerFor]="columnMenu"
               aria-label="Settings column for table" class="is-pulled-left"
-              [matTooltip]="('table_columns_settings_title' | translate|async) ?? ''">
+              [matTooltip]="('table_columns_settings_title' | translate | async) ?? ''">
               <mat-icon color="primary">settings</mat-icon>
             </button>
             <mat-menu #columnMenu="matMenu">
               <mat-label mat-menu-item *ngFor="let column of inputData.defaultColumns;trackBy:trackByFn">
                 <mat-checkbox [checked]="isSelectedColumn(column,showedColumns)"
                   (change)="showColumn(column,inputData,showedColumns)">
-                  {{getTranslatedColumnName(column) | translate|async}}</mat-checkbox>
+                  {{getTranslatedColumnName(column) | translate | async}}</mat-checkbox>
               </mat-label>
               <mat-divider></mat-divider>
               <button mat-menu-item (click)="resetColumnLayout(inputData)">
                 <mat-icon>autorenew </mat-icon>
-                <span>{{'table_column_layout_reset' | translate|async}}</span>
+                <span>{{'table_column_layout_reset' | translate | async}}</span>
               </button>
             </mat-menu>
-            <mat-paginator class="is-fullwidth" [length]="inputData.dataSourceCount |async"
-              [pageSize]="(inputData.trigger |async)!.Next" [pageIndex]="getPageIndex((inputData.trigger |async)! )"
+            <mat-paginator class="is-fullwidth" [length]="inputData.dataSourceCount | async"
+              [pageSize]="(inputData.trigger | async)!.Next" [pageIndex]="getPageIndex((inputData.trigger | async)! )"
               (page)="pageEvent($event,inputData._trigger)" showFirstLastButtons>
             </mat-paginator>
-            <button mat-icon-button class="is-pulled-right" [matTooltip]="('export_xlsx' | translate|async )?? ''"
+            <button mat-icon-button class="is-pulled-right" [matTooltip]="('export_xlsx' | translate | async )?? ''"
               [matMenuTriggerFor]="downloadMenu" [matMenuTriggerData]="{
-            data: (inputData.dataSourceRows |async),
-            count: (inputData.dataSourceCount |async),
-            req:(inputData.trigger |async)
+            data: (inputData.dataSourceRows | async),
+            count: (inputData.dataSourceCount | async),
+            req:(inputData.trigger | async)
           }">
               <mat-icon color="primary">file_download</mat-icon>
             </button>
@@ -209,7 +213,7 @@
                 <button mat-menu-item *ngFor="let mode of exportXlsxModes"
                   (click)="exportXlsx(mode,inputData,req,data,count)">
                   <mat-icon color="primary">file_download </mat-icon>
-                  <span>{{('export_xlsx_' + mode) | translate|async}}</span>
+                  <span>{{('export_xlsx_' + mode) | translate | async}}</span>
                 </button>
               </ng-template>
             </mat-menu>
@@ -223,7 +227,7 @@
       </div>
       <div class="column is-half rigth-column" *ngIf="inputData.shortColumns">
         <mat-card class="mat-elevation-z8 pt-3 fadeInRight"
-          *ngIf="getSelectedItem(inputData.dataSourceRows) |async as selectedItem">
+          *ngIf="getSelectedItem(inputData.dataSourceRows) | async as selectedItem">
           <mat-card-actions class="is-flex-wrap-wrap"
             *ngIf="getActualAction(selectedItem,inputData.action) as actualActions">
             <ng-container *ngFor="let act of actualActions; trackBy:trackByFn">
@@ -232,13 +236,13 @@
                 <mat-icon class="mr-4" matListItemIcon *ngIf="act.iconName" color="accent">
                   {{act.iconName}}
                 </mat-icon>
-                <span>{{act.action | translate| async }}</span>
+                <span>{{act.action | translate | async }}</span>
               </button>
               <ng-template #linkAction>
                 <a class="m-2 p-4 is-autoheight" mat-stroked-button [routerLink]="act.routerLink!(selectedItem)">
                   <mat-icon matListItemIcon *ngIf="act.iconName" color="accent">
                     {{act.iconName}}
-                  </mat-icon> {{act.action | translate| async }}
+                  </mat-icon> {{act.action | translate | async }}
                 </a>
               </ng-template>
             </ng-container>
@@ -249,9 +253,9 @@
               <ng-container *ngFor="let column of getColumnsForRightView(showedColumns);trackBy:trackByFn">
                 <mat-list-item class="is-normal-white-space">
                   <div matListItemTitle class="is-normal-white-space">
-                    {{ (selectedItem |helperColumn:column | ruDateMedium | translate| async ) || "" }}
+                    {{ (selectedItem | helperColumn:column | ruDateMedium | translate | async ) || "" }}
                   </div>
-                  <mat-hint matListItemLine>{{getTranslatedColumnName(column)| translate| async}}</mat-hint>
+                  <mat-hint matListItemLine>{{getTranslatedColumnName(column) | translate | async}}</mat-hint>
                 </mat-list-item>
                 <mat-divider></mat-divider>
               </ng-container>
@@ -261,5 +265,5 @@
       </div>
     </div>
   </ng-container>
-  <span *ngIf="exportXlsxBus$ |async"></span>
+  <span *ngIf="exportXlsxBus$ | async"></span>
 </ng-container>

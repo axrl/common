@@ -14,7 +14,6 @@
 - [TableFilterOptions](classes/TableFilterOptions.md)
 - [OneTableData](classes/OneTableData.md)
 - [ColumnPipe](classes/ColumnPipe.md)
-- [ControlErrorMessagePipe](classes/ControlErrorMessagePipe.md)
 
 ### Interfaces
 
