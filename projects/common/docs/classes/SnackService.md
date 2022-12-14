@@ -21,7 +21,7 @@
 | Name | Type |
 | :------ | :------ |
 | `snackBar` | `MatSnackBar` |
-| `snackServiceConfig` | `undefined` \| `SnackServiceConfig`<`unknown`, `any`\> |
+| `snackServiceConfig` | `undefined` \| [`SnackServiceConfig`](../interfaces/SnackServiceConfig.md)<`unknown`, `any`\> |
 
 ## Methods
 

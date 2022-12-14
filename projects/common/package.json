@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git@github.com:axrl/common.git"
   },
-  "version": "1.0.8",
+  "version": "1.0.9",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

@@ -15,6 +15,7 @@
 
 ### Classes
 
+- [ControlErrorMessagePipe](classes/ControlErrorMessagePipe.md)
 - [RuDateMediumPipe](classes/RuDateMediumPipe.md)
 - [TranslatePipe](classes/TranslatePipe.md)
 - [SnackService](classes/SnackService.md)
@@ -24,21 +25,24 @@
 - [ApiService](classes/ApiService.md)
 - [HttpBusService](classes/HttpBusService.md)
 
+### Interfaces
+
+- [SnackServiceConfig](interfaces/SnackServiceConfig.md)
+- [HttpBusBaseEventData](interfaces/HttpBusBaseEventData.md)
+- [SendEventToBusFnParams](interfaces/SendEventToBusFnParams.md)
+
 ### Variables
 
-- [SNACK\_SERVICE\_COMPONENT](README.md#snack_service_component)
+- [SNACK\_SERVICE\_CONFIG](README.md#snack_service_config)
 - [TRANSLATIONS\_JSON\_URL](README.md#translations_json_url)
 - [API\_SERVICE\_GET\_MAP\_FN](README.md#api_service_get_map_fn)
 - [API\_SERVICE\_POST\_MAP\_FN](README.md#api_service_post_map_fn)
 - [API\_SERVICE\_PUT\_MAP\_FN](README.md#api_service_put_map_fn)
 - [API\_SERVICE\_DELETE\_MAP\_FN](README.md#api_service_delete_map_fn)
 
-### Interfaces
-
-- [SendEventToBusFnParams](interfaces/SendEventToBusFnParams.md)
-
 ### Type Aliases
 
+- [TransformIncomingDataFn](README.md#transformincomingdatafn)
 - [HttpBusEventData](README.md#httpbuseventdata)
 - [AdditionalActionCallbackFn](README.md#additionalactioncallbackfn)
 - [ParamsAndHeaders](README.md#paramsandheaders)
@@ -263,11 +267,11 @@ ___
 
 ## Variables
 
-### SNACK\_SERVICE\_COMPONENT
+### SNACK\_SERVICE\_CONFIG
 
-• `Const` **SNACK\_SERVICE\_COMPONENT**: `InjectionToken`<`undefined` \| `SnackServiceConfig`<`unknown`, `any`\>\>
+• `Const` **SNACK\_SERVICE\_CONFIG**: `InjectionToken`<`undefined` \| [`SnackServiceConfig`](interfaces/SnackServiceConfig.md)<`unknown`, `any`\>\>
 
-InjectionToken с компонентом, который будет отображаться в качестве Snackbar.
+InjectionToken с объектом SnackServiceConfig - конфигурацией компонента , который будет отображаться в качестве Snackbar.
 По умолчанию задано значение undefined - сервис использует встроенный в Angular Material компонент по умолчанию, иначе - используется компонент из токена.
 
 ___
@@ -283,9 +287,9 @@ ___
 
 ### API\_SERVICE\_GET\_MAP\_FN
 
-• `Const` **API\_SERVICE\_GET\_MAP\_FN**: `InjectionToken`<`TransformIncomingDataFn`\>
+• `Const` **API\_SERVICE\_GET\_MAP\_FN**: `InjectionToken`<[`TransformIncomingDataFn`](README.md#transformincomingdatafn)\>
 
-InjectionToken с функцией, которая будет применяться ко всем данным, полученным при использовании
+InjectionToken с функцией, которая будет применяться ко всем данным, полученным при использовании методов
 
 **`Method`**
 
@@ -296,7 +300,7 @@ ___
 
 ### API\_SERVICE\_POST\_MAP\_FN
 
-• `Const` **API\_SERVICE\_POST\_MAP\_FN**: `InjectionToken`<`TransformIncomingDataFn`\>
+• `Const` **API\_SERVICE\_POST\_MAP\_FN**: `InjectionToken`<[`TransformIncomingDataFn`](README.md#transformincomingdatafn)\>
 
 InjectionToken с функцией, которая будет применяться ко всем данным, полученным при использовании
 
@@ -313,7 +317,7 @@ ___
 
 ### API\_SERVICE\_PUT\_MAP\_FN
 
-• `Const` **API\_SERVICE\_PUT\_MAP\_FN**: `InjectionToken`<`TransformIncomingDataFn`\>
+• `Const` **API\_SERVICE\_PUT\_MAP\_FN**: `InjectionToken`<[`TransformIncomingDataFn`](README.md#transformincomingdatafn)\>
 
 InjectionToken с функцией, которая будет применяться ко всем данным, полученным при использовании
 
@@ -326,7 +330,7 @@ ___
 
 ### API\_SERVICE\_DELETE\_MAP\_FN
 
-• `Const` **API\_SERVICE\_DELETE\_MAP\_FN**: `InjectionToken`<`TransformIncomingDataFn`\>
+• `Const` **API\_SERVICE\_DELETE\_MAP\_FN**: `InjectionToken`<[`TransformIncomingDataFn`](README.md#transformincomingdatafn)\>
 
 InjectionToken с функцией, которая будет применяться ко всем данным, полученным при использовании
 
@@ -337,9 +341,41 @@ InjectionToken с функцией, которая будет применять
 
 ## Type Aliases
 
+### TransformIncomingDataFn
+
+Ƭ **TransformIncomingDataFn**: <T\>(`res`: `unknown`) => `T`
+
+#### Type declaration
+
+▸ <`T`\>(`res`): `T`
+
+Описание типа для функций трансформации данных, полученных при использовании методов
+
+**`Method`**
+
+`ApiService.getData<T>`
+
+##### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `res` | `unknown` |
+
+##### Returns
+
+`T`
+
+___
+
 ### HttpBusEventData
 
-Ƭ **HttpBusEventData**<`T`\>: `HttpBusBaseEventData`<`T`\> & { `method`: ``"post"`` \| ``"post-blob"`` \| ``"post-text"`` \| ``"put"`` ; `url`: `string` ; `body?`: `unknown` \| ``null`` ; `options`: [`ParamsAndHeaders`](README.md#paramsandheaders) ; `filename?`: `string`  } \| { `method`: ``"custom"`` ; `customObservable`: `Observable`<`T`\>  } \| { `method`: ``"get"`` \| ``"get-blob"`` \| ``"get-text"`` \| ``"delete"`` ; `url`: `string` ; `options`: [`ParamsAndHeaders`](README.md#paramsandheaders) ; `filename?`: `string`  }
+Ƭ **HttpBusEventData**<`T`\>: [`HttpBusBaseEventData`](interfaces/HttpBusBaseEventData.md)<`T`\> & { `method`: ``"post"`` \| ``"post-blob"`` \| ``"post-text"`` \| ``"put"`` ; `url`: `string` ; `body?`: `unknown` \| ``null`` ; `options`: [`ParamsAndHeaders`](README.md#paramsandheaders) ; `filename?`: `string`  } \| { `method`: ``"custom"`` ; `customObservable`: `Observable`<`T`\>  } \| { `method`: ``"get"`` \| ``"get-blob"`` \| ``"get-text"`` \| ``"delete"`` ; `url`: `string` ; `options`: [`ParamsAndHeaders`](README.md#paramsandheaders) ; `filename?`: `string`  }
 
 #### Type parameters
 

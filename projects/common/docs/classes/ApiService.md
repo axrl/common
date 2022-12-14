@@ -33,10 +33,10 @@
 | :------ | :------ |
 | `http` | `HttpClient` |
 | `snack` | [`SnackService`](SnackService.md) |
-| `methodGetMapFn` | `TransformIncomingDataFn` |
-| `methodPostMapFn` | `TransformIncomingDataFn` |
-| `methodPutMapFn` | `TransformIncomingDataFn` |
-| `methodDeleteMapFn` | `TransformIncomingDataFn` |
+| `methodGetMapFn` | [`TransformIncomingDataFn`](../README.md#transformincomingdatafn) |
+| `methodPostMapFn` | [`TransformIncomingDataFn`](../README.md#transformincomingdatafn) |
+| `methodPutMapFn` | [`TransformIncomingDataFn`](../README.md#transformincomingdatafn) |
+| `methodDeleteMapFn` | [`TransformIncomingDataFn`](../README.md#transformincomingdatafn) |
 
 ## Properties
 
