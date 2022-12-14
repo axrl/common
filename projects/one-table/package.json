@@ -22,7 +22,7 @@
     "@angular/animations": "^15.0.3",
     "@angular/cdk": "^15.0.2",
     "@angular/material": "^15.0.2",
-    "@axrl/common": "^1.0.8",
+    "@axrl/common": "^1.0.9",
     "@axrl/ngx-extended-form-builder": "^1.2.6",
     "uuid": "^9.0.0",
     "xlsx": "^0.18.5",

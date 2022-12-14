@@ -3,7 +3,7 @@ import type { TemplateRef } from '@angular/core';
 import type { ComponentType } from '@angular/cdk/portal';
 import type { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { firstValueFrom } from 'rxjs';
-import { isValue } from '../is-value';
+import { isValue } from '../functions';
 
 @Injectable({
   providedIn: 'root'

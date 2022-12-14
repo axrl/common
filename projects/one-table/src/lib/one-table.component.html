@@ -25,7 +25,7 @@
                   </mat-select>
                   <input matInput [formControlName]="item" *ngSwitchDefault>
                   <mat-error *ngIf="inputData.filterForm.controls?.[item]?.errors"> {{
-                    inputData. filterForm.controls[item].errors?.[item] | translate| async }} </mat-error>
+                    inputData.filterForm.controls[item] |controlErrorMessage | translate| async }} </mat-error>
                 </mat-form-field>
                 <button type="button" mat-icon-button class="is-pulled-right delete-table-filter"
                   *ngIf="!inputData.getOption(item)?.required" (click)="inputData.delFilter(item)">

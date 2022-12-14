@@ -15,7 +15,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { RuDateMediumPipe, TranslatePipe } from '@axrl/common';
+import { RuDateMediumPipe, TranslatePipe, ControlErrorMessagePipe } from '@axrl/common';
 import { RouterLink } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { OneTableExpandedRowContentProjectDirective, CmkTableKeyboardListenerDirective } from './directives';
@@ -38,6 +38,7 @@ import { ColumnPipe } from './pipes';
   }],
   imports: [
     NgFor, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault, AsyncPipe,
+    ControlErrorMessagePipe,
     NgTemplateOutlet,
     RuDateMediumPipe, TranslatePipe,
     RouterLink,

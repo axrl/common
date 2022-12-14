@@ -54,7 +54,7 @@
 
 | Name | Type | Default value |
 | :------ | :------ | :------ |
-| `start` | `boolean` | `true` |
+| `start` | `boolean` | `false` |
 
 #### Returns
 

@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 
-
+/**
+ * Сервис-хранилище, используемый RuDateMediumPipe для кэширования результатов вызова.
+ * Использование этого сервиса кем-либо, кроме непосредственно RuDateMediumPipe - не предполагается.
+ */
 @Injectable({
   providedIn: 'root'
 })
-export class FormatDateService {
+export class FormatDatePipeMemoryService {
 
   constructor() { }
 
@@ -17,6 +20,5 @@ export class FormatDateService {
   saveToMemory(key: string, value: string) {
     this.memory.set(key, value);
   }
-
 
 }

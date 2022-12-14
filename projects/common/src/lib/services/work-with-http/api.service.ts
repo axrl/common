@@ -5,14 +5,17 @@ import type { ParamsAndHeaders } from './params-and-header';
 import { map, catchError, throwError, BehaviorSubject, of, switchMap } from 'rxjs';
 import type { Observable, } from 'rxjs';
 import { SnackService } from '../snack.service';
-import { isValue } from '../../is-value';
+import { isValue } from '../../functions';
 
 const noTransFormIncomingDataFn = <T>(res: unknown): T => res as T;
 
-type TransformIncomingDataFn = <T>(res: unknown) => T;
+/**
+ * Описание типа для функций трансформации данных, полученных при использовании методов @method `ApiService.getData<T>`
+ */
+export type TransformIncomingDataFn = <T>(res: unknown) => T;
 
 /**
- * InjectionToken с функцией, которая будет применяться ко всем данным, полученным при использовании @method `ApiService.getData<T>` .
+ * InjectionToken с функцией, которая будет применяться ко всем данным, полученным при использовании методов @method `ApiService.getData<T>` .
  * По умолчанию -  (data) => data (преобразование данных не происходит) ;
  */
 export const API_SERVICE_GET_MAP_FN = new InjectionToken<TransformIncomingDataFn>('API_SERVICE_GET_MAP_FN', {

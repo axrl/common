@@ -1,8 +1,8 @@
 import { Pipe } from '@angular/core';
 import type { PipeTransform } from '@angular/core';
 import { formatDate } from '@angular/common';
-import { isValue } from '../is-value';
-import { FormatDateService } from '../services/format-date.service';
+import { isValue } from '../functions';
+import { FormatDatePipeMemoryService } from '../services/format-date.service';
 
 @Pipe({
   name: 'ruDateMedium',
@@ -20,12 +20,12 @@ import { FormatDateService } from '../services/format-date.service';
 */
 export class RuDateMediumPipe implements PipeTransform {
 
-  constructor(private formatDateService: FormatDateService,
+  constructor(private formatDatePipeMemoryService: FormatDatePipeMemoryService,
   ) { }
 
   transform(value: string | number | Date | undefined, mode: 'short' | 'long' | 'time' = 'short'): string {
     const valueToString = String(value);
-    const memoryValue = this.formatDateService.getFromMemory(valueToString);
+    const memoryValue = this.formatDatePipeMemoryService.getFromMemory(valueToString);
     if (isValue(memoryValue)) {
       return memoryValue;
     } else {
@@ -50,7 +50,7 @@ export class RuDateMediumPipe implements PipeTransform {
           ) :
           /** иначе - возвращаем исходное значение */
           valueToString;
-      this.formatDateService.saveToMemory(valueToString, result);
+      this.formatDatePipeMemoryService.saveToMemory(valueToString, result);
       return result;
     }
   }

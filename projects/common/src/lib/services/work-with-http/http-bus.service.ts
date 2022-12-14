@@ -3,10 +3,12 @@ import type { Observable } from 'rxjs';
 import { map, catchError, concatMap } from 'rxjs';
 import type { ParamsAndHeaders, AdditionalActionCallbackFn } from './params-and-header';
 import { ApiService } from './api.service';
-import { isValue } from '../../is-value';
-import { createObservable } from '../../createObservable';
+import { createObservable, isValue } from '../../functions';
 
-interface HttpBusBaseEventData<T> {
+/**
+ * Базовый интерфейс для всех событий HttpBusEvent
+ */
+export interface HttpBusBaseEventData<T> {
   cb: AdditionalActionCallbackFn<T>;
   errCb: AdditionalActionCallbackFn<unknown>;
 }

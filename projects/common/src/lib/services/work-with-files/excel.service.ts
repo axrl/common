@@ -3,7 +3,7 @@ import { utils, read, writeFile } from 'xlsx';
 import type { WorkBook } from 'xlsx';
 import { map, Observable } from 'rxjs';
 import { TranslationsService } from '../translations.service';
-import { isValue } from '../../is-value';
+import { isValue } from '../../functions';
 
 @Injectable({
   providedIn: 'root'

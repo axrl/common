@@ -5,11 +5,13 @@
 ### Functions
 
 - [createObservable](README.md#createobservable)
-- [isValue](README.md#isvalue)
+- [createSubject](README.md#createsubject)
+- [getFilteredData](README.md#getfiltereddata)
 - [isEqualItems](README.md#isequalitems)
+- [isValue](README.md#isvalue)
+- [trackByFn](README.md#trackbyfn)
 - [blobDownloader](README.md#blobdownloader)
 - [makeHttpParams](README.md#makehttpparams)
-- [trackByFn](README.md#trackbyfn)
 
 ### Classes
 
@@ -65,6 +67,96 @@
 
 ___
 
+### createSubject
+
+▸ **createSubject**<`T`\>(`initValue`): `BehaviorSubject`<`T`\>
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `initValue` | `T` |
+
+#### Returns
+
+`BehaviorSubject`<`T`\>
+
+▸ **createSubject**<`T`\>(`initValue`): `BehaviorSubject`<`T` \| ``null``\>
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `initValue` | ``null`` |
+
+#### Returns
+
+`BehaviorSubject`<`T` \| ``null``\>
+
+___
+
+### getFilteredData
+
+▸ **getFilteredData**<`T`\>(`nonFilteredData`): `Observable`<`T`\>
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `nonFilteredData` | `Observable`<``null`` \| `T`\> |
+
+#### Returns
+
+`Observable`<`T`\>
+
+___
+
+### isEqualItems
+
+▸ **isEqualItems**<`T`\>(`a`, `b`): `boolean`
+
+Функция для сравнения двух переменных.
+Осуществляет "глубокое" сравнение для непримитивных типов по значениям их свойств, а не по ссылке на объект.
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `a` | `T` |  |
+| `b` | `T` | сравниваемые объекты. |
+
+#### Returns
+
+`boolean`
+
+true, если объекты идентичны и false, если объекты различаются.
+
+___
+
 ### isValue
 
 ▸ **isValue**<`T`\>(`value`): value is NonNullable<T\>
@@ -113,12 +205,9 @@ value is NonNullable<T\>
 
 ___
 
-### isEqualItems
+### trackByFn
 
-▸ **isEqualItems**<`T`\>(`a`, `b`): `boolean`
-
-Функция для сравнения двух переменных.
-Осуществляет "глубокое" сравнение для непримитивных типов по значениям их свойств, а не по ссылке на объект.
+▸ **trackByFn**<`T`\>(`index`, `item`): `number`
 
 #### Type parameters
 
@@ -128,16 +217,14 @@ ___
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `a` | `T` |  |
-| `b` | `T` | сравниваемые объекты. |
+| Name | Type |
+| :------ | :------ |
+| `index` | `number` |
+| `item` | `T` |
 
 #### Returns
 
-`boolean`
-
-true, если объекты идентичны и false, если объекты различаются.
+`number`
 
 ___
 
@@ -173,29 +260,6 @@ ___
 #### Returns
 
 `Object`
-
-___
-
-### trackByFn
-
-▸ **trackByFn**<`T`\>(`index`, `item`): `number`
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `T` |
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `index` | `number` |
-| `item` | `T` |
-
-#### Returns
-
-`number`
 
 ## Variables
 

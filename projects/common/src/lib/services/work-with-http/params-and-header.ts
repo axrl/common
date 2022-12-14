@@ -1,5 +1,5 @@
 import { formatDate } from "@angular/common";
-import { isValue } from "../../is-value";
+import { isValue } from "../../functions";
 
 export type AdditionalActionCallbackFn<T> = (result?: T) => void;
 
