@@ -18,7 +18,8 @@
     "module": "es2020",
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "esModuleInterop":true
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

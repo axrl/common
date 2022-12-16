@@ -112,13 +112,14 @@ button.mat-icon-button.delete-table-filter {
 
 .is-fullwidth {
   width: 100% !important;
+  
 }
 
 `],
   animations: [
     trigger('openClose', [
-      state('open', style({ height: '*', maxHeight: '*', minHeight: '*', opacity: 1, })),
-      state('closed', style({ height: '0px', maxHeight: '0px', minHeight: '0px', opacity: 0, background: 'transparent' })),
+      state('open', style({ height: '*', maxHeight: '*', minHeight: '*', opacity: 1, visibility: 'visible' })),
+      state('closed', style({ height: '0px', maxHeight: '0px', minHeight: '0px', opacity: 0, visibility: 'hidden', background: 'transparent' })),
       transition('open <=> closed', [
         animate('600ms cubic-bezier(0.4, 0.0, 0.2, 1)')
       ]),
