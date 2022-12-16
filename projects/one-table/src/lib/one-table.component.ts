@@ -112,7 +112,6 @@ button.mat-icon-button.delete-table-filter {
 
 .is-fullwidth {
   width: 100% !important;
-  
 }
 
 `],

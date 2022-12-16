@@ -14,9 +14,9 @@ export interface IconColumnData {
 export interface BasePersonSettings {
   paginatorDefaultSize: number;
   uiLayouts: Record<string, {
-    columns: ColumnsType<any>;
+    columns: ColumnsType<Record<string, unknown>>;
     req?: BaseListRequest;
-  }>;
+  }> | null;
 }
 
 /**
@@ -52,10 +52,10 @@ export const PERSON_SETTINGS_START_VALUE = new InjectionToken<BasePersonSettings
 @Injectable({
   providedIn: 'root'
 })
-export class OneTableService<S extends BasePersonSettings = BasePersonSettings> {
+export class OneTableService<Settings extends BasePersonSettings = BasePersonSettings> {
 
   constructor(
-    @Inject(PERSON_SETTINGS_START_VALUE) private defaultPersonSettingsValue: S | null
+    @Inject(PERSON_SETTINGS_START_VALUE) private defaultPersonSettingsValue: Settings | null
   ) { }
 
   private memory = new Map<string, IconColumnData>([]);
@@ -69,44 +69,45 @@ export class OneTableService<S extends BasePersonSettings = BasePersonSettings> 
   }
 
   private _basePersonSettings$: BehaviorSubject<
-    S | null
-  > = new BehaviorSubject<S | null>(this.defaultPersonSettingsValue);
+    Settings | null
+  > = new BehaviorSubject<Settings | null>(this.defaultPersonSettingsValue);
 
   basePersonSettings$: Observable<
-    S | null
+    Settings | null
   > = this._basePersonSettings$.asObservable();
 
-  basePersonSettingsFiltered$: Observable<
-    S
-  > = this.basePersonSettings$.pipe(
+  basePersonSettingsFiltered$: Observable<Settings> = this.basePersonSettings$.pipe(
     filter(
-      (s): s is S => isValue(s)
+      (s): s is Settings => isValue(s)
     )
   );
 
   private _settingsChanges = new EventEmitter<BasePersonSettings>();
 
-  /** Поток с данными об обновлениях настроек. */
+  /** Поток с данными об обновлениях в настроках. */
   settingsChanges = this._settingsChanges.asObservable();
 
   updatePersonSettings(newSettings: BasePersonSettings, emitEvent: boolean = true) {
     localStorage.setItem('one-table:user-settings', JSON.stringify(newSettings));
-    this._basePersonSettings$.next(<S>newSettings);
+    this._basePersonSettings$.next(<Settings>newSettings);
     if (emitEvent) {
-      this._settingsChanges.emit(<S>newSettings);
+      this._settingsChanges.emit(<Settings>newSettings);
     };
   }
 
-  updateUiLayoutFn(
+  updateUiLayoutFn<T extends {}, Q extends BaseListRequest>(
     componentName: string,
-    newComponentLayout: S['uiLayouts'][keyof S['uiLayouts']]
+    newComponentLayout: {
+      columns: ColumnsType<T>;
+      req?: Q;
+    }
   ) {
-    const settings = <S>this._basePersonSettings$.value;
+    const settings = this._basePersonSettings$.value;
     if (settings) {
       const layout = settings.uiLayouts ? settings.uiLayouts : {};
       layout[componentName] = newComponentLayout;
       settings.uiLayouts = layout;
-      this.updatePersonSettings(<S>settings);
+      this.updatePersonSettings(settings);
     };
   }
 
@@ -138,7 +139,7 @@ export class OneTableService<S extends BasePersonSettings = BasePersonSettings> 
           showedColumns$: this.getUserColumns(config.componentName, config.defaultColumns),
           sourceFn: config.sourceFn,
           componentName: config.componentName,
-          filter: res.uiLayouts[config.componentName]?.req?.filter ?? config.filter ?? config.filter,
+          filter: res.uiLayouts?.[config.componentName]?.req?.filter ?? config.filter ?? config.filter,
           orderBy: config.orderBy,
           action: config.actions,
           additionParams: config.additionParams,
@@ -164,8 +165,8 @@ export class OneTableService<S extends BasePersonSettings = BasePersonSettings> 
         settings => {
           const uiLayouts = settings.uiLayouts;
           return uiLayouts && uiLayouts[componentName] && isValue(uiLayouts[componentName].columns) ?
-            [... (uiLayouts[componentName].columns ?? []).filter(
-              userColumnName => !!defaultColumns.find(
+            [...  (<ColumnsType<T>>uiLayouts[componentName].columns ?? []).filter(
+              (userColumnName) => !!defaultColumns.find(
                 defaultColumn => typeof userColumnName === 'string' ?
                   typeof defaultColumn === 'string' ?
                     userColumnName === defaultColumn :
