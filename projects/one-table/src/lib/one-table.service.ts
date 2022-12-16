@@ -11,11 +11,11 @@ export interface IconColumnData {
   color: string;
 }
 
-export interface BasePersonSettings<T extends {}, Q extends BaseListRequest = BaseListRequest> {
+export interface BasePersonSettings {
   paginatorDefaultSize: number;
   uiLayouts: Record<string, {
-    columns: ColumnsType<T>;
-    req?: Q;
+    columns: ColumnsType<any>;
+    req?: BaseListRequest;
   }>;
 }
 
@@ -26,11 +26,11 @@ export interface BasePersonSettings<T extends {}, Q extends BaseListRequest = Ba
  * Если в приложении определена собственная логика хранения пользовательских настроек и стартовое значение 
  * будет передаваться в сервис извне - рекомендуется определить токен, используя в качестве стартового значения - null.
  */
-export const PERSON_SETTINGS_START_VALUE = new InjectionToken<BasePersonSettings<{}, BaseListRequest> | null>('PERSON_SETTINGS_START_VALUE', {
+export const PERSON_SETTINGS_START_VALUE = new InjectionToken<BasePersonSettings | null>('PERSON_SETTINGS_START_VALUE', {
   providedIn: 'root',
   factory: () => {
     const storageValue = window.localStorage.getItem('one-table:user-settings');
-    const defaultSettings: BasePersonSettings<{}, BaseListRequest> = {
+    const defaultSettings: BasePersonSettings = {
       paginatorDefaultSize: 10,
       uiLayouts: {}
     };
@@ -52,10 +52,10 @@ export const PERSON_SETTINGS_START_VALUE = new InjectionToken<BasePersonSettings
 @Injectable({
   providedIn: 'root'
 })
-export class OneTableService {
+export class OneTableService<S extends BasePersonSettings = BasePersonSettings> {
 
   constructor(
-    @Inject(PERSON_SETTINGS_START_VALUE) private defaultPersonSettingsValue: BasePersonSettings<{}, BaseListRequest> | null
+    @Inject(PERSON_SETTINGS_START_VALUE) private defaultPersonSettingsValue: S | null
   ) { }
 
   private memory = new Map<string, IconColumnData>([]);
@@ -69,42 +69,44 @@ export class OneTableService {
   }
 
   private _basePersonSettings$: BehaviorSubject<
-    BasePersonSettings<{}, BaseListRequest> | null
-  > = new BehaviorSubject<BasePersonSettings<{}, BaseListRequest> | null>(this.defaultPersonSettingsValue);
+    S | null
+  > = new BehaviorSubject<S | null>(this.defaultPersonSettingsValue);
 
   basePersonSettings$: Observable<
-    BasePersonSettings<{}, BaseListRequest> | null
+    S | null
   > = this._basePersonSettings$.asObservable();
 
   basePersonSettingsFiltered$: Observable<
-    BasePersonSettings<{}, BaseListRequest>
+    S
   > = this.basePersonSettings$.pipe(
     filter(
-      (s): s is BasePersonSettings<{}, BaseListRequest> => isValue(s)
+      (s): s is S => isValue(s)
     )
   );
 
-  /** Поток с данными об обновлениях настроек. */
-  settingsChanges = new EventEmitter<BasePersonSettings<{}, BaseListRequest>>();
+  private _settingsChanges = new EventEmitter<BasePersonSettings>();
 
-  updatePersonSettings<T extends {}, Q extends BaseListRequest>(newSettings: BasePersonSettings<T, Q>, emitEvent: boolean = true) {
+  /** Поток с данными об обновлениях настроек. */
+  settingsChanges = this._settingsChanges.asObservable();
+
+  updatePersonSettings(newSettings: BasePersonSettings, emitEvent: boolean = true) {
     localStorage.setItem('one-table:user-settings', JSON.stringify(newSettings));
-    this._basePersonSettings$.next(<BasePersonSettings<{}, BaseListRequest>>newSettings);
+    this._basePersonSettings$.next(<S>newSettings);
     if (emitEvent) {
-      this.settingsChanges.emit(<BasePersonSettings<{}, BaseListRequest>>newSettings);
+      this._settingsChanges.emit(<S>newSettings);
     };
   }
 
-  updateUiLayoutFn<T extends {}, Q extends BaseListRequest = BaseListRequest>(
+  updateUiLayoutFn(
     componentName: string,
-    newComponentLayout: BasePersonSettings<T, Q>['uiLayouts'][keyof BasePersonSettings<T, Q>['uiLayouts']]
+    newComponentLayout: S['uiLayouts'][keyof S['uiLayouts']]
   ) {
-    const settings = <BasePersonSettings<T, Q>>this._basePersonSettings$.value;
+    const settings = <S>this._basePersonSettings$.value;
     if (settings) {
       const layout = settings.uiLayouts ? settings.uiLayouts : {};
       layout[componentName] = newComponentLayout;
       settings.uiLayouts = layout;
-      this.updatePersonSettings(<BasePersonSettings<{}, BaseListRequest>>settings);
+      this.updatePersonSettings(<S>settings);
     };
   }
 
