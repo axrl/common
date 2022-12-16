@@ -1,15 +1,63 @@
+import { Location } from '@angular/common';
 import { Injectable, InjectionToken, Inject } from '@angular/core';
-import { shareReplay } from 'rxjs';
+import { shareReplay, distinctUntilChanged, switchMap } from 'rxjs';
+import { createSubject, isValue } from '../functions';
 import { ApiService } from './work-with-http/api.service';
 
+/**
+ * Настройка конфигурации TranslationsService
+ */
+export type TranslationConfig = {
+
+  /**
+   * Требуется ли добавлять '.json' в конце пути url, по которому сервис будет запрашивать данные для переводов.
+   * Если для получения переводов используется endpoint некоего сервиса rest-api - установите значение false.
+   * Если для получения переводов используется набор статичных файлов JSON, расположенных по некоему URL - установите true.
+   * По умолчанию - true.
+   * @default true 
+   */
+  includeDotJsonToPath?: boolean;
+
+  /** 
+   * Первая часть пути url, на который сервис будет делать запрос для получения словаря переводов.
+   * Итоговый url, на который будет обращаться сервис за конкретным переводом получается по формуле :
+   *      translationsFolderUrl +
+   *      одно из значений в списке языков languages +
+   *      '.json' (только если для includeDotJsonToPath установлено значение true)
+   *  @default 'assets/translations'
+   */
+  translationsFolderUrl: string;
+
+  /**
+   * Язык, который будет использоватьcя сервисом в качестве языка по умолчанию - к примеру, при старте приложения.
+   * @default 'ru'
+   */
+  defaultLanguage?: string;
+
+  /**
+   * Список языков, для которых доступны данные для перевода.
+   *  @default ['ru']
+   */
+  languages: string[];
+}
 
 /**
- * InjectionToken со строкой URL, по которому расположен файл со словарем переводов.
- * По умолчанию - 'assets/translations/ru.json';
+ * InjectionToken с объектом конфигурации TranslationConfig.
+ * @default {
+ *  includeDotJsonToPath: true,
+ *  translationsFolderUrl: 'assets/translations',
+ *  defaultLanguage: 'ru',
+ *  languages: ['ru']
+ * }
  */
-export const TRANSLATIONS_JSON_URL = new InjectionToken<string>('TRANSLATIONS_JSON_URL', {
+export const TRANSLATIONS_CONFIG = new InjectionToken<TranslationConfig>('TRANSLATIONS_CONFIG', {
   providedIn: 'root',
-  factory: () => 'assets/translations/ru.json'
+  factory: () => ({
+    includeDotJsonToPath: true,
+    translationsFolderUrl: 'assets/translations',
+    defaultLanguage: 'ru',
+    languages: ['ru']
+  })
 });
 
 @Injectable({
@@ -19,10 +67,32 @@ export class TranslationsService {
 
   constructor(
     private api: ApiService,
-    @Inject(TRANSLATIONS_JSON_URL) private translationsJsonUrl: string
+    @Inject(TRANSLATIONS_CONFIG) private translationsConfig: TranslationConfig,
   ) { }
 
-  translations$ = this.api.getData<Record<string, string>>(this.translationsJsonUrl).pipe(
+  private _currentLanguage = createSubject<string>(this.translationsConfig.defaultLanguage ?? 'ru');
+
+  get languagesList() {
+    return this.translationsConfig.languages;
+  }
+
+  currentLanguage$ = this._currentLanguage.asObservable().pipe(
+    distinctUntilChanged()
+  );
+
+  changeCurrentLanguage(language: string) {
+    this._currentLanguage.next(language);
+  }
+
+  translations$ = this.currentLanguage$.pipe(
+    switchMap(
+      currentLang => {
+        const translationsJsonUrl = Location.joinWithSlash(
+          this.translationsConfig.translationsFolderUrl,
+          `${currentLang}${!isValue(this.translationsConfig.includeDotJsonToPath) || this.translationsConfig.includeDotJsonToPath ? '.json' : ''}`
+        );
+        return this.api.getData<Record<string, string>>(translationsJsonUrl);
+      }),
     shareReplay(1)
   );
 

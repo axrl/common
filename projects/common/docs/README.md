@@ -34,7 +34,7 @@
 ### Variables
 
 - [SNACK\_SERVICE\_CONFIG](README.md#snack_service_config)
-- [TRANSLATIONS\_JSON\_URL](README.md#translations_json_url)
+- [TRANSLATIONS\_CONFIG](README.md#translations_config)
 - [API\_SERVICE\_GET\_MAP\_FN](README.md#api_service_get_map_fn)
 - [API\_SERVICE\_POST\_MAP\_FN](README.md#api_service_post_map_fn)
 - [API\_SERVICE\_PUT\_MAP\_FN](README.md#api_service_put_map_fn)
@@ -42,6 +42,7 @@
 
 ### Type Aliases
 
+- [TranslationConfig](README.md#translationconfig)
 - [TransformIncomingDataFn](README.md#transformincomingdatafn)
 - [HttpBusEventData](README.md#httpbuseventdata)
 - [AdditionalActionCallbackFn](README.md#additionalactioncallbackfn)
@@ -276,12 +277,13 @@ InjectionToken с объектом SnackServiceConfig - конфигурацие
 
 ___
 
-### TRANSLATIONS\_JSON\_URL
+### TRANSLATIONS\_CONFIG
 
-• `Const` **TRANSLATIONS\_JSON\_URL**: `InjectionToken`<`string`\>
+• `Const` **TRANSLATIONS\_CONFIG**: `InjectionToken`<[`TranslationConfig`](README.md#translationconfig)\>
 
-InjectionToken со строкой URL, по которому расположен файл со словарем переводов.
-По умолчанию - 'assets/translations/ru.json';
+InjectionToken с объектом конфигурации TranslationConfig.
+
+**`Default`**
 
 ___
 
@@ -340,6 +342,23 @@ InjectionToken с функцией, которая будет применять
 По умолчанию -  (data) => data (преобразование данных не происходит) ;
 
 ## Type Aliases
+
+### TranslationConfig
+
+Ƭ **TranslationConfig**: `Object`
+
+Настройка конфигурации TranslationsService
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `includeDotJsonToPath?` | `boolean` | Требуется ли добавлять '.json' в конце пути url, по которому сервис будет запрашивать данные для переводов. Если для получения переводов используется endpoint некоего сервиса rest-api - установите значение false. Если для получения переводов используется набор статичных файлов JSON, расположенных по некоему URL - установите true. По умолчанию - true. **`Default`** true |
+| `translationsFolderUrl` | `string` | Первая часть пути url, на который сервис будет делать запрос для получения словаря переводов. Итоговый url, на который будет обращаться сервис за конкретным переводом получается по формуле : translationsFolderUrl + одно из значений в списке языков languages + '.json' (только если для includeDotJsonToPath установлено значение true) **`Default`** 'assets/translations' |
+| `defaultLanguage?` | `string` | Язык, который будет использоватьcя сервисом в качестве языка по умолчанию - к примеру, при старте приложения. **`Default`** 'ru' |
+| `languages` | `string`[] | Список языков, для которых доступны данные для перевода. **`Default`** ['ru'] |
+
+___
 
 ### TransformIncomingDataFn
 

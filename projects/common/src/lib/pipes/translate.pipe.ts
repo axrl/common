@@ -1,21 +1,32 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { ChangeDetectorRef, Pipe, PipeTransform } from '@angular/core';
 import { map } from 'rxjs';
-import type { Observable } from 'rxjs';
 import { TranslationsService } from '../services';
+import { AsyncPipe } from '@angular/common';
 
 @Pipe({
   name: 'translate',
+  pure: false,
   standalone: true
 })
 export class TranslatePipe implements PipeTransform {
-  constructor(private translationService: TranslationsService) { }
+  private asyncPipe: AsyncPipe
 
-  transform(value?: string): Observable<string> {
-    return this.translationService.translations$.pipe(
-      map(
-        translations => this.translationService.translate(translations, value)
+  constructor(
+    private translationService: TranslationsService,
+    ref: ChangeDetectorRef
+  ) {
+    this.asyncPipe = new AsyncPipe(ref);
+  }
+
+  transform(value?: string) {
+
+    return this.asyncPipe.transform(
+      this.translationService.translations$.pipe(
+        map(
+          translations => this.translationService.translate(translations, value)
+        )
       )
-    );
+    )
   }
 
 }

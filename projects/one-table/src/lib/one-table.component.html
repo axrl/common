@@ -11,21 +11,21 @@
               <div class="column is-narrow py-1">
                 <mat-form-field appearance="fill" [ngSwitch]="true" class="table-filter-form-field"
                   [class]="inputData.getOption(item)?.required ? ' required-field':''">
-                  <mat-label>{{ inputData.getOption(item)?.translateName | translate | async }}
+                  <mat-label>{{ inputData.getOption(item)?.translateName | translate }}
                     {{inputData.isDateControl(item)?
-                    (inputData.getOption(item)?.translateKey(item) | translate | async ) :'' }}
+                    (inputData.getOption(item)?.translateKey(item) | translate ) :'' }}
                   </mat-label>
                   <input *ngSwitchCase="inputData.isDateControl(item)" matInput type="date" [formControlName]="item">
                   <mat-select [formControlName]="item" *ngSwitchCase="inputData.isSelectable(item)"
                     (selectionChange)="inputData.submit()">
                     <mat-option *ngFor="let option of (inputData.getOption(item)?.values  ?? []); trackBy: trackByFn"
                       [value]="option">
-                      {{inputData.getOption(item)?.translateKey(option) | translate | async }}
+                      {{inputData.getOption(item)?.translateKey(option) | translate }}
                     </mat-option>
                   </mat-select>
                   <input matInput [formControlName]="item" *ngSwitchDefault>
                   <mat-error *ngIf="inputData.filterForm.controls?.[item]?.errors"> {{
-                    inputData.filterForm.controls[item] | controlErrorMessage | translate | async }} </mat-error>
+                    inputData.filterForm.controls[item] | controlErrorMessage | translate }} </mat-error>
                 </mat-form-field>
                 <button type="button" mat-icon-button class="is-pulled-right delete-table-filter"
                   *ngIf="!inputData.getOption(item)?.required" (click)="inputData.delFilter(item)">
@@ -48,7 +48,7 @@
       </mat-card>
       <div class="is-flex is-justify-content-center mb-0" *ngIf="openTrigger">
         <button class="show_hide_button" mat-icon-button color="accent" (click)="openTrigger.next(!openTrigger.value)"
-          [matTooltip]="(((openTrigger | async) === true ? 'collapse':'expand') | translate | async ) ?? ''"
+          [matTooltip]="(((openTrigger | async) === true ? 'collapse':'expand') | translate ) ?? ''"
           matTooltipPosition="above">
           <mat-icon
             [style]="(openTrigger | async) === true ? 'transform: rotate(180deg);' : 'transform: rotate(0deg);'">
@@ -59,7 +59,7 @@
         <mat-card-subtitle class="ml-2 mb-4">Доступные фильтры:</mat-card-subtitle>
         <button mat-menu-item class="is-fullwidth" *ngFor="let item of inputData.availableFilters; trackBy: trackByFn"
           (click)="inputData.addFilter(item.key)">
-          {{ item.translateName | translate | async }}
+          {{ item.translateName | translate }}
         </button>
       </mat-menu>
     </ng-container>
@@ -81,13 +81,13 @@
               [matColumnDef]="getColumnName(column)">
               <ng-container *ngIf="isSortedColumn(column);else noSortHeader">
                 <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header [id]="'th-'+column">
-                  {{ getTranslatedColumnName(column) | translate | async }}
+                  {{ getTranslatedColumnName(column) | translate }}
                 </th>
               </ng-container>
               <ng-template #noSortHeader>
                 <th mat-header-cell cdkDrag *matHeaderCellDef [id]="'th-'+column">
                   {{ ['select','action'].includes(getColumnName(column)) ? '':
-                  (getTranslatedColumnName(column) | translate | async)}}
+                  (getTranslatedColumnName(column) | translate)}}
                 </th>
               </ng-template>
               <td mat-cell [ngSwitch]="true" *matCellDef="let row;let i=dataIndex" class="is-clearfix"
@@ -95,7 +95,7 @@
                 <ng-container *ngSwitchCase="getColumnName(column).includes('Icon-')">
                   <ng-container *ngIf="getIconData(row | helperColumn:column, row,column) as iconData">
                     <button mat-icon-button
-                      [matTooltip]="iconData.tooltip ? (iconData.tooltip | translate | async ) ?? '' : ''">
+                      [matTooltip]="iconData.tooltip ? (iconData.tooltip | translate ) ?? '' : ''">
                       <mat-icon *ngIf="iconData.color;else noColorIcon" [style.color]="iconData.color">
                         {{iconData.icon}}
                       </mat-icon>
@@ -110,7 +110,7 @@
                     (change)="clickedAction('selectItem',row, inputData)" [checked]='row?.selected'></mat-checkbox>
                   <ng-template #elseBlock>
                     <button (click)="clickedAction('selectSingle',row, inputData)" mat-stroked-button
-                      color="accent">{{'select' | translate | async}}</button>
+                      color="accent">{{'select' | translate}}</button>
                   </ng-template>
                 </ng-container>
                 <ng-container *ngSwitchCase="column === 'action'">
@@ -129,13 +129,13 @@
                           <mat-icon matListItemIcon *ngIf="act.iconName" color="accent">
                             {{act.iconName}}
                           </mat-icon>
-                          <span>{{act.action | translate | async }}</span>
+                          <span>{{act.action | translate }}</span>
                         </button>
                         <ng-template #linkAction>
                           <a mat-menu-item [routerLink]="act.routerLink!(row)">
                             <mat-icon matListItemIcon *ngIf="act.iconName" color="accent">
                               {{act.iconName}}
-                            </mat-icon> {{act.action | translate | async }}
+                            </mat-icon> {{act.action | translate }}
                           </a>
                         </ng-template>
                       </ng-container>
@@ -146,9 +146,9 @@
                   <button mat-icon-button
                     *ngIf="inputData.columnsForCopy.includes(getColumnName(column)) && row[column]"
                     (click)="copy(row[column])" color="accent"
-                    [matTooltip]="('copy' | translate | async) + ' ' + ( getTranslatedColumnName(column) | translate | async)">
+                    [matTooltip]="('copy' | translate) + ' ' + ( getTranslatedColumnName(column) | translate)">
                     <mat-icon>content_copy</mat-icon>
-                  </button>{{ (row | helperColumn:column | ruDateMedium | translate | async ) || "" }}
+                  </button>{{ (row | helperColumn:column | ruDateMedium | translate ) || "" }}
                 </ng-container>
               </td>
             </ng-container>
@@ -181,26 +181,26 @@
           <mat-card class=" is-fullwidth is-flex is-align-items-center is-flex-direction-row ">
             <button *ngIf="!inputData.shortColumns" mat-icon-button [matMenuTriggerFor]="columnMenu"
               aria-label="Settings column for table" class="is-pulled-left"
-              [matTooltip]="('table_columns_settings_title' | translate | async) ?? ''">
+              [matTooltip]="('table_columns_settings_title' | translate) ?? ''">
               <mat-icon color="primary">settings</mat-icon>
             </button>
             <mat-menu #columnMenu="matMenu">
               <mat-label mat-menu-item *ngFor="let column of inputData.defaultColumns;trackBy:trackByFn">
                 <mat-checkbox [checked]="isSelectedColumn(column,showedColumns)"
                   (change)="showColumn(column,inputData,showedColumns)">
-                  {{getTranslatedColumnName(column) | translate | async}}</mat-checkbox>
+                  {{getTranslatedColumnName(column) | translate}}</mat-checkbox>
               </mat-label>
               <mat-divider></mat-divider>
               <button mat-menu-item (click)="resetColumnLayout(inputData)">
                 <mat-icon>autorenew </mat-icon>
-                <span>{{'table_column_layout_reset' | translate | async}}</span>
+                <span>{{'table_column_layout_reset' | translate}}</span>
               </button>
             </mat-menu>
             <mat-paginator class="is-fullwidth" [length]="inputData.dataSourceCount | async"
               [pageSize]="(inputData.trigger | async)!.Next" [pageIndex]="getPageIndex((inputData.trigger | async)! )"
               (page)="pageEvent($event,inputData._trigger)" showFirstLastButtons>
             </mat-paginator>
-            <button mat-icon-button class="is-pulled-right" [matTooltip]="('export_xlsx' | translate | async )?? ''"
+            <button mat-icon-button class="is-pulled-right" [matTooltip]="('export_xlsx' | translate )?? ''"
               [matMenuTriggerFor]="downloadMenu" [matMenuTriggerData]="{
             data: (inputData.dataSourceRows | async),
             count: (inputData.dataSourceCount | async),
@@ -213,7 +213,7 @@
                 <button mat-menu-item *ngFor="let mode of exportXlsxModes"
                   (click)="exportXlsx(mode,inputData,req,data,count)">
                   <mat-icon color="primary">file_download </mat-icon>
-                  <span>{{('export_xlsx_' + mode) | translate | async}}</span>
+                  <span>{{('export_xlsx_' + mode) | translate}}</span>
                 </button>
               </ng-template>
             </mat-menu>
@@ -236,13 +236,13 @@
                 <mat-icon class="mr-4" matListItemIcon *ngIf="act.iconName" color="accent">
                   {{act.iconName}}
                 </mat-icon>
-                <span>{{act.action | translate | async }}</span>
+                <span>{{act.action | translate }}</span>
               </button>
               <ng-template #linkAction>
                 <a class="m-2 p-4 is-autoheight" mat-stroked-button [routerLink]="act.routerLink!(selectedItem)">
                   <mat-icon matListItemIcon *ngIf="act.iconName" color="accent">
                     {{act.iconName}}
-                  </mat-icon> {{act.action | translate | async }}
+                  </mat-icon> {{act.action | translate }}
                 </a>
               </ng-template>
             </ng-container>
@@ -253,9 +253,9 @@
               <ng-container *ngFor="let column of getColumnsForRightView(showedColumns);trackBy:trackByFn">
                 <mat-list-item class="is-normal-white-space">
                   <div matListItemTitle class="is-normal-white-space">
-                    {{ (selectedItem | helperColumn:column | ruDateMedium | translate | async ) || "" }}
+                    {{ (selectedItem | helperColumn:column | ruDateMedium | translate ) || "" }}
                   </div>
-                  <mat-hint matListItemLine>{{getTranslatedColumnName(column) | translate | async}}</mat-hint>
+                  <mat-hint matListItemLine>{{getTranslatedColumnName(column) | translate}}</mat-hint>
                 </mat-list-item>
                 <mat-divider></mat-divider>
               </ng-container>

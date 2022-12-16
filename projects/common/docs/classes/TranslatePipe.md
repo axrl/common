@@ -18,19 +18,20 @@
 
 ### constructor
 
-• **new TranslatePipe**(`translationService`)
+• **new TranslatePipe**(`translationService`, `ref`)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `translationService` | [`TranslationsService`](TranslationsService.md) |
+| `ref` | `ChangeDetectorRef` |
 
 ## Methods
 
 ### transform
 
-▸ **transform**(`value?`): `Observable`<`string`\>
+▸ **transform**(`value?`): ``null`` \| `string`
 
 #### Parameters
 
@@ -40,7 +41,7 @@
 
 #### Returns
 
-`Observable`<`string`\>
+``null`` \| `string`
 
 #### Implementation of
 

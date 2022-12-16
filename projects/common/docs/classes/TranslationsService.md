@@ -6,12 +6,18 @@
 
 - [constructor](TranslationsService.md#constructor)
 
+### Accessors
+
+- [languagesList](TranslationsService.md#languageslist)
+
 ### Properties
 
+- [currentLanguage$](TranslationsService.md#currentlanguage$)
 - [translations$](TranslationsService.md#translations$)
 
 ### Methods
 
+- [changeCurrentLanguage](TranslationsService.md#changecurrentlanguage)
 - [translate](TranslationsService.md#translate)
 - [getFromMemory](TranslationsService.md#getfrommemory)
 - [saveToMemory](TranslationsService.md#savetomemory)
@@ -20,22 +26,54 @@
 
 ### constructor
 
-• **new TranslationsService**(`api`, `translationsJsonUrl`)
+• **new TranslationsService**(`api`, `translationsConfig`)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `api` | [`ApiService`](ApiService.md) |
-| `translationsJsonUrl` | `string` |
+| `translationsConfig` | [`TranslationConfig`](../README.md#translationconfig) |
+
+## Accessors
+
+### languagesList
+
+• `get` **languagesList**(): `string`[]
+
+#### Returns
+
+`string`[]
 
 ## Properties
+
+### currentLanguage$
+
+• **currentLanguage$**: `Observable`<`string`\>
+
+___
 
 ### translations$
 
 • **translations$**: `Observable`<`Record`<`string`, `string`\>\>
 
 ## Methods
+
+### changeCurrentLanguage
+
+▸ **changeCurrentLanguage**(`language`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `language` | `string` |
+
+#### Returns
+
+`void`
+
+___
 
 ### translate
 
