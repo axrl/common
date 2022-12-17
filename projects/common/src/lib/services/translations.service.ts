@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { Injectable, InjectionToken, Inject } from '@angular/core';
-import { shareReplay, distinctUntilChanged, switchMap } from 'rxjs';
+import { shareReplay, distinctUntilChanged, switchMap, map } from 'rxjs';
 import { createSubject, isValue } from '../functions';
 import { ApiService } from './work-with-http/api.service';
 
@@ -91,7 +91,13 @@ export class TranslationsService {
           this.translationsConfig.translationsFolderUrl,
           `${currentLang}${!isValue(this.translationsConfig.includeDotJsonToPath) || this.translationsConfig.includeDotJsonToPath ? '.json' : ''}`
         );
-        return this.api.getData<Record<string, string>>(translationsJsonUrl);
+        return this.api.getData<Record<string, string>>(translationsJsonUrl).pipe(
+          map(
+            translations => {
+              this.memory.clear();
+              return translations;
+            })
+        );
       }),
     shareReplay(1)
   );

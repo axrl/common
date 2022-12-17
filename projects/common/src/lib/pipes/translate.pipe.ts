@@ -26,10 +26,7 @@ export class TranslatePipe implements PipeTransform {
     return this.asyncPipe.transform(
       this.translationService.translations$.pipe(
         map(
-          translations => {
-            this._ref?.markForCheck();
-            return this.translationService.translate(translations, value)
-          }
+          translations => this.translationService.translate(translations, value)
         )
       )
     )
