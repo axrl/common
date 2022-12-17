@@ -68,13 +68,9 @@ export class OneTableService<Settings extends BasePersonSettings = BasePersonSet
     this.memory.set(key, value);
   }
 
-  private _basePersonSettings$: BehaviorSubject<
-    Settings | null
-  > = new BehaviorSubject<Settings | null>(this.defaultPersonSettingsValue);
+  private _basePersonSettings$: BehaviorSubject<Settings | null> = new BehaviorSubject<Settings | null>(this.defaultPersonSettingsValue);
 
-  basePersonSettings$: Observable<
-    Settings | null
-  > = this._basePersonSettings$.asObservable();
+  basePersonSettings$: Observable<Settings | null> = this._basePersonSettings$.asObservable();
 
   basePersonSettingsFiltered$: Observable<Settings> = this.basePersonSettings$.pipe(
     filter(
