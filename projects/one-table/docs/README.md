@@ -124,7 +124,7 @@ ___
 
 ### PERSON\_SETTINGS\_START\_VALUE
 
-• `Const` **PERSON\_SETTINGS\_START\_VALUE**: `InjectionToken`<``null`` \| `BasePersonSettings`<{}, [`BaseListRequest`](classes/BaseListRequest.md)\>\>
+• `Const` **PERSON\_SETTINGS\_START\_VALUE**: `InjectionToken`<``null`` \| `BasePersonSettings`\>
 
 InjectionToken со стартовым значением для потока с настройками пользователя.
 По умолчанию - использются данные, хранящиеся в localStorage, при их отсутствии - значение по умолчанию.

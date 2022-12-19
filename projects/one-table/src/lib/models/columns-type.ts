@@ -23,5 +23,5 @@ export interface ColumnConfig<T> {
 }
 
 export type ColumnName<T> = `Icon-${PropertyesKeys<T>}` | PropertyesKeys<T> | 'select' | 'action';
-export type ColumnType<T> = ColumnName<T> | ColumnConfig<T> | '';
+export type ColumnType<T> = ColumnName<T> | ColumnConfig<T>;
 export type ColumnsType<T> = Array<ColumnType<T>>;

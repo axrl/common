@@ -1,4 +1,10 @@
-# Class: OneTableService
+# Class: OneTableService<Settings\>
+
+## Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `Settings` | extends `BasePersonSettings` = `BasePersonSettings` |
 
 ## Table of contents
 
@@ -24,13 +30,19 @@
 
 ### constructor
 
-• **new OneTableService**(`defaultPersonSettingsValue`)
+• **new OneTableService**<`Settings`\>(`defaultPersonSettingsValue`)
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `Settings` | extends `BasePersonSettings` = `BasePersonSettings` |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `defaultPersonSettingsValue` | ``null`` \| `BasePersonSettings`<{}, [`BaseListRequest`](BaseListRequest.md)\> |
+| `defaultPersonSettingsValue` | ``null`` \| `Settings` |
 
 ## Methods
 
@@ -69,20 +81,13 @@ ___
 
 ### updatePersonSettings
 
-▸ **updatePersonSettings**<`T`, `Q`\>(`newSettings`, `emitEvent?`): `void`
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `T` | extends `Object` |
-| `Q` | extends [`BaseListRequest`](BaseListRequest.md)<`Q`\> |
+▸ **updatePersonSettings**(`newSettings`, `emitEvent?`): `void`
 
 #### Parameters
 
 | Name | Type | Default value |
 | :------ | :------ | :------ |
-| `newSettings` | `BasePersonSettings`<`T`, `Q`\> | `undefined` |
+| `newSettings` | `BasePersonSettings` | `undefined` |
 | `emitEvent` | `boolean` | `true` |
 
 #### Returns
@@ -100,7 +105,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `T` | extends `Object` |
-| `Q` | extends [`BaseListRequest`](BaseListRequest.md)<`Q`\> = [`BaseListRequest`](BaseListRequest.md) |
+| `Q` | extends [`BaseListRequest`](BaseListRequest.md)<`Q`\> |
 
 #### Parameters
 
@@ -158,18 +163,18 @@ ___
 
 ### basePersonSettings$
 
-• **basePersonSettings$**: `Observable`<``null`` \| `BasePersonSettings`<{}, [`BaseListRequest`](BaseListRequest.md)\>\>
+• **basePersonSettings$**: `Observable`<``null`` \| `Settings`\>
 
 ___
 
 ### basePersonSettingsFiltered$
 
-• **basePersonSettingsFiltered$**: `Observable`<`BasePersonSettings`<{}, [`BaseListRequest`](BaseListRequest.md)\>\>
+• **basePersonSettingsFiltered$**: `Observable`<`Settings`\>
 
 ___
 
 ### settingsChanges
 
-• **settingsChanges**: `EventEmitter`<`BasePersonSettings`<{}, [`BaseListRequest`](BaseListRequest.md)\>\>
+• **settingsChanges**: `Observable`<`BasePersonSettings`\>
 
-Поток с данными об обновлениях настроек.
+Поток с данными об обновлениях в настроках.

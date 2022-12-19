@@ -259,7 +259,7 @@ ___
 | `config.sourceFn` | (`req`: `Q`) => `Observable`<[`CountAndRows`](../interfaces/CountAndRows.md)<`T`\>\> |
 | `config.componentName` | `string` |
 | `config.filter?` | `any` |
-| `config.orderBy` | [`ColumnType`](../README.md#columntype)<`T`\> |
+| `config.orderBy` | ``""`` \| [`ColumnType`](../README.md#columntype)<`T`\> |
 | `config.action?` | [`ActionButton`](ActionButton.md)<`T`\>[] |
 | `config.additionParams?` | `Partial`<`Omit`<`Q`, keyof [`BaseListRequest`](BaseListRequest.md)\>\> |
 | `config.filterOptions?` | [`TableFilterOptions`](TableFilterOptions.md)<`Q`\> |
