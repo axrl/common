@@ -13,6 +13,16 @@
 - [blobDownloader](README.md#blobdownloader)
 - [makeHttpParams](README.md#makehttpparams)
 
+### Variables
+
+- [CONTROL\_ERROR\_MESSAGES\_PIPE\_DICTIONARY](README.md#control_error_messages_pipe_dictionary)
+- [SNACK\_SERVICE\_CONFIG](README.md#snack_service_config)
+- [TRANSLATIONS\_CONFIG](README.md#translations_config)
+- [API\_SERVICE\_GET\_MAP\_FN](README.md#api_service_get_map_fn)
+- [API\_SERVICE\_POST\_MAP\_FN](README.md#api_service_post_map_fn)
+- [API\_SERVICE\_PUT\_MAP\_FN](README.md#api_service_put_map_fn)
+- [API\_SERVICE\_DELETE\_MAP\_FN](README.md#api_service_delete_map_fn)
+
 ### Classes
 
 - [ControlErrorMessagePipe](classes/ControlErrorMessagePipe.md)
@@ -30,15 +40,6 @@
 - [SnackServiceConfig](interfaces/SnackServiceConfig.md)
 - [HttpBusBaseEventData](interfaces/HttpBusBaseEventData.md)
 - [SendEventToBusFnParams](interfaces/SendEventToBusFnParams.md)
-
-### Variables
-
-- [SNACK\_SERVICE\_CONFIG](README.md#snack_service_config)
-- [TRANSLATIONS\_CONFIG](README.md#translations_config)
-- [API\_SERVICE\_GET\_MAP\_FN](README.md#api_service_get_map_fn)
-- [API\_SERVICE\_POST\_MAP\_FN](README.md#api_service_post_map_fn)
-- [API\_SERVICE\_PUT\_MAP\_FN](README.md#api_service_put_map_fn)
-- [API\_SERVICE\_DELETE\_MAP\_FN](README.md#api_service_delete_map_fn)
 
 ### Type Aliases
 
@@ -267,6 +268,16 @@ ___
 `Object`
 
 ## Variables
+
+### CONTROL\_ERROR\_MESSAGES\_PIPE\_DICTIONARY
+
+• `Const` **CONTROL\_ERROR\_MESSAGES\_PIPE\_DICTIONARY**: `InjectionToken`<`Record`<`string`, `string`\>\>
+
+InjectionToken с объектом-словарем сообщений об ошибке валидации контролов формы, используемым ControlErrorMessagePipe для форматирования.
+Пайп проверяет список ошибок контрола и возвращает сообщение для первой найденной ошибки.
+Если для такой ошибки в словаре определено сообщение - оно будет возвращено пайпом, иначе - фактический текст ошибки из контрола.
+
+___
 
 ### SNACK\_SERVICE\_CONFIG
 

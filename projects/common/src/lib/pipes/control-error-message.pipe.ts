@@ -34,24 +34,20 @@ export class ControlErrorMessagePipe implements PipeTransform {
 
   transform(control: AbstractControl): string {
     const errors = control.errors;
-
+    let result = '';
     if (isValue(control) && isValue(errors)) {
       const keys = Object.keys(errors);
 
       if (keys.length > 0) {
 
         const key = keys[0];
-        return this.controlErrorsMessagesPipeDictionary[key] ?? errors[key];
-
-      } else {
-
-        return '';
+        result = this.controlErrorsMessagesPipeDictionary[key] ?? (typeof errors[key] === 'string' ? errors[key] : JSON.stringify(errors[key]));
       };
 
-    } else {
-
-      return '';
     };
+
+    console.log(control, result);
+    return result;
   }
 
 }
