@@ -196,7 +196,7 @@
                 <span>{{'table_column_layout_reset' | translate}}</span>
               </button>
             </mat-menu>
-            <div>
+            <div class="is-flex is-align-items-center">
               <mat-paginator class="is-fullwidth" [length]="inputData.dataSourceCount | async"
                 [pageSize]="(inputData.trigger | async)!.Next" [pageIndex]="getPageIndex((inputData.trigger | async)! )"
                 (page)="pageEvent($event,inputData._trigger)" showFirstLastButtons>
