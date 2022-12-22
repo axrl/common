@@ -29,17 +29,17 @@ ___
 
 ### canShow
 
-• **canShow**: (`row?`: `T`) => `boolean`
+• **canShow**: (`row`: `T`) => `boolean`
 
 #### Type declaration
 
-▸ (`row?`): `boolean`
+▸ (`row`): `boolean`
 
 ##### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `row?` | `T` |
+| `row` | `T` |
 
 ##### Returns
 

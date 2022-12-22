@@ -44,7 +44,6 @@
 - [pageEvent](OneTableComponent.md#pageevent)
 - [sortEvent](OneTableComponent.md#sortevent)
 - [getPageIndex](OneTableComponent.md#getpageindex)
-- [filterFormSubmit](OneTableComponent.md#filterformsubmit)
 - [getMainRowClass](OneTableComponent.md#getmainrowclass)
 - [ngOnDestroy](OneTableComponent.md#ngondestroy)
 - [getIconData](OneTableComponent.md#geticondata)
@@ -388,24 +387,6 @@ ___
 #### Returns
 
 `number`
-
-___
-
-### filterFormSubmit
-
-▸ **filterFormSubmit**(`customEventData`, `inputData`, `showedColumns`): `void`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `customEventData` | `any` |
-| `inputData` | [`OneTableData`](OneTableData.md)<`T`, `Q`\> |
-| `showedColumns` | [`ColumnsType`](../README.md#columnstype)<`T`\> |
-
-#### Returns
-
-`void`
 
 ___
 

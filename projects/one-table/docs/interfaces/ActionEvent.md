@@ -14,7 +14,6 @@
 - [action](ActionEvent.md#action)
 - [element](ActionEvent.md#element)
 - [inputData](ActionEvent.md#inputdata)
-- [customEventData](ActionEvent.md#customeventdata)
 
 ## Properties
 
@@ -26,16 +25,10 @@ ___
 
 ### element
 
-• **element**: ``null`` \| `T`
+• **element**: `T`
 
 ___
 
 ### inputData
 
 • **inputData**: [`OneTableData`](../classes/OneTableData.md)<`T`, `Q`\>
-
-___
-
-### customEventData
-
-• `Optional` **customEventData**: `any`
