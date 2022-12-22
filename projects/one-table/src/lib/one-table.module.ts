@@ -15,12 +15,13 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { RuDateMediumPipe, TranslatePipe, ControlErrorMessagePipe } from '@axrl/common';
+import { RuDateMediumPipe, TranslatePipe, ControlErrorMessagePipe, LANGUAGE_PERSON_SETTINGS_START_VALUE, LanguagePersonSettingsService } from '@axrl/common';
 import { RouterLink } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { OneTableExpandedRowContentProjectDirective, CmkTableKeyboardListenerDirective } from './directives';
 import { OneTableComponent } from './one-table.component';
 import { ColumnPipe } from './pipes';
+import { PERSON_SETTINGS_START_VALUE } from './one-table.service';
 
 @NgModule({
   declarations:
@@ -30,12 +31,21 @@ import { ColumnPipe } from './pipes';
       OneTableExpandedRowContentProjectDirective,
       ColumnPipe
     ],
-  providers: [{
-    provide: MAT_PAGINATOR_DEFAULT_OPTIONS,
-    useValue: {
-      pageSizeOptions: [5, 10, 20, 50, 100]
-    }
-  }],
+  providers: [
+    {
+      provide: LANGUAGE_PERSON_SETTINGS_START_VALUE,
+      useExisting: PERSON_SETTINGS_START_VALUE
+    },
+    {
+      provide: LanguagePersonSettingsService,
+      useClass: LanguagePersonSettingsService
+    },
+    {
+      provide: MAT_PAGINATOR_DEFAULT_OPTIONS,
+      useValue: {
+        pageSizeOptions: [5, 10, 20, 50, 100]
+      }
+    }],
   imports: [
     NgFor, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault, AsyncPipe,
     ControlErrorMessagePipe,

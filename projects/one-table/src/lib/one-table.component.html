@@ -92,7 +92,7 @@
               </ng-template>
               <td mat-cell [ngSwitch]="true" *matCellDef="let row;let i=dataIndex" class="is-clearfix"
                 (dblclick)="onDblClick(i,row,inputData)">
-                <ng-container *ngSwitchCase="getColumnName(column).includes('Icon-')">
+                <ng-container *ngSwitchCase="isIconColumn(column)">
                   <ng-container *ngIf="getIconData(row | helperColumn:column, row,column) as iconData">
                     <button mat-icon-button
                       [matTooltip]="iconData.tooltip ? (iconData.tooltip | translate ) ?? '' : ''">
@@ -178,10 +178,10 @@
           </table>
         </div>
         <div class="mat-elevation-z8 mt-1">
-          <mat-card class=" is-fullwidth is-flex is-align-items-center is-flex-direction-row ">
+          <mat-card
+            class="is-fullwidth is-flex is-align-items-center is-flex-direction-row is-justify-content-space-between">
             <button *ngIf="!inputData.shortColumns" mat-icon-button [matMenuTriggerFor]="columnMenu"
-              aria-label="Settings column for table" class="is-pulled-left"
-              [matTooltip]="('table_columns_settings_title' | translate) ?? ''">
+              aria-label="Settings column for table" [matTooltip]="('table_columns_settings_title' | translate) ?? ''">
               <mat-icon color="primary">settings</mat-icon>
             </button>
             <mat-menu #columnMenu="matMenu">
@@ -196,30 +196,31 @@
                 <span>{{'table_column_layout_reset' | translate}}</span>
               </button>
             </mat-menu>
-            <mat-paginator class="is-fullwidth" [length]="inputData.dataSourceCount | async"
-              [pageSize]="(inputData.trigger | async)!.Next" [pageIndex]="getPageIndex((inputData.trigger | async)! )"
-              (page)="pageEvent($event,inputData._trigger)" showFirstLastButtons>
-            </mat-paginator>
-            <button mat-icon-button class="is-pulled-right" [matTooltip]="('export_xlsx' | translate )?? ''"
-              [matMenuTriggerFor]="downloadMenu" [matMenuTriggerData]="{
+            <div>
+              <mat-paginator class="is-fullwidth" [length]="inputData.dataSourceCount | async"
+                [pageSize]="(inputData.trigger | async)!.Next" [pageIndex]="getPageIndex((inputData.trigger | async)! )"
+                (page)="pageEvent($event,inputData._trigger)" showFirstLastButtons>
+              </mat-paginator>
+              <button mat-icon-button class="is-pulled-right" [matTooltip]="('export_xlsx' | translate )?? ''"
+                [matMenuTriggerFor]="downloadMenu" [matMenuTriggerData]="{
             data: (inputData.dataSourceRows | async),
             count: (inputData.dataSourceCount | async),
             req:(inputData.trigger | async)
           }">
-              <mat-icon color="primary">file_download</mat-icon>
-            </button>
-            <mat-menu #downloadMenu="matMenu">
-              <ng-template matMenuContent let-data="data" let-count="count" let-req="req">
-                <button mat-menu-item *ngFor="let mode of exportXlsxModes"
-                  (click)="exportXlsx(mode,inputData,req,data,count)">
-                  <mat-icon color="primary">file_download </mat-icon>
-                  <span>{{('export_xlsx_' + mode) | translate}}</span>
-                </button>
-              </ng-template>
-            </mat-menu>
+                <mat-icon color="primary">file_download</mat-icon>
+              </button>
+              <mat-menu #downloadMenu="matMenu">
+                <ng-template matMenuContent let-data="data" let-count="count" let-req="req">
+                  <button mat-menu-item *ngFor="let mode of exportXlsxModes"
+                    (click)="exportXlsx(mode,inputData,req,data,count)">
+                    <mat-icon color="primary">file_download </mat-icon>
+                    <span>{{('export_xlsx_' + mode) | translate}}</span>
+                  </button>
+                </ng-template>
+              </mat-menu>
+            </div>
           </mat-card>
         </div>
-
 
         <div class="mt-2 is-fullwidth">
           <ng-content select="table-bottom"></ng-content>

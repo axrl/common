@@ -24,6 +24,7 @@ export const CONTROL_ERROR_MESSAGES_PIPE_DICTIONARY = new InjectionToken<Record<
 
 @Pipe({
   name: 'controlErrorMessage',
+  pure: false,
   standalone: true
 })
 export class ControlErrorMessagePipe implements PipeTransform {
@@ -33,6 +34,7 @@ export class ControlErrorMessagePipe implements PipeTransform {
   ) { };
 
   transform(control: AbstractControl): string {
+   
     const errors = control.errors;
     let result = '';
     if (isValue(control) && isValue(errors)) {
@@ -46,7 +48,6 @@ export class ControlErrorMessagePipe implements PipeTransform {
 
     };
 
-    console.log(control, result);
     return result;
   }
 

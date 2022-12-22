@@ -1,9 +1,10 @@
-import { Inject, InjectionToken, Injectable, EventEmitter } from '@angular/core';
-import { BehaviorSubject, distinctUntilKeyChanged, filter, map } from 'rxjs';
+import { inject, InjectionToken, Injectable } from '@angular/core';
+import { distinctUntilKeyChanged, map } from 'rxjs';
 import type { Observable } from 'rxjs';
 import { OneTableData, TableFilterOptions } from './models';
 import type { ActionButton, BaseListRequest, ColumnsType, ColumnType, ColumnName, CountAndRows, TableFilterUpdateFn, TableFilterOptionsData } from './models';
-import { isValue } from '@axrl/common';
+import { isValue, TRANSLATIONS_CONFIG, LanguagePersonSettingsService } from '@axrl/common';
+import type { LanguagePersonSettings, TranslationConfig } from '@axrl/common';
 
 export interface IconColumnData {
   icon: string;
@@ -11,10 +12,10 @@ export interface IconColumnData {
   color: string;
 }
 
-export interface BasePersonSettings {
+export interface BasePersonSettings extends LanguagePersonSettings {
   paginatorDefaultSize: number;
   uiLayouts: Record<string, {
-    columns: ColumnsType<Record<string, unknown>>;
+    columns: ColumnsType<any>;
     req?: BaseListRequest;
   }> | null;
 }
@@ -30,8 +31,11 @@ export const PERSON_SETTINGS_START_VALUE = new InjectionToken<BasePersonSettings
   providedIn: 'root',
   factory: () => {
     const storageValue = window.localStorage.getItem('one-table:user-settings');
+    const translationsConfig: TranslationConfig = inject(TRANSLATIONS_CONFIG);
+
     const defaultSettings: BasePersonSettings = {
       paginatorDefaultSize: 10,
+      lang: translationsConfig.defaultLanguage ?? 'ru',
       uiLayouts: {}
     };
     if (isValue(storageValue)) {
@@ -50,12 +54,12 @@ export const PERSON_SETTINGS_START_VALUE = new InjectionToken<BasePersonSettings
 });
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class OneTableService<Settings extends BasePersonSettings = BasePersonSettings> {
 
   constructor(
-    @Inject(PERSON_SETTINGS_START_VALUE) private defaultPersonSettingsValue: Settings | null
+    private languagePersonSettingsService: LanguagePersonSettingsService<Settings>
   ) { }
 
   private memory = new Map<string, IconColumnData>([]);
@@ -68,27 +72,15 @@ export class OneTableService<Settings extends BasePersonSettings = BasePersonSet
     this.memory.set(key, value);
   }
 
-  private _basePersonSettings$: BehaviorSubject<Settings | null> = new BehaviorSubject<Settings | null>(this.defaultPersonSettingsValue);
+  basePersonSettings$: Observable<Settings | null> = this.languagePersonSettingsService.languagePersonSettings$;
 
-  basePersonSettings$: Observable<Settings | null> = this._basePersonSettings$.asObservable();
-
-  basePersonSettingsFiltered$: Observable<Settings> = this.basePersonSettings$.pipe(
-    filter(
-      (s): s is Settings => isValue(s)
-    )
-  );
-
-  private _settingsChanges = new EventEmitter<BasePersonSettings>();
+  basePersonSettingsFiltered$: Observable<Settings> = this.languagePersonSettingsService.languagePersonSettingsFiltered$;
 
   /** Поток с данными об обновлениях в настроках. */
-  settingsChanges = this._settingsChanges.asObservable();
+  settingsChanges = this.languagePersonSettingsService.settingsChanges;
 
-  updatePersonSettings(newSettings: BasePersonSettings, emitEvent: boolean = true) {
-    localStorage.setItem('one-table:user-settings', JSON.stringify(newSettings));
-    this._basePersonSettings$.next(<Settings>newSettings);
-    if (emitEvent) {
-      this._settingsChanges.emit(<Settings>newSettings);
-    };
+  updatePersonSettings(newSettings: Settings, emitEvent: boolean = true) {
+    this.languagePersonSettingsService.updatePersonSettings(newSettings, emitEvent);
   }
 
   updateUiLayoutFn<T extends {}, Q extends BaseListRequest>(
@@ -98,7 +90,7 @@ export class OneTableService<Settings extends BasePersonSettings = BasePersonSet
       req?: Q;
     }
   ) {
-    const settings = this._basePersonSettings$.value;
+    const settings = this.languagePersonSettingsService._languagePersonSettings$.value;
     if (settings) {
       const layout = settings.uiLayouts ? settings.uiLayouts : {};
       layout[componentName] = newComponentLayout;

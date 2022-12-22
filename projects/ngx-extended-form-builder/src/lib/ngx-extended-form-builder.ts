@@ -4,10 +4,10 @@ import { Observable } from "rxjs";
 
 /**
  * Вспомогательная утилита типа.
- * На вход принимает некий тип T, возвращает список только строковых ключей этого типа, при этом значения этих ключей не являются Observable.
+ * На вход принимает некий тип T, возвращает список только строковых ключей этого типа, при этом значения этих ключей не являются Observable или Function.
  */
 export type StringKeys<T> = {
-  [K in keyof T]: T[K] extends Observable<unknown> ?
+  [K in keyof T]: T[K] extends Observable<unknown> | Function ?
   never :
   K extends string ?
   K : never;
@@ -16,16 +16,16 @@ export type StringKeys<T> = {
 /**
  * Вспомогательный alias-тип ключей в объекте Map, содержащем конфигурацию валидаторов контролов.
  */
-export type ControlsNames<T> = T extends Observable<unknown> ?
+export type ControlsNames<T> = T extends Observable<unknown> | Function ?
   never :
   T extends Array<infer U> ?
   'main' | 'mainItems' | `mainItems.${PropertyesKeys<U>}` :
   'main' | PropertyesKeys<T>;
 /**
  * Вспомогательная утилита типа.
- * На вход принимает некий тип T, возвращает только строковые ключи этого типа.
+ * На вход принимает некий тип T, возвращает только строковые ключи этого типа, значения которых не являются Observable или Function.
  */
-export type PropertyesKeys<T> = T extends undefined | null | number | boolean | symbol | Observable<unknown> ?
+export type PropertyesKeys<T> = T extends undefined | null | number | boolean | symbol | Observable<unknown> | Function ?
   never :
   T extends string ?
   T :
@@ -35,7 +35,7 @@ export type PropertyesKeys<T> = T extends undefined | null | number | boolean | 
     [K in keyof T]-?: K extends string ?
     T[K] extends (string | number | boolean | symbol | undefined | null) ?
     K :
-    T[K] extends Observable<unknown> ?
+    T[K] extends Observable<unknown> | Function ?
     never :
     T[K] extends Array<infer U> ?
     `${K}Items.${PropertyesKeys<U>}` | `${K}Items` | K :
@@ -74,8 +74,8 @@ export type FormGroupType<T extends object> = FormGroup<{
  * Для любого типа Т выводит правильный тип создаваемой формы, включая любой уровень вложенности.
  * ВАЖНО!
  * Чтобы избежать ошибки переполнения стэка вызовов в рекурсивном процессе создания формы, для любых
- * Observable-значений ( в т.ч., к примеру, Subject  * и EventEmitter) соответствующий элемент формы не создается.
- * ScanFormType это также учитывает.
+ * Observable-значений ( в т.ч., к примеру, Subject  * и EventEmitter) и значений с типом Function (функции либо методы классов)
+ * соответствующий элемент формы не создается. ScanFormType это также учитывает.
  */
 export type ScanFormType<T> = T extends AbstractControl<unknown, unknown> ?
   T :

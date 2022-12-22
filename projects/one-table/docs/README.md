@@ -24,6 +24,7 @@
 
 ### Type Aliases
 
+- [PropertyesKeys](README.md#propertyeskeys)
 - [ColumnName](README.md#columnname)
 - [ColumnType](README.md#columntype)
 - [ColumnsType](README.md#columnstype)
@@ -37,9 +38,21 @@
 
 ## Type Aliases
 
+### PropertyesKeys
+
+Ƭ **PropertyesKeys**<`T`\>: `T` extends `undefined` \| ``null`` \| `number` \| `boolean` \| `symbol` \| `Observable`<`unknown`\> \| `Function` \| `AbstractControl` ? `never` : `T` extends `string` ? `T` : `T` extends infer U[] ? [`PropertyesKeys`](README.md#propertyeskeys)<`U`\> : { [K in keyof T]-?: K extends string ? T[K] extends string \| number \| boolean \| symbol \| undefined \| null ? K : T[K] extends Observable<unknown\> \| Function \| AbstractControl ? never : \`${K}.${PropertyesKeys<T[K] extends (infer U)[] ? U : T[K]\>}\` \| K : never }[keyof `T`]
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+___
+
 ### ColumnName
 
-Ƭ **ColumnName**<`T`\>: \`Icon-${PropertyesKeys<T\>}\` \| `PropertyesKeys`<`T`\> \| ``"select"`` \| ``"action"``
+Ƭ **ColumnName**<`T`\>: [`PropertyesKeys`](README.md#propertyeskeys)<`T`\> \| ``"select"`` \| ``"action"``
 
 #### Type parameters
 

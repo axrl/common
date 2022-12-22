@@ -2,6 +2,32 @@
 
 ## Table of contents
 
+### Type Aliases
+
+- [TransformIncomingDataFn](README.md#transformincomingdatafn)
+- [TranslationConfig](README.md#translationconfig)
+- [HttpBusEventData](README.md#httpbuseventdata)
+- [AdditionalActionCallbackFn](README.md#additionalactioncallbackfn)
+- [ParamsAndHeaders](README.md#paramsandheaders)
+
+### Variables
+
+- [API\_SERVICE\_GET\_MAP\_FN](README.md#api_service_get_map_fn)
+- [API\_SERVICE\_POST\_MAP\_FN](README.md#api_service_post_map_fn)
+- [API\_SERVICE\_PUT\_MAP\_FN](README.md#api_service_put_map_fn)
+- [API\_SERVICE\_DELETE\_MAP\_FN](README.md#api_service_delete_map_fn)
+- [SNACK\_SERVICE\_CONFIG](README.md#snack_service_config)
+- [TRANSLATIONS\_CONFIG](README.md#translations_config)
+- [CONTROL\_ERROR\_MESSAGES\_PIPE\_DICTIONARY](README.md#control_error_messages_pipe_dictionary)
+- [LANGUAGE\_PERSON\_SETTINGS\_START\_VALUE](README.md#language_person_settings_start_value)
+
+### Interfaces
+
+- [SnackServiceConfig](interfaces/SnackServiceConfig.md)
+- [LanguagePersonSettings](interfaces/LanguagePersonSettings.md)
+- [HttpBusBaseEventData](interfaces/HttpBusBaseEventData.md)
+- [SendEventToBusFnParams](interfaces/SendEventToBusFnParams.md)
+
 ### Functions
 
 - [createObservable](README.md#createobservable)
@@ -13,21 +39,12 @@
 - [blobDownloader](README.md#blobdownloader)
 - [makeHttpParams](README.md#makehttpparams)
 
-### Variables
-
-- [CONTROL\_ERROR\_MESSAGES\_PIPE\_DICTIONARY](README.md#control_error_messages_pipe_dictionary)
-- [SNACK\_SERVICE\_CONFIG](README.md#snack_service_config)
-- [TRANSLATIONS\_CONFIG](README.md#translations_config)
-- [API\_SERVICE\_GET\_MAP\_FN](README.md#api_service_get_map_fn)
-- [API\_SERVICE\_POST\_MAP\_FN](README.md#api_service_post_map_fn)
-- [API\_SERVICE\_PUT\_MAP\_FN](README.md#api_service_put_map_fn)
-- [API\_SERVICE\_DELETE\_MAP\_FN](README.md#api_service_delete_map_fn)
-
 ### Classes
 
 - [ControlErrorMessagePipe](classes/ControlErrorMessagePipe.md)
 - [RuDateMediumPipe](classes/RuDateMediumPipe.md)
 - [TranslatePipe](classes/TranslatePipe.md)
+- [LanguagePersonSettingsService](classes/LanguagePersonSettingsService.md)
 - [SnackService](classes/SnackService.md)
 - [TranslationsService](classes/TranslationsService.md)
 - [ExcelService](classes/ExcelService.md)
@@ -35,19 +52,202 @@
 - [ApiService](classes/ApiService.md)
 - [HttpBusService](classes/HttpBusService.md)
 
-### Interfaces
+## Type Aliases
 
-- [SnackServiceConfig](interfaces/SnackServiceConfig.md)
-- [HttpBusBaseEventData](interfaces/HttpBusBaseEventData.md)
-- [SendEventToBusFnParams](interfaces/SendEventToBusFnParams.md)
+### TransformIncomingDataFn
 
-### Type Aliases
+Ƭ **TransformIncomingDataFn**: <T\>(`res`: `unknown`) => `T`
 
-- [TranslationConfig](README.md#translationconfig)
-- [TransformIncomingDataFn](README.md#transformincomingdatafn)
-- [HttpBusEventData](README.md#httpbuseventdata)
-- [AdditionalActionCallbackFn](README.md#additionalactioncallbackfn)
-- [ParamsAndHeaders](README.md#paramsandheaders)
+#### Type declaration
+
+▸ <`T`\>(`res`): `T`
+
+Описание типа для функций трансформации данных, полученных при использовании методов
+
+**`Method`**
+
+`ApiService.getData<T>`
+
+##### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `res` | `unknown` |
+
+##### Returns
+
+`T`
+
+___
+
+### TranslationConfig
+
+Ƭ **TranslationConfig**: `Object`
+
+Настройка конфигурации TranslationsService
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `includeDotJsonToPath?` | `boolean` | Требуется ли добавлять '.json' в конце пути url, по которому сервис будет запрашивать данные для переводов. Если для получения переводов используется endpoint некоего сервиса rest-api - установите значение false. Если для получения переводов используется набор статичных файлов JSON, расположенных по некоему URL - установите true. По умолчанию - true. **`Default`** true |
+| `translationsFolderUrl` | `string` | Первая часть пути url, на который сервис будет делать запрос для получения словаря переводов. Итоговый url, на который будет обращаться сервис за конкретным переводом получается по формуле : translationsFolderUrl + одно из значений в списке языков languages + '.json' (только если для includeDotJsonToPath установлено значение true) **`Default`** 'assets/translations' |
+| `defaultLanguage?` | `string` | Язык, который будет использоватьcя сервисом в качестве языка по умолчанию - к примеру, при старте приложения. **`Default`** 'ru' |
+| `languages` | `string`[] | Список языков, для которых доступны данные для перевода. **`Default`** ['ru'] |
+
+___
+
+### HttpBusEventData
+
+Ƭ **HttpBusEventData**<`T`\>: [`HttpBusBaseEventData`](interfaces/HttpBusBaseEventData.md)<`T`\> & { `method`: ``"post"`` \| ``"post-blob"`` \| ``"post-text"`` \| ``"put"`` ; `url`: `string` ; `body?`: `unknown` \| ``null`` ; `options`: [`ParamsAndHeaders`](README.md#paramsandheaders) ; `filename?`: `string`  } \| { `method`: ``"custom"`` ; `customObservable`: `Observable`<`T`\>  } \| { `method`: ``"get"`` \| ``"get-blob"`` \| ``"get-text"`` \| ``"delete"`` ; `url`: `string` ; `options`: [`ParamsAndHeaders`](README.md#paramsandheaders) ; `filename?`: `string`  }
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+___
+
+### AdditionalActionCallbackFn
+
+Ƭ **AdditionalActionCallbackFn**<`T`\>: (`result?`: `T`) => `void`
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Type declaration
+
+▸ (`result?`): `void`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `result?` | `T` |
+
+##### Returns
+
+`void`
+
+___
+
+### ParamsAndHeaders
+
+Ƭ **ParamsAndHeaders**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `headers?` | { `[header: string]`: `string`;  } |
+| `params?` | { `[params: string]`: `any`;  } |
+
+## Variables
+
+### API\_SERVICE\_GET\_MAP\_FN
+
+• `Const` **API\_SERVICE\_GET\_MAP\_FN**: `InjectionToken`<[`TransformIncomingDataFn`](README.md#transformincomingdatafn)\>
+
+InjectionToken с функцией, которая будет применяться ко всем данным, полученным при использовании методов
+
+**`Method`**
+
+`ApiService.getData<T>` .
+По умолчанию -  (data) => data (преобразование данных не происходит) ;
+
+___
+
+### API\_SERVICE\_POST\_MAP\_FN
+
+• `Const` **API\_SERVICE\_POST\_MAP\_FN**: `InjectionToken`<[`TransformIncomingDataFn`](README.md#transformincomingdatafn)\>
+
+InjectionToken с функцией, которая будет применяться ко всем данным, полученным при использовании
+
+**`Method`**
+
+`ApiService.postData<TResponse,TBody>` и
+
+**`Method`**
+
+`ApiService.postNoData<TResponse>` .
+По умолчанию -  (data) => data (преобразование данных не происходит) ;
+
+___
+
+### API\_SERVICE\_PUT\_MAP\_FN
+
+• `Const` **API\_SERVICE\_PUT\_MAP\_FN**: `InjectionToken`<[`TransformIncomingDataFn`](README.md#transformincomingdatafn)\>
+
+InjectionToken с функцией, которая будет применяться ко всем данным, полученным при использовании
+
+**`Method`**
+
+`ApiService.putData<TResponse,TBody>` .
+По умолчанию -  (data) => data (преобразование данных не происходит) ;
+
+___
+
+### API\_SERVICE\_DELETE\_MAP\_FN
+
+• `Const` **API\_SERVICE\_DELETE\_MAP\_FN**: `InjectionToken`<[`TransformIncomingDataFn`](README.md#transformincomingdatafn)\>
+
+InjectionToken с функцией, которая будет применяться ко всем данным, полученным при использовании
+
+**`Method`**
+
+`ApiService.delete<T>` .
+По умолчанию -  (data) => data (преобразование данных не происходит) ;
+
+___
+
+### SNACK\_SERVICE\_CONFIG
+
+• `Const` **SNACK\_SERVICE\_CONFIG**: `InjectionToken`<`undefined` \| [`SnackServiceConfig`](interfaces/SnackServiceConfig.md)<`unknown`, `any`\>\>
+
+InjectionToken с объектом SnackServiceConfig - конфигурацией компонента , который будет отображаться в качестве Snackbar.
+По умолчанию задано значение undefined - сервис использует встроенный в Angular Material компонент по умолчанию, иначе - используется компонент из токена.
+
+___
+
+### TRANSLATIONS\_CONFIG
+
+• `Const` **TRANSLATIONS\_CONFIG**: `InjectionToken`<[`TranslationConfig`](README.md#translationconfig)\>
+
+InjectionToken с объектом конфигурации TranslationConfig.
+
+**`Default`**
+
+___
+
+### CONTROL\_ERROR\_MESSAGES\_PIPE\_DICTIONARY
+
+• `Const` **CONTROL\_ERROR\_MESSAGES\_PIPE\_DICTIONARY**: `InjectionToken`<`Record`<`string`, `string`\>\>
+
+InjectionToken с объектом-словарем сообщений об ошибке валидации контролов формы, используемым ControlErrorMessagePipe для форматирования.
+Пайп проверяет список ошибок контрола и возвращает сообщение для первой найденной ошибки.
+Если для такой ошибки в словаре определено сообщение - оно будет возвращено пайпом, иначе - фактический текст ошибки из контрола.
+
+___
+
+### LANGUAGE\_PERSON\_SETTINGS\_START\_VALUE
+
+• `Const` **LANGUAGE\_PERSON\_SETTINGS\_START\_VALUE**: `InjectionToken`<``null`` \| [`LanguagePersonSettings`](interfaces/LanguagePersonSettings.md)\>
+
+InjectionToken со стартовым значением для потока с настройками пользователя.
+По умолчанию - использются данные, хранящиеся в localStorage, при их отсутствии - значение по умолчанию.
+
+Если в приложении определена собственная логика хранения пользовательских настроек и стартовое значение 
+будет передаваться в сервис извне - рекомендуется определить токен, используя в качестве стартового значения - null.
 
 ## Functions
 
@@ -266,188 +466,3 @@ ___
 #### Returns
 
 `Object`
-
-## Variables
-
-### CONTROL\_ERROR\_MESSAGES\_PIPE\_DICTIONARY
-
-• `Const` **CONTROL\_ERROR\_MESSAGES\_PIPE\_DICTIONARY**: `InjectionToken`<`Record`<`string`, `string`\>\>
-
-InjectionToken с объектом-словарем сообщений об ошибке валидации контролов формы, используемым ControlErrorMessagePipe для форматирования.
-Пайп проверяет список ошибок контрола и возвращает сообщение для первой найденной ошибки.
-Если для такой ошибки в словаре определено сообщение - оно будет возвращено пайпом, иначе - фактический текст ошибки из контрола.
-
-___
-
-### SNACK\_SERVICE\_CONFIG
-
-• `Const` **SNACK\_SERVICE\_CONFIG**: `InjectionToken`<`undefined` \| [`SnackServiceConfig`](interfaces/SnackServiceConfig.md)<`unknown`, `any`\>\>
-
-InjectionToken с объектом SnackServiceConfig - конфигурацией компонента , который будет отображаться в качестве Snackbar.
-По умолчанию задано значение undefined - сервис использует встроенный в Angular Material компонент по умолчанию, иначе - используется компонент из токена.
-
-___
-
-### TRANSLATIONS\_CONFIG
-
-• `Const` **TRANSLATIONS\_CONFIG**: `InjectionToken`<[`TranslationConfig`](README.md#translationconfig)\>
-
-InjectionToken с объектом конфигурации TranslationConfig.
-
-**`Default`**
-
-___
-
-### API\_SERVICE\_GET\_MAP\_FN
-
-• `Const` **API\_SERVICE\_GET\_MAP\_FN**: `InjectionToken`<[`TransformIncomingDataFn`](README.md#transformincomingdatafn)\>
-
-InjectionToken с функцией, которая будет применяться ко всем данным, полученным при использовании методов
-
-**`Method`**
-
-`ApiService.getData<T>` .
-По умолчанию -  (data) => data (преобразование данных не происходит) ;
-
-___
-
-### API\_SERVICE\_POST\_MAP\_FN
-
-• `Const` **API\_SERVICE\_POST\_MAP\_FN**: `InjectionToken`<[`TransformIncomingDataFn`](README.md#transformincomingdatafn)\>
-
-InjectionToken с функцией, которая будет применяться ко всем данным, полученным при использовании
-
-**`Method`**
-
-`ApiService.postData<TResponse,TBody>` и
-
-**`Method`**
-
-`ApiService.postNoData<TResponse>` .
-По умолчанию -  (data) => data (преобразование данных не происходит) ;
-
-___
-
-### API\_SERVICE\_PUT\_MAP\_FN
-
-• `Const` **API\_SERVICE\_PUT\_MAP\_FN**: `InjectionToken`<[`TransformIncomingDataFn`](README.md#transformincomingdatafn)\>
-
-InjectionToken с функцией, которая будет применяться ко всем данным, полученным при использовании
-
-**`Method`**
-
-`ApiService.putData<TResponse,TBody>` .
-По умолчанию -  (data) => data (преобразование данных не происходит) ;
-
-___
-
-### API\_SERVICE\_DELETE\_MAP\_FN
-
-• `Const` **API\_SERVICE\_DELETE\_MAP\_FN**: `InjectionToken`<[`TransformIncomingDataFn`](README.md#transformincomingdatafn)\>
-
-InjectionToken с функцией, которая будет применяться ко всем данным, полученным при использовании
-
-**`Method`**
-
-`ApiService.delete<T>` .
-По умолчанию -  (data) => data (преобразование данных не происходит) ;
-
-## Type Aliases
-
-### TranslationConfig
-
-Ƭ **TranslationConfig**: `Object`
-
-Настройка конфигурации TranslationsService
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `includeDotJsonToPath?` | `boolean` | Требуется ли добавлять '.json' в конце пути url, по которому сервис будет запрашивать данные для переводов. Если для получения переводов используется endpoint некоего сервиса rest-api - установите значение false. Если для получения переводов используется набор статичных файлов JSON, расположенных по некоему URL - установите true. По умолчанию - true. **`Default`** true |
-| `translationsFolderUrl` | `string` | Первая часть пути url, на который сервис будет делать запрос для получения словаря переводов. Итоговый url, на который будет обращаться сервис за конкретным переводом получается по формуле : translationsFolderUrl + одно из значений в списке языков languages + '.json' (только если для includeDotJsonToPath установлено значение true) **`Default`** 'assets/translations' |
-| `defaultLanguage?` | `string` | Язык, который будет использоватьcя сервисом в качестве языка по умолчанию - к примеру, при старте приложения. **`Default`** 'ru' |
-| `languages` | `string`[] | Список языков, для которых доступны данные для перевода. **`Default`** ['ru'] |
-
-___
-
-### TransformIncomingDataFn
-
-Ƭ **TransformIncomingDataFn**: <T\>(`res`: `unknown`) => `T`
-
-#### Type declaration
-
-▸ <`T`\>(`res`): `T`
-
-Описание типа для функций трансформации данных, полученных при использовании методов
-
-**`Method`**
-
-`ApiService.getData<T>`
-
-##### Type parameters
-
-| Name |
-| :------ |
-| `T` |
-
-##### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `res` | `unknown` |
-
-##### Returns
-
-`T`
-
-___
-
-### HttpBusEventData
-
-Ƭ **HttpBusEventData**<`T`\>: [`HttpBusBaseEventData`](interfaces/HttpBusBaseEventData.md)<`T`\> & { `method`: ``"post"`` \| ``"post-blob"`` \| ``"post-text"`` \| ``"put"`` ; `url`: `string` ; `body?`: `unknown` \| ``null`` ; `options`: [`ParamsAndHeaders`](README.md#paramsandheaders) ; `filename?`: `string`  } \| { `method`: ``"custom"`` ; `customObservable`: `Observable`<`T`\>  } \| { `method`: ``"get"`` \| ``"get-blob"`` \| ``"get-text"`` \| ``"delete"`` ; `url`: `string` ; `options`: [`ParamsAndHeaders`](README.md#paramsandheaders) ; `filename?`: `string`  }
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `T` |
-
-___
-
-### AdditionalActionCallbackFn
-
-Ƭ **AdditionalActionCallbackFn**<`T`\>: (`result?`: `T`) => `void`
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `T` |
-
-#### Type declaration
-
-▸ (`result?`): `void`
-
-##### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `result?` | `T` |
-
-##### Returns
-
-`void`
-
-___
-
-### ParamsAndHeaders
-
-Ƭ **ParamsAndHeaders**: `Object`
-
-#### Type declaration
-
-| Name | Type |
-| :------ | :------ |
-| `headers?` | { `[header: string]`: `string`;  } |
-| `params?` | { `[params: string]`: `any`;  } |

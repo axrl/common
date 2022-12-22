@@ -19,10 +19,10 @@
 
 ### StringKeys
 
-Ƭ **StringKeys**<`T`\>: { [K in keyof T]: T[K] extends Observable<unknown\> ? never : K extends string ? K : never }[keyof `T`]
+Ƭ **StringKeys**<`T`\>: { [K in keyof T]: T[K] extends Observable<unknown\> \| Function ? never : K extends string ? K : never }[keyof `T`]
 
 Вспомогательная утилита типа.
-На вход принимает некий тип T, возвращает список только строковых ключей этого типа, при этом значения этих ключей не являются Observable.
+На вход принимает некий тип T, возвращает список только строковых ключей этого типа, при этом значения этих ключей не являются Observable или Function.
 
 #### Type parameters
 
@@ -34,7 +34,7 @@ ___
 
 ### ControlsNames
 
-Ƭ **ControlsNames**<`T`\>: `T` extends `Observable`<`unknown`\> ? `never` : `T` extends infer U[] ? ``"main"`` \| ``"mainItems"`` \| \`mainItems.${PropertyesKeys<U\>}\` : ``"main"`` \| [`PropertyesKeys`](README.md#propertyeskeys)<`T`\>
+Ƭ **ControlsNames**<`T`\>: `T` extends `Observable`<`unknown`\> \| `Function` ? `never` : `T` extends infer U[] ? ``"main"`` \| ``"mainItems"`` \| \`mainItems.${PropertyesKeys<U\>}\` : ``"main"`` \| [`PropertyesKeys`](README.md#propertyeskeys)<`T`\>
 
 Вспомогательный alias-тип ключей в объекте Map, содержащем конфигурацию валидаторов контролов.
 
@@ -48,10 +48,10 @@ ___
 
 ### PropertyesKeys
 
-Ƭ **PropertyesKeys**<`T`\>: `T` extends `undefined` \| ``null`` \| `number` \| `boolean` \| `symbol` \| `Observable`<`unknown`\> ? `never` : `T` extends `string` ? `T` : `T` extends infer U[] ? [`PropertyesKeys`](README.md#propertyeskeys)<`U`\> : { [K in keyof T]-?: K extends string ? T[K] extends string \| number \| boolean \| symbol \| undefined \| null ? K : T[K] extends Observable<unknown\> ? never : T[K] extends (infer U)[] ? \`${K}Items.${PropertyesKeys<U\>}\` \| \`${K}Items\` \| K : \`${K}.${PropertyesKeys<T[K]\>}\` \| K : never }[keyof `T`]
+Ƭ **PropertyesKeys**<`T`\>: `T` extends `undefined` \| ``null`` \| `number` \| `boolean` \| `symbol` \| `Observable`<`unknown`\> \| `Function` ? `never` : `T` extends `string` ? `T` : `T` extends infer U[] ? [`PropertyesKeys`](README.md#propertyeskeys)<`U`\> : { [K in keyof T]-?: K extends string ? T[K] extends string \| number \| boolean \| symbol \| undefined \| null ? K : T[K] extends Observable<unknown\> \| Function ? never : T[K] extends (infer U)[] ? \`${K}Items.${PropertyesKeys<U\>}\` \| \`${K}Items\` \| K : \`${K}.${PropertyesKeys<T[K]\>}\` \| K : never }[keyof `T`]
 
 Вспомогательная утилита типа.
-На вход принимает некий тип T, возвращает только строковые ключи этого типа.
+На вход принимает некий тип T, возвращает только строковые ключи этого типа, значения которых не являются Observable или Function.
 
 #### Type parameters
 
@@ -83,8 +83,8 @@ ___
 Для любого типа Т выводит правильный тип создаваемой формы, включая любой уровень вложенности.
 ВАЖНО!
 Чтобы избежать ошибки переполнения стэка вызовов в рекурсивном процессе создания формы, для любых
-Observable-значений ( в т.ч., к примеру, Subject  * и EventEmitter) соответствующий элемент формы не создается.
-ScanFormType это также учитывает.
+Observable-значений ( в т.ч., к примеру, Subject  * и EventEmitter) и значений с типом Function (функции либо методы классов)
+соответствующий элемент формы не создается. ScanFormType это также учитывает.
 
 #### Type parameters
 

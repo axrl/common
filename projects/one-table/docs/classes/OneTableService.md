@@ -30,7 +30,7 @@
 
 ### constructor
 
-• **new OneTableService**<`Settings`\>(`defaultPersonSettingsValue`)
+• **new OneTableService**<`Settings`\>(`languagePersonSettingsService`)
 
 #### Type parameters
 
@@ -42,7 +42,7 @@
 
 | Name | Type |
 | :------ | :------ |
-| `defaultPersonSettingsValue` | ``null`` \| `Settings` |
+| `languagePersonSettingsService` | `LanguagePersonSettingsService`<`Settings`\> |
 
 ## Methods
 
@@ -87,7 +87,7 @@ ___
 
 | Name | Type | Default value |
 | :------ | :------ | :------ |
-| `newSettings` | `BasePersonSettings` | `undefined` |
+| `newSettings` | `Settings` | `undefined` |
 | `emitEvent` | `boolean` | `true` |
 
 #### Returns
@@ -175,6 +175,6 @@ ___
 
 ### settingsChanges
 
-• **settingsChanges**: `Observable`<`BasePersonSettings`\>
+• **settingsChanges**: `Observable`<`Settings`\>
 
 Поток с данными об обновлениях в настроках.

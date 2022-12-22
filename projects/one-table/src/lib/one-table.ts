@@ -72,7 +72,7 @@ export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequ
     sourceFn: (req: Q) => Observable<CountAndRows<T>>,
     componentName: string,
     filter?: any,
-    orderBy: ColumnType<T>  | '',
+    orderBy: ColumnType<T> | '',
     action?: ActionButton<T>[],
     additionParams?: Partial<Omit<Q, keyof BaseListRequest>>,
     filterOptions?: TableFilterOptions<Q>,

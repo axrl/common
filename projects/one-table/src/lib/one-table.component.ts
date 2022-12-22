@@ -6,7 +6,7 @@ import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { OneTableExpandedRowContentProjectDirective } from './directives';
 import type { Observable } from 'rxjs';
-import { map, switchMap, BehaviorSubject } from 'rxjs';
+import { map, switchMap, BehaviorSubject, from } from 'rxjs';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import type { BaseListRequest, OneTableData, ActionEvent, ColumnType, ActionButton, ColumnsType, ColumnConfig } from './models';
 import { createObservable, ExcelService, SnackService, isValue, trackByFn } from '@axrl/common';
@@ -80,6 +80,10 @@ type ExportXlsxEvent<T extends {}, Q extends BaseListRequest> = {
   overflow: auto;
   box-sizing: border-box;
   animation: 0.5s ease-in-out 0s from_void;
+}
+
+.table-container tr.mat-mdc-row.selected-row {
+  background-color:rgba(33, 150, 243, 0.2);
 }
 
 .table-container tr.mat-mdc-row td.mat-mdc-cell,
@@ -159,10 +163,15 @@ export class OneTableComponent<T extends {}, Q extends BaseListRequest> implemen
     return typeof columnData === 'string' ? columnData : columnData.translateName;
   }
 
+  isIconColumn(column: ColumnType<T>) {
+    return !(typeof column == 'string') && column.isIconColumn;
+  }
+
   /** to do  = счписок колонок убрать из хардкода */
   isSortedColumn(column: ColumnType<T>): boolean {
     const columnName = this.getColumnName(column);
-    return !columnName.includes('Icon-') && !columnName.includes('.') && ![
+
+    return !this.isIconColumn(column) && !columnName.includes('.') && ![
       'action', 'taskNumber', 'completeDt', 'comment', 'docType', 'signer', 'ismtStatus', 'ismtUpdated', 'gtinCount', 'quantity', 'targetName'
     ].includes(columnName);
   }
@@ -226,25 +235,14 @@ export class OneTableComponent<T extends {}, Q extends BaseListRequest> implemen
     return (req.Offset / req.Next) | 0;
   }
 
-  filterFormSubmit(customEventData: any, inputData: OneTableData<T, Q>, showedColumns: ColumnsType<T>) {
-    this.cleanSelected();
-    this.tableAction.emit({
-      action: 'filterFormSubmit', element: null, inputData, customEventData
-    });
-
-    this.oneTableService.updateUiLayoutFn(inputData.componentName, {
-      columns: showedColumns, req: inputData._trigger.value
-    });
-  }
-
   getMainRowClass(inputData: OneTableData<T, Q>, row: T, index: number, currentSelected: number | null): string {
 
     return inputData.withExtendedRow() ?
       index === currentSelected ?
-        'mdc-data-table__row--selected no-bottom-border' :
+        'selected-row no-bottom-border' :
         'no-bottom-border' :
       index === currentSelected ?
-        'mdc-data-table__row--selected' :
+        'selected-row' :
         '';
   }
 
@@ -288,10 +286,12 @@ export class OneTableComponent<T extends {}, Q extends BaseListRequest> implemen
     return this.selectedItemIndex$.pipe(
       switchMap(
         indexOrNull => dataSourceRows.pipe(
-          map(
-            sourceRows => isValue(indexOrNull) ?
-              sourceRows[indexOrNull] ?? null :
-              null
+          switchMap(
+            sourceRows => from(
+              isValue(indexOrNull) && isValue(sourceRows[indexOrNull]) ?
+                [null, sourceRows[indexOrNull]] :
+                [null]
+            )
           )
         )
       )

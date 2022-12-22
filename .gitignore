@@ -1,5 +1,8 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
+projects/one-table/ng-package-axrl.json
+projects/common/ng-package-axrl.json
+
 # compiled output
 /tmp
 /out-tsc

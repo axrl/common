@@ -34,6 +34,7 @@
 - [cleanSelected](OneTableComponent.md#cleanselected)
 - [getColumnName](OneTableComponent.md#getcolumnname)
 - [getTranslatedColumnName](OneTableComponent.md#gettranslatedcolumnname)
+- [isIconColumn](OneTableComponent.md#isiconcolumn)
 - [isSortedColumn](OneTableComponent.md#issortedcolumn)
 - [getActualAction](OneTableComponent.md#getactualaction)
 - [isAvailableAction](OneTableComponent.md#isavailableaction)
@@ -217,6 +218,22 @@ ___
 #### Returns
 
 `string`
+
+___
+
+### isIconColumn
+
+▸ **isIconColumn**(`column`): `undefined` \| `boolean`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `column` | [`ColumnType`](../README.md#columntype)<`T`\> |
+
+#### Returns
+
+`undefined` \| `boolean`
 
 ___
 

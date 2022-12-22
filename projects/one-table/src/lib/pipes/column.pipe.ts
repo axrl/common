@@ -9,9 +9,7 @@ export class ColumnPipe<T extends {}> implements PipeTransform {
 
   transform(value: T, columnData: ColumnType<T>) {
     const column = typeof columnData === 'string' ? columnData : columnData.column;
-    const columnArray = (
-      column.includes('Icon-') ? column.replace('Icon-', '') : column
-    ).split('.');
+    const columnArray = column.split('.');
     switch (columnArray.length) {
       case 2:
         return value?.[

@@ -4,15 +4,13 @@ import type { OneTableData } from "../one-table";
 
 export interface ActionEvent<T extends {}, Q extends BaseListRequest = BaseListRequest> {
   action: string;
-  element: T | null;
+  element: T;
   inputData: OneTableData<T, Q>;
-  customEventData?: any | undefined;
 }
-
 
 export class ActionButton<T extends {}> {
   action: string;
-  canShow: (row?: T) => boolean = () => true;
+  canShow: (row: T) => boolean = () => true;
   routerLink?: (row?: T) => (string | any)[];
   iconName: string | null;
 
