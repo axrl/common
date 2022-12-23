@@ -1,11 +1,9 @@
 <ng-container *ngIf="inputData$ | async as inputData">
   <ng-container *ngIf="inputData.showedColumns$ | async as showedColumns">
     <ng-container *ngIf="inputData.filterOptions && inputData.filterForm">
-      <mat-card class="is-flex is-flex-direction-row is-align-items-center"
-        style="border-top-left-radius: 0;border-top-right-radius: 0;"
-        [@openClose]="(openTrigger | async) === true ? 'open' : 'closed'"
+      <mat-card class="filter-form-container" [@openClose]="(openTrigger | async) === true ? 'open' : 'closed'"
         *ngIf="inputData.filterForm && inputData._trigger">
-        <form class="column pb-0" (submit)="inputData.submit()" [formGroup]="inputData.filterForm">
+        <form (submit)="inputData.submit()" [formGroup]="inputData.filterForm">
           <div class="columns is-mobile is-multiline">
             <ng-container *ngFor="let item of inputData.showedUsedFilters; trackBy:trackByFn">
               <div class="column is-narrow py-1">
@@ -27,27 +25,27 @@
                   <mat-error *ngIf="inputData.filterForm.controls?.[item]?.errors"> {{
                     inputData.filterForm.controls[item] | controlErrorMessage | translate }} </mat-error>
                 </mat-form-field>
-                <button type="button" mat-icon-button class="is-pulled-right delete-table-filter"
+                <button type="button" mat-icon-button class="delete-table-filter"
                   *ngIf="!inputData.getOption(item)?.required" (click)="inputData.delFilter(item)">
-                  <mat-icon class="is-size-5"> close</mat-icon>
+                  <mat-icon> close</mat-icon>
                 </button>
               </div>
             </ng-container>
           </div>
         </form>
-        <div class="column is-narrow  is-flex is-justify-content-center is-align-items-center mx-0 px-0">
+        <div class="column is-narrow add-filter">
           <button mat-icon-button [matMenuTriggerFor]="addFilterMenu" *ngIf="inputData.availableFilters.length > 0">
             <mat-icon>add</mat-icon>
           </button>
         </div>
-        <div class="column is-narrow is-flex">
+        <div class="column is-narrow submit-filter">
           <button mat-icon-button color="accent" (click)="inputData.submit()" [disabled]="inputData.filterForm.invalid">
             <mat-icon>done</mat-icon>
           </button>
         </div>
       </mat-card>
-      <div class="is-flex is-justify-content-center mb-0" *ngIf="openTrigger">
-        <button class="show_hide_button" mat-icon-button color="accent" (click)="openTrigger.next(!openTrigger.value)"
+      <div class="show-hide-button-block" *ngIf="openTrigger">
+        <button class="show-hide-button" mat-icon-button color="accent" (click)="openTrigger.next(!openTrigger.value)"
           [matTooltip]="(((openTrigger | async) === true ? 'collapse':'expand') | translate ) ?? ''"
           matTooltipPosition="above">
           <mat-icon
@@ -56,8 +54,8 @@
         </button>
       </div>
       <mat-menu #addFilterMenu="matMenu">
-        <mat-card-subtitle class="ml-2 mb-4">Доступные фильтры:</mat-card-subtitle>
-        <button mat-menu-item class="is-fullwidth" *ngFor="let item of inputData.availableFilters; trackBy: trackByFn"
+        <mat-card-subtitle >Доступные фильтры:</mat-card-subtitle>
+        <button mat-menu-item style="width: 100%;" *ngFor="let item of inputData.availableFilters; trackBy: trackByFn"
           (click)="inputData.addFilter(item.key)">
           {{ item.translateName | translate }}
         </button>
@@ -75,8 +73,7 @@
             [sourceData]="(inputData.dataSource | async)" [dataSourceTrigger]="inputData._trigger"
             (spaceEvent)="onDblClick(selectedItemIndex$.value,$event,inputData)"
             [selectedItemIndexSubject]="selectedItemIndex$" cdkDropList cdkDropListOrientation="horizontal"
-            (cdkDropListDropped)="drop($event, inputData,showedColumns)"
-            class="mat-elevation-z8 is-fullwidth one-table">
+            (cdkDropListDropped)="drop($event, inputData,showedColumns)" class="mat-elevation-z8 one-table">
             <ng-container *ngFor="let column of inputData.defaultColumns;let columnIndex=index;trackBy:trackByFn"
               [matColumnDef]="getColumnName(column)">
               <ng-container *ngIf="isSortedColumn(column);else noSortHeader">
@@ -90,7 +87,7 @@
                   (getTranslatedColumnName(column) | translate)}}
                 </th>
               </ng-template>
-              <td mat-cell [ngSwitch]="true" *matCellDef="let row;let i=dataIndex" class="is-clearfix"
+              <td mat-cell [ngSwitch]="true" *matCellDef="let row;let i=dataIndex"
                 (dblclick)="onDblClick(i,row,inputData)">
                 <ng-container *ngSwitchCase="isIconColumn(column)">
                   <ng-container *ngIf="getIconData(row | helperColumn:column, row,column) as iconData">
@@ -115,8 +112,8 @@
                 </ng-container>
                 <ng-container *ngSwitchCase="column === 'action'">
                   <ng-container *ngIf="getActualAction(row,inputData.action) as actualActions">
-                    <button class="is-pulled-right" mat-icon-button [matMenuTriggerData]="{actualActions}"
-                      *ngIf="actualActions.length > 0" [matMenuTriggerFor]="menu" color="accent">
+                    <button mat-icon-button [matMenuTriggerData]="{actualActions}" *ngIf="actualActions.length > 0"
+                      [matMenuTriggerFor]="menu" color="accent">
                       <mat-icon>more_vert</mat-icon>
                     </button>
                   </ng-container>
@@ -177,9 +174,8 @@
             </tr>
           </table>
         </div>
-        <div class="mat-elevation-z8 mt-1">
-          <mat-card
-            class="is-fullwidth is-flex is-align-items-center is-flex-direction-row is-justify-content-space-between">
+        <div class="mat-elevation-z8 paginator-block">
+          <mat-card class="paginator-container">
             <button *ngIf="!inputData.shortColumns" mat-icon-button [matMenuTriggerFor]="columnMenu"
               aria-label="Settings column for table" [matTooltip]="('table_columns_settings_title' | translate) ?? ''">
               <mat-icon color="primary">settings</mat-icon>
@@ -196,17 +192,16 @@
                 <span>{{'table_column_layout_reset' | translate}}</span>
               </button>
             </mat-menu>
-            <div class="is-flex is-align-items-center">
-              <mat-paginator class="is-fullwidth" [length]="inputData.dataSourceCount | async"
-                [pageSize]="(inputData.trigger | async)!.Next" [pageIndex]="getPageIndex((inputData.trigger | async)! )"
-                (page)="pageEvent($event,inputData._trigger)" showFirstLastButtons>
+            <div class="right-block">
+              <mat-paginator [length]="inputData.dataSourceCount | async" [pageSize]="(inputData.trigger | async)!.Next"
+                [pageIndex]="getPageIndex((inputData.trigger | async)! )" (page)="pageEvent($event,inputData._trigger)"
+                showFirstLastButtons>
               </mat-paginator>
-              <button mat-icon-button class="is-pulled-right" [matTooltip]="('export_xlsx' | translate )?? ''"
+              <button mat-icon-button [matTooltip]="('export_xlsx' | translate )?? ''"
                 [matMenuTriggerFor]="downloadMenu" [matMenuTriggerData]="{
             data: (inputData.dataSourceRows | async),
             count: (inputData.dataSourceCount | async),
-            req:(inputData.trigger | async)
-          }">
+            req:(inputData.trigger | async) }">
                 <mat-icon color="primary">file_download</mat-icon>
               </button>
               <mat-menu #downloadMenu="matMenu">
@@ -222,26 +217,23 @@
           </mat-card>
         </div>
 
-        <div class="mt-2 is-fullwidth">
+        <div class="table-bottom-block">
           <ng-content select="table-bottom"></ng-content>
         </div>
       </div>
       <div class="column is-half rigth-column" *ngIf="inputData.shortColumns">
-        <mat-card class="mat-elevation-z8 pt-3 fadeInRight"
+        <mat-card class="mat-elevation-z8 fadeInRight"
           *ngIf="getSelectedItem(inputData.dataSourceRows) | async as selectedItem">
-          <mat-card-actions class="is-flex-wrap-wrap"
-            *ngIf="getActualAction(selectedItem,inputData.action) as actualActions">
+          <mat-card-actions *ngIf="getActualAction(selectedItem,inputData.action) as actualActions">
             <ng-container *ngFor="let act of actualActions; trackBy:trackByFn">
-              <button class="m-2 p-4 is-autoheight" mat-stroked-button
-                (click)="clickedAction(act.action,selectedItem,inputData)" *ngIf="!act.routerLink; else linkAction">
-                <mat-icon class="mr-4" matListItemIcon *ngIf="act.iconName" color="accent">
-                  {{act.iconName}}
-                </mat-icon>
+              <button class="action-button" mat-stroked-button *ngIf="!act.routerLink; else linkAction"
+                (click)="clickedAction(act.action,selectedItem,inputData)">
+                <mat-icon *ngIf="act.iconName" color="accent"> {{act.iconName}} </mat-icon>
                 <span>{{act.action | translate }}</span>
               </button>
               <ng-template #linkAction>
-                <a class="m-2 p-4 is-autoheight" mat-stroked-button [routerLink]="act.routerLink!(selectedItem)">
-                  <mat-icon matListItemIcon *ngIf="act.iconName" color="accent">
+                <a class="action-button" mat-stroked-button [routerLink]="act.routerLink!(selectedItem)">
+                  <mat-icon *ngIf="act.iconName" color="accent">
                     {{act.iconName}}
                   </mat-icon> {{act.action | translate }}
                 </a>

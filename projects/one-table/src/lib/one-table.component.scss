@@ -1,0 +1,176 @@
+@keyframes from_void {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translate3d(100%, 0, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+:host {
+  mat-card.filter-form-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+
+    mat-form-field.table-filter-form-field {
+      width: 15rem;
+
+      &.required-field {
+        width: 16rem;
+      }
+    }
+
+    button.mat-icon-button.delete-table-filter {
+      width: 1rem;
+      height: 1rem;
+      line-height: normal;
+      margin-top: 0.75rem;
+      float: right;
+
+      mat-icon {
+        font-size: 1.25rem;
+      }
+    }
+
+    .add-filter {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-left: 0;
+      margin-right: 0;
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .submit-filter {
+      display: flex;
+    }
+  }
+
+  .show-hide-button-block {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0;
+
+    button.show-hide-button {
+      margin-top: -1.25rem;
+    }
+  }
+
+  .table-container {
+    height: auto;
+    overflow: auto;
+    box-sizing: border-box;
+    animation: 0.5s ease-in-out 0s from_void;
+
+    table.one-table {
+      width: 100%;
+
+      .mat-column-action {
+        td {
+          button {
+            float: right;
+          }
+        }
+      }
+
+      tr {
+        &.mat-mdc-row {
+          &.selected-row {
+            background-color: rgba(33, 150, 243, 0.2);
+          }
+
+          td.mat-mdc-cell {
+            word-break: break-word;
+            height: auto;
+            white-space: pre-line;
+            -webkit-hyphens: auto;
+            hyphens: auto;
+          }
+        }
+      }
+    }
+
+
+  }
+
+  .paginator-block {
+    margin-top: 0.25rem;
+
+    mat-card.paginator-container {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      flex-direction: row;
+      justify-content: space-between;
+
+      .right-block {
+        display: flex;
+        align-items: center;
+
+        mat-paginator {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  .table-bottom-block {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .column.rigth-column {
+    overflow-x: hidden;
+
+    .fadeInRight {
+      padding-top: 0.75rem;
+      animation-name: fadeInRight;
+      animation-delay: 0s;
+      animation-duration: 0.5s;
+      animation-timing-function: ease-in-out;
+      animation-fill-mode: none;
+
+      mat-card-actions {
+        flex-wrap: wrap;
+
+        a,
+        button {
+          &.action-button {
+            margin: 0.5rem;
+            padding: 1rem;
+            height: auto !important;
+
+            mat-icon {
+              margin-right: 1rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+
+
+
+
+  .is-fullwidth {
+    width: 100% !important;
+  }
+}
