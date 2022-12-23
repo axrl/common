@@ -54,7 +54,7 @@
         </button>
       </div>
       <mat-menu #addFilterMenu="matMenu">
-        <mat-card-subtitle >Доступные фильтры:</mat-card-subtitle>
+        <mat-card-subtitle>Доступные фильтры:</mat-card-subtitle>
         <button mat-menu-item style="width: 100%;" *ngFor="let item of inputData.availableFilters; trackBy: trackByFn"
           (click)="inputData.addFilter(item.key)">
           {{ item.translateName | translate }}

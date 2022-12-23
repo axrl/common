@@ -100,8 +100,8 @@ export class OneTableComponent<T extends {}, Q extends BaseListRequest> implemen
 
   trackByFn = trackByFn;
 
-  getActualAction(row: T, allAction?: ActionButton<T>[]): ActionButton<T>[] {
-    return allAction ? allAction.filter(act => act.canShow(row)) : [];
+  getActualAction(row: T, allAction?: ActionButton<T>[]): ActionButton<T>[]|null {
+    return allAction ? allAction.filter(act => act.canShow(row)) : null;
   }
 
   isAvailableAction(action: string, allAction?: ActionButton<T>[]) {
