@@ -18,13 +18,7 @@
 
 ### constructor
 
-• **new RuDateMediumPipe**(`formatDatePipeMemoryService`)
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `formatDatePipeMemoryService` | `FormatDatePipeMemoryService` |
+• **new RuDateMediumPipe**()
 
 ## Methods
 

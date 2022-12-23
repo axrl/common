@@ -6,6 +6,10 @@
 
 - [constructor](ExcelService.md#constructor)
 
+### Properties
+
+- [translationService](ExcelService.md#translationservice)
+
 ### Methods
 
 - [create](ExcelService.md#create)
@@ -24,6 +28,12 @@
 | :------ | :------ |
 | `translationService` | [`TranslationsService`](TranslationsService.md) |
 
+## Properties
+
+### translationService
+
+• `Private` **translationService**: [`TranslationsService`](TranslationsService.md)
+
 ## Methods
 
 ### create
@@ -38,11 +48,11 @@
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `data` | `T`[] |
-| `filename` | `string` |
-| `keys` | `Object` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `data` | `T`[] | Массив объектов с данными типа T, которые требуется отобразить в таблице |
+| `filename` | `string` | Название для генерируемого файла |
+| `keys` | `Object` | Объект, в качестве ключей которого выступают названия ключей в типе T, а в качестве значений : 1. Если в DOM для данного ключа существует таблица с элементом th, id которого соответствует шаблону "th-"+некое_значение, то можно указать его здесь. В таком случае при создании таблицы сервис найдет этот элемент в DOM и в сгенерированном файле ширина столбца будет соответствовать ширине такого столбца в DOM. 2. Если поведение из пункта 1 не требуется, можно указать любое строковое значение, для которого не найдется элемента th с соответствующим шаблону идентификатором. Ширина для столбца в сгенерированном файле в таком случае будет установлена по умолчанию - 150px |
 
 #### Returns
 

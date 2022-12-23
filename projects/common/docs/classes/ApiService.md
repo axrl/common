@@ -8,6 +8,13 @@
 
 ### Properties
 
+- [http](ApiService.md#http)
+- [snack](ApiService.md#snack)
+- [methodGetMapFn](ApiService.md#methodgetmapfn)
+- [methodPostMapFn](ApiService.md#methodpostmapfn)
+- [methodPutMapFn](ApiService.md#methodputmapfn)
+- [methodDeleteMapFn](ApiService.md#methoddeletemapfn)
+- [\_isLoadingResults](ApiService.md#_isloadingresults)
 - [isLoadingResults$](ApiService.md#isloadingresults$)
 
 ### Methods
@@ -39,6 +46,48 @@
 | `methodDeleteMapFn` | [`TransformIncomingDataFn`](../README.md#transformincomingdatafn) |
 
 ## Properties
+
+### http
+
+• `Private` **http**: `HttpClient`
+
+___
+
+### snack
+
+• `Private` **snack**: [`SnackService`](SnackService.md)
+
+___
+
+### methodGetMapFn
+
+• `Private` **methodGetMapFn**: [`TransformIncomingDataFn`](../README.md#transformincomingdatafn)
+
+___
+
+### methodPostMapFn
+
+• `Private` **methodPostMapFn**: [`TransformIncomingDataFn`](../README.md#transformincomingdatafn)
+
+___
+
+### methodPutMapFn
+
+• `Private` **methodPutMapFn**: [`TransformIncomingDataFn`](../README.md#transformincomingdatafn)
+
+___
+
+### methodDeleteMapFn
+
+• `Private` **methodDeleteMapFn**: [`TransformIncomingDataFn`](../README.md#transformincomingdatafn)
+
+___
+
+### \_isLoadingResults
+
+• `Private` **\_isLoadingResults**: `BehaviorSubject`<`number`\>
+
+___
 
 ### isLoadingResults$
 

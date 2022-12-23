@@ -14,10 +14,13 @@
 
 ### Properties
 
+- [translationsService](LanguagePersonSettingsService.md#translationsservice)
+- [defaultPersonSettingsValue](LanguagePersonSettingsService.md#defaultpersonsettingsvalue)
 - [storageKey](LanguagePersonSettingsService.md#storagekey)
 - [\_languagePersonSettings$](LanguagePersonSettingsService.md#_languagepersonsettings$)
 - [languagePersonSettings$](LanguagePersonSettingsService.md#languagepersonsettings$)
 - [languagePersonSettingsFiltered$](LanguagePersonSettingsService.md#languagepersonsettingsfiltered$)
+- [\_settingsChanges](LanguagePersonSettingsService.md#_settingschanges)
 - [settingsChanges](LanguagePersonSettingsService.md#settingschanges)
 
 ### Methods
@@ -45,6 +48,18 @@
 
 ## Properties
 
+### translationsService
+
+• `Private` **translationsService**: [`TranslationsService`](TranslationsService.md)
+
+___
+
+### defaultPersonSettingsValue
+
+• `Private` **defaultPersonSettingsValue**: ``null`` \| `Settings`
+
+___
+
 ### storageKey
 
 • `Readonly` **storageKey**: `string`
@@ -66,6 +81,12 @@ ___
 ### languagePersonSettingsFiltered$
 
 • **languagePersonSettingsFiltered$**: `Observable`<`Settings`\>
+
+___
+
+### \_settingsChanges
+
+• `Private` **\_settingsChanges**: `EventEmitter`<`Settings`\>
 
 ___
 

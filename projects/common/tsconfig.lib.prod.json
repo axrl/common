@@ -15,7 +15,7 @@
     "plugin": [
       "typedoc-plugin-markdown"
     ],
-    "excludePrivate": true,
+    "excludeInternal": true,
     "categorizeByGroup": false,
     "exclude": [
       "**/*+(.spec|.module).ts"

@@ -3,3 +3,4 @@ export * from './snack.service';
 export * from './work-with-files';
 export * from './translations.service';
 export * from './language-person-settings.service';
+export * from './dialog.service';

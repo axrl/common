@@ -6,6 +6,11 @@
 
 - [constructor](SnackService.md#constructor)
 
+### Properties
+
+- [snackBar](SnackService.md#snackbar)
+- [snackServiceConfig](SnackService.md#snackserviceconfig)
+
 ### Methods
 
 - [showText](SnackService.md#showtext)
@@ -22,6 +27,18 @@
 | :------ | :------ |
 | `snackBar` | `MatSnackBar` |
 | `snackServiceConfig` | `undefined` \| [`SnackServiceConfig`](../interfaces/SnackServiceConfig.md)<`unknown`, `any`\> |
+
+## Properties
+
+### snackBar
+
+• `Private` **snackBar**: `MatSnackBar`
+
+___
+
+### snackServiceConfig
+
+• `Private` **snackServiceConfig**: `undefined` \| [`SnackServiceConfig`](../interfaces/SnackServiceConfig.md)<`unknown`, `any`\>
 
 ## Methods
 

@@ -10,6 +10,10 @@
 
 - [constructor](ControlErrorMessagePipe.md#constructor)
 
+### Properties
+
+- [controlErrorsMessagesPipeDictionary](ControlErrorMessagePipe.md#controlerrorsmessagespipedictionary)
+
 ### Methods
 
 - [transform](ControlErrorMessagePipe.md#transform)
@@ -25,6 +29,12 @@
 | Name | Type |
 | :------ | :------ |
 | `controlErrorsMessagesPipeDictionary` | `Record`<`string`, `string`\> |
+
+## Properties
+
+### controlErrorsMessagesPipeDictionary
+
+• `Private` **controlErrorsMessagesPipeDictionary**: `Record`<`string`, `string`\>
 
 ## Methods
 

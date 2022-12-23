@@ -6,14 +6,18 @@
 
 - [constructor](TranslationsService.md#constructor)
 
+### Properties
+
+- [api](TranslationsService.md#api)
+- [translationsConfig](TranslationsService.md#translationsconfig)
+- [\_currentLanguage](TranslationsService.md#_currentlanguage)
+- [currentLanguage$](TranslationsService.md#currentlanguage$)
+- [translations$](TranslationsService.md#translations$)
+- [memory](TranslationsService.md#memory)
+
 ### Accessors
 
 - [languagesList](TranslationsService.md#languageslist)
-
-### Properties
-
-- [currentLanguage$](TranslationsService.md#currentlanguage$)
-- [translations$](TranslationsService.md#translations$)
 
 ### Methods
 
@@ -35,17 +39,25 @@
 | `api` | [`ApiService`](ApiService.md) |
 | `translationsConfig` | [`TranslationConfig`](../README.md#translationconfig) |
 
-## Accessors
-
-### languagesList
-
-• `get` **languagesList**(): `string`[]
-
-#### Returns
-
-`string`[]
-
 ## Properties
+
+### api
+
+• `Private` **api**: [`ApiService`](ApiService.md)
+
+___
+
+### translationsConfig
+
+• `Private` **translationsConfig**: [`TranslationConfig`](../README.md#translationconfig)
+
+___
+
+### \_currentLanguage
+
+• `Private` **\_currentLanguage**: `BehaviorSubject`<``null`` \| `string`\>
+
+___
 
 ### currentLanguage$
 
@@ -56,6 +68,22 @@ ___
 ### translations$
 
 • **translations$**: `Observable`<`Record`<`string`, `string`\>\>
+
+___
+
+### memory
+
+• `Private` **memory**: `Map`<`string`, `string`\>
+
+## Accessors
+
+### languagesList
+
+• `get` **languagesList**(): `string`[]
+
+#### Returns
+
+`string`[]
 
 ## Methods
 

@@ -20,7 +20,9 @@ import { FormatDatePipeMemoryService } from '../services/format-date.service';
 */
 export class RuDateMediumPipe implements PipeTransform {
 
-  constructor(private formatDatePipeMemoryService: FormatDatePipeMemoryService,
+  constructor(
+    /** @internal */
+    private formatDatePipeMemoryService: FormatDatePipeMemoryService,
   ) { }
 
   transform(value: string | number | Date | undefined, mode: 'short' | 'long' | 'time' = 'short'): string {

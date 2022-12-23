@@ -32,6 +32,7 @@
 
 - [createObservable](README.md#createobservable)
 - [createSubject](README.md#createsubject)
+- [delayedObservable](README.md#delayedobservable)
 - [getFilteredData](README.md#getfiltereddata)
 - [isEqualItems](README.md#isequalitems)
 - [isValue](README.md#isvalue)
@@ -44,6 +45,7 @@
 - [ControlErrorMessagePipe](classes/ControlErrorMessagePipe.md)
 - [RuDateMediumPipe](classes/RuDateMediumPipe.md)
 - [TranslatePipe](classes/TranslatePipe.md)
+- [DialogService](classes/DialogService.md)
 - [LanguagePersonSettingsService](classes/LanguagePersonSettingsService.md)
 - [SnackService](classes/SnackService.md)
 - [TranslationsService](classes/TranslationsService.md)
@@ -310,6 +312,31 @@ ___
 #### Returns
 
 `BehaviorSubject`<`T` \| ``null``\>
+
+___
+
+### delayedObservable
+
+▸ **delayedObservable**<`T`\>(`values`, `delayInMs`): `Observable`<`T`\>
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `values` | `T`[] | Значения, которые требуется испускать с задержкой |
+| `delayInMs` | `number` | Задержка между событиями |
+
+#### Returns
+
+`Observable`<`T`\>
+
+Функция создает Obsewrvable-поток, который будет по очереди испускать значения массива values с задержкой delayInMs между каждым событием.
 
 ___
 
