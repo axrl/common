@@ -51,7 +51,6 @@
 
 - [usedFilters](OneTableData.md#usedfilters)
 - [showedUsedFilters](OneTableData.md#showedusedfilters)
-- [availableFilters](OneTableData.md#availablefilters)
 
 ## Properties
 
@@ -99,7 +98,7 @@ ___
 
 ### filterForm
 
-• **filterForm**: `undefined` \| `FormGroupType`<`FilterFormValueType`\>
+• **filterForm**: `undefined` \| `FormGroupType`<[`FilterFormValueType`](../README.md#filterformvaluetype)\>
 
 ___
 
@@ -380,13 +379,3 @@ ___
 #### Returns
 
 `string`[]
-
-___
-
-### availableFilters
-
-• `get` **availableFilters**(): `AvailableFilterItem`[]
-
-#### Returns
-
-`AvailableFilterItem`[]

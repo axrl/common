@@ -14,7 +14,7 @@ import { OneTableService } from './one-table.service';
 import type { IconColumnData } from './one-table.service';
 import { ColumnPipe } from './pipes/column.pipe';
 
-interface TableIconsDataFn {
+export interface TableIconsDataFn {
   getIconName?: <T extends {}>(value: string, row: T, key?: ColumnType<T>) => string | null;
   getTooltip?: <T extends {}>(value: string, row: T, key?: ColumnType<T>) => string | null;
   getColor?: <T extends {}>(value: string, row: T, key?: ColumnType<T>) => string | null;
@@ -100,7 +100,7 @@ export class OneTableComponent<T extends {}, Q extends BaseListRequest> implemen
 
   trackByFn = trackByFn;
 
-  getActualAction(row: T, allAction?: ActionButton<T>[]): ActionButton<T>[]|null {
+  getActualAction(row: T, allAction?: ActionButton<T>[]): ActionButton<T>[] | null {
     return allAction ? allAction.filter(act => act.canShow(row)) : null;
   }
 

@@ -73,8 +73,8 @@
 
 | Name | Type |
 | :------ | :------ |
-| `tableIconsDataFn` | `TableIconsDataFn` |
-| `oneTableService` | [`OneTableService`](OneTableService.md)<`BasePersonSettings`\> |
+| `tableIconsDataFn` | [`TableIconsDataFn`](../interfaces/TableIconsDataFn.md) |
+| `oneTableService` | [`OneTableService`](OneTableService.md)<[`BasePersonSettings`](../interfaces/BasePersonSettings.md)\> |
 | `excelService` | `ExcelService` |
 | `clipboard` | `Clipboard_2` |
 | `snack` | `SnackService` |
@@ -256,7 +256,7 @@ ___
 
 ### getActualAction
 
-▸ **getActualAction**(`row`, `allAction?`): [`ActionButton`](ActionButton.md)<`T`\>[]
+▸ **getActualAction**(`row`, `allAction?`): ``null`` \| [`ActionButton`](ActionButton.md)<`T`\>[]
 
 #### Parameters
 
@@ -267,7 +267,7 @@ ___
 
 #### Returns
 
-[`ActionButton`](ActionButton.md)<`T`\>[]
+``null`` \| [`ActionButton`](ActionButton.md)<`T`\>[]
 
 ___
 
@@ -425,7 +425,7 @@ ___
 
 ### getIconData
 
-▸ **getIconData**(`id`, `row`, `column`): `IconColumnData`
+▸ **getIconData**(`id`, `row`, `column`): [`IconColumnData`](../interfaces/IconColumnData.md)
 
 #### Parameters
 
@@ -437,7 +437,7 @@ ___
 
 #### Returns
 
-`IconColumnData`
+[`IconColumnData`](../interfaces/IconColumnData.md)
 
 ___
 

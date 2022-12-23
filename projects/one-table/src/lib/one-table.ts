@@ -33,7 +33,7 @@ export class TableFilterOptions<Q extends BaseListRequest> {
   ) { };
 };
 
-type FilterFormValueType = Record<string, string | number | undefined | null>;
+export type FilterFormValueType = Record<string, string | number | undefined | null>;
 type FormKey = keyof FilterFormValueType & string;
 
 interface AvailableFilterItem {
@@ -268,6 +268,7 @@ export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequ
       }) : [];
   }
 
+  /** @internal */
   get availableFilters(): AvailableFilterItem[] {
     return isValue(this.filterOptions) && isValue(this.filterForm) ?
       Object.keys(this.filterOptions.options).filter(

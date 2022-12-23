@@ -4,7 +4,7 @@
 
 | Name | Type |
 | :------ | :------ |
-| `Settings` | extends `BasePersonSettings` = `BasePersonSettings` |
+| `Settings` | extends [`BasePersonSettings`](../interfaces/BasePersonSettings.md) = [`BasePersonSettings`](../interfaces/BasePersonSettings.md) |
 
 ## Table of contents
 
@@ -36,7 +36,7 @@
 
 | Name | Type |
 | :------ | :------ |
-| `Settings` | extends `BasePersonSettings` = `BasePersonSettings` |
+| `Settings` | extends [`BasePersonSettings`](../interfaces/BasePersonSettings.md) = [`BasePersonSettings`](../interfaces/BasePersonSettings.md) |
 
 #### Parameters
 
@@ -48,7 +48,7 @@
 
 ### getFromMemory
 
-▸ **getFromMemory**(`key`): `undefined` \| `IconColumnData`
+▸ **getFromMemory**(`key`): `undefined` \| [`IconColumnData`](../interfaces/IconColumnData.md)
 
 #### Parameters
 
@@ -58,7 +58,7 @@
 
 #### Returns
 
-`undefined` \| `IconColumnData`
+`undefined` \| [`IconColumnData`](../interfaces/IconColumnData.md)
 
 ___
 
@@ -71,7 +71,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `key` | `string` |
-| `value` | `IconColumnData` |
+| `value` | [`IconColumnData`](../interfaces/IconColumnData.md) |
 
 #### Returns
 

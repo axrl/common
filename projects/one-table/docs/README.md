@@ -20,6 +20,9 @@
 - [ActionEvent](interfaces/ActionEvent.md)
 - [CountAndRows](interfaces/CountAndRows.md)
 - [ColumnConfig](interfaces/ColumnConfig.md)
+- [TableIconsDataFn](interfaces/TableIconsDataFn.md)
+- [IconColumnData](interfaces/IconColumnData.md)
+- [BasePersonSettings](interfaces/BasePersonSettings.md)
 - [TableFilterOption](interfaces/TableFilterOption.md)
 
 ### Type Aliases
@@ -30,6 +33,7 @@
 - [ColumnsType](README.md#columnstype)
 - [TableFilterOptionsData](README.md#tablefilteroptionsdata)
 - [TableFilterUpdateFn](README.md#tablefilterupdatefn)
+- [FilterFormValueType](README.md#filterformvaluetype)
 
 ### Variables
 
@@ -127,17 +131,23 @@ ___
 
 `void`
 
+___
+
+### FilterFormValueType
+
+Ƭ **FilterFormValueType**: `Record`<`string`, `string` \| `number` \| `undefined` \| ``null``\>
+
 ## Variables
 
 ### TABLE\_ICON\_DATA\_FN
 
-• `Const` **TABLE\_ICON\_DATA\_FN**: `InjectionToken`<`TableIconsDataFn`\>
+• `Const` **TABLE\_ICON\_DATA\_FN**: `InjectionToken`<[`TableIconsDataFn`](interfaces/TableIconsDataFn.md)\>
 
 ___
 
 ### PERSON\_SETTINGS\_START\_VALUE
 
-• `Const` **PERSON\_SETTINGS\_START\_VALUE**: `InjectionToken`<``null`` \| `BasePersonSettings`\>
+• `Const` **PERSON\_SETTINGS\_START\_VALUE**: `InjectionToken`<``null`` \| [`BasePersonSettings`](interfaces/BasePersonSettings.md)\>
 
 InjectionToken со стартовым значением для потока с настройками пользователя.
 По умолчанию - использются данные, хранящиеся в localStorage, при их отсутствии - значение по умолчанию.
