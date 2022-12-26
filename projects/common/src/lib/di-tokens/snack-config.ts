@@ -8,7 +8,7 @@ import type { MatSnackBarConfig } from '@angular/material/snack-bar';
  */
 export interface SnackServiceConfig<T, D = any> {
   component: ComponentType<T>;
-  snackBarConfig: MatSnackBarConfig<D>
+  snackBarConfig: (message: string, isError: boolean) => MatSnackBarConfig<D>
 }
 
 /**

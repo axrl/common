@@ -27,4 +27,19 @@ ___
 
 ### snackBarConfig
 
-• **snackBarConfig**: `MatSnackBarConfig`<`D`\>
+• **snackBarConfig**: (`message`: `string`, `isError`: `boolean`) => `MatSnackBarConfig`<`D`\>
+
+#### Type declaration
+
+▸ (`message`, `isError`): `MatSnackBarConfig`<`D`\>
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `message` | `string` |
+| `isError` | `boolean` |
+
+##### Returns
+
+`MatSnackBarConfig`<`D`\>

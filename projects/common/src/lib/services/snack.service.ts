@@ -19,7 +19,7 @@ export class SnackService {
     return isValue(this.snackServiceConfig) ?
       this.snackBar.openFromComponent(this.snackServiceConfig.component, {
         duration: isError ? 5000 : 2000,
-        ... this.snackServiceConfig.snackBarConfig,
+        ... this.snackServiceConfig.snackBarConfig(message, isError),
         ...config
       }) :
       this.snackBar.open(message, 'OK', {
