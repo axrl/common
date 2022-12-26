@@ -9,7 +9,7 @@ import type { Observable } from 'rxjs';
 import { map, switchMap, BehaviorSubject, from } from 'rxjs';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import type { BaseListRequest, OneTableData, ActionEvent, ColumnType, ActionButton, ColumnsType, ColumnConfig } from './models';
-import { createObservable, ExcelService, SnackService, isValue, trackByFn } from '@axrl/common';
+import { createObservable, ExcelService, SnackService, isValue, trackByFn, delayedObservable } from '@axrl/common';
 import { OneTableService } from './one-table.service';
 import type { IconColumnData } from './one-table.service';
 import { ColumnPipe } from './pipes/column.pipe';
@@ -72,6 +72,7 @@ export class OneTableComponent<T extends {}, Q extends BaseListRequest> implemen
   }
 
   selectedItemIndex$ = new BehaviorSubject<number | null>(null);
+  selectedItem$: Observable<T | null> | undefined;
 
   cleanSelected() {
     this.selectedItemIndex$.next(null);
@@ -205,19 +206,22 @@ export class OneTableComponent<T extends {}, Q extends BaseListRequest> implemen
   }
 
   getSelectedItem(dataSourceRows: Observable<T[]>) {
-    return this.selectedItemIndex$.pipe(
-      switchMap(
-        indexOrNull => dataSourceRows.pipe(
-          switchMap(
-            sourceRows => from(
-              isValue(indexOrNull) && isValue(sourceRows[indexOrNull]) ?
-                [null, sourceRows[indexOrNull]] :
-                [null]
+    if (isValue(this.selectedItem$)) {
+      return this.selectedItem$;
+    } else {
+      this.selectedItem$ = this.selectedItemIndex$.pipe(
+        switchMap(
+          indexOrNull => dataSourceRows.pipe(
+            switchMap(
+              sourceRows => isValue(indexOrNull) && isValue(sourceRows[indexOrNull]) ?
+                delayedObservable([null, sourceRows[indexOrNull]], 150) :
+                from([null])
             )
           )
         )
-      )
-    );
+      );
+      return this.selectedItem$;
+    }
   }
 
   exportXlsxModes = ['current', 'all'] as const;
