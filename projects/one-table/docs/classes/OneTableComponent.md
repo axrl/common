@@ -23,6 +23,7 @@
 - [tableAction](OneTableComponent.md#tableaction)
 - [expandedRowContent](OneTableComponent.md#expandedrowcontent)
 - [selectedItemIndex$](OneTableComponent.md#selecteditemindex$)
+- [selectedItem$](OneTableComponent.md#selecteditem$)
 - [trackByFn](OneTableComponent.md#trackbyfn)
 - [openTrigger](OneTableComponent.md#opentrigger)
 - [exportXlsxModes](OneTableComponent.md#exportxlsxmodes)
@@ -102,6 +103,12 @@ ___
 ### selectedItemIndex$
 
 • **selectedItemIndex$**: `BehaviorSubject`<``null`` \| `number`\>
+
+___
+
+### selectedItem$
+
+• **selectedItem$**: `undefined` \| `Observable`<``null`` \| `T`\>
 
 ___
 
