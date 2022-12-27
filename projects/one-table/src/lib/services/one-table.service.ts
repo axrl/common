@@ -1,8 +1,8 @@
 import { inject, InjectionToken, Injectable } from '@angular/core';
 import { distinctUntilKeyChanged, map } from 'rxjs';
 import type { Observable } from 'rxjs';
-import { OneTableData, TableFilterOptions } from './models';
-import type { ActionButton, BaseListRequest, ColumnsType, ColumnType, ColumnName, CountAndRows, TableFilterUpdateFn, TableFilterOptionsData } from './models';
+import { OneTableData, TableFilterOptions } from '../models';
+import type { ActionButton, BaseListRequest, ColumnsType, ColumnType, ColumnName, CountAndRows, TableFilterUpdateFn, TableFilterOptionsData } from '../models';
 import { isValue, TRANSLATIONS_CONFIG, LanguagePersonSettingsService } from '@axrl/common';
 import type { LanguagePersonSettings, TranslationConfig } from '@axrl/common';
 

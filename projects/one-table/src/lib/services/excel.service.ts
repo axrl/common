@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { utils, read, writeFile } from 'xlsx';
 import type { WorkBook } from 'xlsx';
 import { map, Observable } from 'rxjs';
-import { TranslationsService } from '../translations.service';
-import { isValue } from '../../functions';
+import { TranslationsService, isValue } from '@axrl/common';
 
 @Injectable({
   providedIn: 'root'

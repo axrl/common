@@ -9,9 +9,9 @@ import type { Observable } from 'rxjs';
 import { map, switchMap, BehaviorSubject, from } from 'rxjs';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import type { BaseListRequest, OneTableData, ActionEvent, ColumnType, ActionButton, ColumnsType, ColumnConfig } from './models';
-import { createObservable, ExcelService, SnackService, isValue, trackByFn, delayedObservable } from '@axrl/common';
-import { OneTableService } from './one-table.service';
-import type { IconColumnData } from './one-table.service';
+import { createObservable, SnackService, isValue, trackByFn, delayedObservable } from '@axrl/common';
+import { OneTableService, ExcelService } from './services';
+import type { IconColumnData } from './services';
 import { ColumnPipe } from './pipes/column.pipe';
 
 export interface TableIconsDataFn {

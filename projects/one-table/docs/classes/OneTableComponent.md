@@ -76,7 +76,7 @@
 | :------ | :------ |
 | `tableIconsDataFn` | [`TableIconsDataFn`](../interfaces/TableIconsDataFn.md) |
 | `oneTableService` | [`OneTableService`](OneTableService.md)<[`BasePersonSettings`](../interfaces/BasePersonSettings.md)\> |
-| `excelService` | `ExcelService` |
+| `excelService` | [`ExcelService`](ExcelService.md) |
 | `clipboard` | `Clipboard_2` |
 | `snack` | `SnackService` |
 

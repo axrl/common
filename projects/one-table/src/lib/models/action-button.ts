@@ -24,7 +24,7 @@ export class ActionButton<T extends {}> {
    */
   constructor(options: {
     action: string,
-    canShow?: (row?: T) => boolean,
+    canShow?: (row: T) => boolean,
     routerLink?: (row?: T) => (string | any)[],
     iconName?: string | null
   }) {

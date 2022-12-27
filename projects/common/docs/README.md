@@ -49,7 +49,6 @@
 - [LanguagePersonSettingsService](classes/LanguagePersonSettingsService.md)
 - [SnackService](classes/SnackService.md)
 - [TranslationsService](classes/TranslationsService.md)
-- [ExcelService](classes/ExcelService.md)
 - [FileLoaderAndReaderService](classes/FileLoaderAndReaderService.md)
 - [ApiService](classes/ApiService.md)
 - [HttpBusService](classes/HttpBusService.md)

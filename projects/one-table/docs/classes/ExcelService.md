@@ -6,10 +6,6 @@
 
 - [constructor](ExcelService.md#constructor)
 
-### Properties
-
-- [translationService](ExcelService.md#translationservice)
-
 ### Methods
 
 - [create](ExcelService.md#create)
@@ -26,13 +22,7 @@
 
 | Name | Type |
 | :------ | :------ |
-| `translationService` | [`TranslationsService`](TranslationsService.md) |
-
-## Properties
-
-### translationService
-
-• `Private` **translationService**: [`TranslationsService`](TranslationsService.md)
+| `translationService` | `TranslationsService` |
 
 ## Methods
 
