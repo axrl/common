@@ -4,9 +4,9 @@
       <mat-card class="filter-form-container" [@openClose]="(openTrigger | async) === true ? 'open' : 'closed'"
         *ngIf="inputData.filterForm && inputData._trigger">
         <form (submit)="inputData.submit()" [formGroup]="inputData.filterForm">
-          <div class="columns is-mobile is-multiline">
+          <div class="one-table-columns is-mobile is-multiline">
             <ng-container *ngFor="let item of inputData.showedUsedFilters; trackBy:trackByFn">
-              <div class="column is-narrow py-1">
+              <div class="one-table-column is-narrow">
                 <mat-form-field appearance="fill" [ngSwitch]="true" class="table-filter-form-field"
                   [class]="inputData.getOption(item)?.required ? ' required-field':''">
                   <mat-label>{{ inputData.getOption(item)?.translateName | translate }}
@@ -33,12 +33,12 @@
             </ng-container>
           </div>
         </form>
-        <div class="column is-narrow add-filter">
+        <div class="one-table-column is-narrow add-filter">
           <button mat-icon-button [matMenuTriggerFor]="addFilterMenu" *ngIf="inputData.availableFilters.length > 0">
             <mat-icon>add</mat-icon>
           </button>
         </div>
-        <div class="column is-narrow submit-filter">
+        <div class="one-table-column is-narrow submit-filter">
           <button mat-icon-button color="accent" (click)="inputData.submit()" [disabled]="inputData.filterForm.invalid">
             <mat-icon>done</mat-icon>
           </button>
@@ -62,8 +62,8 @@
       </mat-menu>
     </ng-container>
 
-    <div class="columns is-fullwidth">
-      <div class="column" [class]="!!inputData.shortColumns ? 'is-half': 'is-full'">
+    <div class="one-table-columns">
+      <div class="one-table-column" [class]="!!inputData.shortColumns ? 'is-half': 'is-full'">
         <div class="table-container">
           <table mat-table [id]="inputData.id" [dataSource]="inputData.dataSourceRows" matSort
             [matSortDisableClear]="true" [matSortActive]="(inputData.trigger | async)?.orderBy|| ''"
@@ -151,7 +151,7 @@
             </ng-container>
 
             <ng-container matColumnDef="expandedDetail">
-              <td mat-cell *matCellDef="let row" [attr.colspan]="showedColumns.length" class="px-0"
+              <td mat-cell *matCellDef="let row" [attr.colspan]="showedColumns.length"
                 [@openClose]="inputData?.extendedRowPredicate(row) ? 'open' : 'closed'">
                 <ng-container *ngIf="expandedRowContent">
                   <ng-content></ng-content>
@@ -221,7 +221,7 @@
           <ng-content select="table-bottom"></ng-content>
         </div>
       </div>
-      <div class="column is-half rigth-column" *ngIf="inputData.shortColumns">
+      <div class="one-table-column is-half rigth-column" *ngIf="inputData.shortColumns">
         <mat-card class="mat-elevation-z8 fadeInRight"
           *ngIf="getSelectedItem(inputData.dataSourceRows) | async as selectedItem">
           <mat-card-actions *ngIf="getActualAction(selectedItem,inputData.action) as actualActions">

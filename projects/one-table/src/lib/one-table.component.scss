@@ -1,4 +1,4 @@
-@keyframes from_void {
+@keyframes oneTableFadeInTableContainer {
   0% {
     opacity: 0;
   }
@@ -8,7 +8,7 @@
   }
 }
 
-@keyframes fadeInRight {
+@keyframes oneTableRightColumnFadeInRight {
   from {
     opacity: 0;
     transform: translate3d(100%, 0, 0);
@@ -21,6 +21,7 @@
 }
 
 :host {
+
   mat-card.filter-form-container {
     display: flex;
     flex-direction: row;
@@ -48,19 +49,6 @@
       }
     }
 
-    .add-filter {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-left: 0;
-      margin-right: 0;
-      padding-left: 0;
-      padding-right: 0;
-    }
-
-    .submit-filter {
-      display: flex;
-    }
   }
 
   .show-hide-button-block {
@@ -77,18 +65,10 @@
     height: auto;
     overflow: auto;
     box-sizing: border-box;
-    animation: 0.5s ease-in-out 0s from_void;
+    animation: 0.5s ease-in-out 0s oneTableFadeInTableContainer;
 
     table.one-table {
       width: 100%;
-
-      .mat-column-action {
-        td {
-          button {
-            float: right;
-          }
-        }
-      }
 
       tr {
         &.mat-mdc-row {
@@ -102,6 +82,17 @@
             white-space: pre-line;
             -webkit-hyphens: auto;
             hyphens: auto;
+          }
+        }
+
+        td.mat-column-expandedDetail {
+          padding-top: 0 !important;
+          padding-bottom: 0 !important;
+        }
+  
+        td.mat-column-action {
+          button {
+            float: right;
           }
         }
       }
@@ -135,13 +126,30 @@
     width: 100%;
     margin-top: 0.5rem;
   }
+}
 
-  .column.rigth-column {
+.one-table-columns {
+  display: flex;
+  width: 100%;
+
+  &.is-multiline {
+    flex-wrap: wrap
+  }
+}
+
+.one-table-column {
+  display: block;
+  flex-basis: 0;
+  flex-grow: 1;
+  flex-shrink: 1;
+  padding: 0.75rem;
+
+  &.rigth-column {
     overflow-x: hidden;
 
     .fadeInRight {
       padding-top: 0.75rem;
-      animation-name: fadeInRight;
+      animation-name: oneTableRightColumnFadeInRight;
       animation-delay: 0s;
       animation-duration: 0.5s;
       animation-timing-function: ease-in-out;
@@ -166,11 +174,42 @@
     }
   }
 
+  mat-card.filter-form-container .one-table-columns.is-mobile &.is-narrow {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
 
+    &.add-filter,
+    &.submit-filter {
+      display: flex;
+    }
 
+    &.submit-filter {
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+    }
 
+    &.add-filter {
+      justify-content: center;
+      align-items: center;
+      margin-left: 0;
+      margin-right: 0;
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
 
-  .is-fullwidth {
-    width: 100% !important;
+  .one-table-columns.is-mobile>&.is-narrow {
+    flex: none;
+    width: unset;
+  }
+
+  .one-table-columns.is-mobile>&.is-full {
+    flex: none;
+    width: 100%;
+  }
+
+  .one-table-columns.is-mobile>&.is-half {
+    flex: none;
+    width: 50%;
   }
 }

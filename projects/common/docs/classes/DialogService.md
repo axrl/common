@@ -2,6 +2,10 @@
 
 ## Table of contents
 
+### Properties
+
+- [dialog](DialogService.md#dialog)
+
 ### Constructors
 
 - [constructor](DialogService.md#constructor)
@@ -13,6 +17,12 @@
 - [openWindow](DialogService.md#openwindow)
 - [openWindowAndWaitPromise](DialogService.md#openwindowandwaitpromise)
 
+## Properties
+
+### dialog
+
+• `Private` **dialog**: ``null`` \| `MatDialog`
+
 ## Constructors
 
 ### constructor
@@ -23,13 +33,13 @@
 
 ### closeAllDialogs
 
-▸ **closeAllDialogs**(`dialog`): `void`
+▸ **closeAllDialogs**(`dialog?`): `void`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `dialog` | `MatDialog` |
+| `dialog?` | `MatDialog` |
 
 #### Returns
 
@@ -61,7 +71,7 @@ ___
 
 ### openWindow
 
-▸ **openWindow**<`T`, `D`, `R`\>(`dialog`, `T`, `config?`): `MatDialogRef`<`T`, `R`\>
+▸ **openWindow**<`T`, `D`, `R`\>(`T`, `config?`, `dialog?`): `MatDialogRef`<`T`, `R`\>
 
 #### Type parameters
 
@@ -75,9 +85,9 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `dialog` | `MatDialog` |
 | `T` | `ComponentType`<`T`\> \| `TemplateRef`<`T`\> |
 | `config?` | `MatDialogConfig`<`D`\> |
+| `dialog?` | `MatDialog` |
 
 #### Returns
 
@@ -87,7 +97,7 @@ ___
 
 ### openWindowAndWaitPromise
 
-▸ **openWindowAndWaitPromise**<`T`, `D`, `R`\>(`dialog`, `T`, `config?`): `Promise`<`undefined` \| `R`\>
+▸ **openWindowAndWaitPromise**<`T`, `D`, `R`\>(`T`, `config?`, `dialog?`): `Promise`<`undefined` \| `R`\>
 
 #### Type parameters
 
@@ -101,9 +111,9 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `dialog` | `MatDialog` |
 | `T` | `ComponentType`<`T`\> \| `TemplateRef`<`T`\> |
 | `config?` | `MatDialogConfig`<`D`\> |
+| `dialog?` | `MatDialog` |
 
 #### Returns
 
