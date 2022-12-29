@@ -63,7 +63,7 @@
     </ng-container>
 
     <div class="one-table-columns">
-      <div class="one-table-column" [class]="!!inputData.shortColumns ? 'is-half': 'is-full'">
+      <div class="one-table-column is-overflow-x-hidden-column" [class]="!!inputData.shortColumns ? 'is-half': 'is-full'">
         <div class="table-container">
           <table mat-table [id]="inputData.id" [dataSource]="inputData.dataSourceRows" matSort
             [matSortDisableClear]="true" [matSortActive]="(inputData.trigger | async)?.orderBy|| ''"
@@ -221,7 +221,7 @@
           <ng-content select="table-bottom"></ng-content>
         </div>
       </div>
-      <div class="one-table-column is-half rigth-column" *ngIf="inputData.shortColumns">
+      <div class="one-table-column is-half is-overflow-x-hidden-column" *ngIf="inputData.shortColumns">
         <mat-card class="mat-elevation-z8 fadeInRight"
           *ngIf="getSelectedItem(inputData.dataSourceRows) | async as selectedItem">
           <mat-card-actions *ngIf="getActualAction(selectedItem,inputData.action) as actualActions">
