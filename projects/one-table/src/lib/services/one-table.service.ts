@@ -53,6 +53,93 @@ export const PERSON_SETTINGS_START_VALUE = new InjectionToken<BasePersonSettings
   }
 });
 
+export interface MakeOneTableConfig<T extends {}, Q extends BaseListRequest = BaseListRequest> {
+  /**
+   * Массив с конфигурациями всех колонок, которые могут отображаться в таблице либо быть спрятанными пользователем.
+   */
+  defaultColumns: ColumnsType<T>,
+
+  /** Функция, которая будет вызываться для загрузки очередной порции данных в таблицу. */
+  sourceFn: (req: Q) => Observable<CountAndRows<T>>,
+
+  /** Название компонента, содержащего таблицу. Должно быть уникальным для каждой отдельной таблицйы, поскольку именно с этим 
+   * ключом настройки той или иной таблицы будут сохраняться в пользовательских настройках.
+   */
+  componentName: string,
+
+  /**
+   * Объект с параметрами, которые будут использоваться для задания начальных значений в форме фильтрации таблицы и, как следствие,
+   * передаваться в качестве значения поля filter в объекте BaseListRequest при вызове sourceFn
+   */
+  filter: any,
+
+  /** Колонка, по которой изначально будут отсортированы данные таблицы */
+  orderBy: ColumnType<T>,
+
+  /**
+   * Массив action-ов, символизирующих действия, доступные для той или иной строки таблицы.
+   * Используется только в случае, если в списке defaultColumns для таблицы была определена колонка "action"
+   */
+  actions?: ActionButton<T>[],
+
+  /**Дополнительные параметры, которые могут или должны присутствовать в параметрах запроса очередной порции данных таблицы, отсутсвующие в типе BaseListRequest,
+   * но объявленные в типе Q. Не используется, если Q = BaseListRequest (т.е. практически никогда :) )
+    */
+  additionParams?: Partial<Omit<Q, keyof BaseListRequest>>,
+
+  /**
+   *Конфигурация для полей формы фильтрации данных в таблице. 
+   */
+  filterOptions?: TableFilterOptionsData<string | string[] | number>,
+
+  /**
+   * Функция, которая будет вызываться при каждой отправке данных формы фильтрации. Используется в случаях, если требуется дополнительное преобразование данных
+   * фильтра перед тем, как выполнить запросить очередную порцию данных в sourceFn.
+   * Первый параметр функции - объект BaseListRequest, который будет в дальнейшем передан в sourceFn.
+   * Второй параметр - текущее значение формы с фильтрами.
+   */
+  updateFilterFn?: TableFilterUpdateFn<Q>,
+
+  /** 
+   * Функция, при помощи которой будет формироваться название для xlsx-файла с экспортируемыми данными таблицы.
+   * Если ничего не задано - файл будет экспортироваться с названием по умолчанием.
+   */
+  exportXlsxFileNameGenerationFn?: (req?: Q) => string,
+
+  /**
+   * Функция, определяющая условие, при выполнении которого для каждой строки таблицы будет отображаться раскрывающаяся строка с дополнительной информацией.
+   */
+  extendedRowPredicate?: (row: T) => boolean;
+
+  /**
+   * Изначальное направление сортировки данных в таблице.
+   */
+  orderDirection?: 'asc' | 'desc';
+
+  /**
+   * Используется в случае, когда таблицу нужно вывести в частичном представлении -
+   *  В левой части (50% доступного пространства) - будут отображаться только колонки из списка shortColumns.
+   *  Справа - отдельный компонент, в котором вертикальным списком будут выведены данные для всех полей, объявленных в defaultColumns.
+   * В верху этого компонента будут выведены кнопки всех доступных action-действий для данной строки (в случае, если такие действия были определены в массиве action)
+   */
+  shortColumns?: ColumnsType<T>;
+
+  /**
+   * Признак, является ли данная таблица вложенной внутрь другой таблицы (например, отображается в extendedRow).
+   */
+  isInnerTable?: boolean,
+
+  /**
+   * Используется в случае, если требуется ограничить количество данных, которые будут экспортироваться в xlsx.
+   */
+  columnsForXlsxExport?: 'all' | ColumnsType<T>,
+
+  /**
+   * Список колонок, внутри которых рядом с данными будет дополнительно выведена кнопка, позволящая скопировать значение ячейки таблицы.
+   */
+  columnsForCopy?: ColumnName<T>[]
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -99,24 +186,7 @@ export class OneTableService<Settings extends BasePersonSettings = BasePersonSet
     };
   }
 
-  makeOneTableData<T extends {}, Q extends BaseListRequest = BaseListRequest>(config: {
-    defaultColumns: ColumnsType<T>,
-    sourceFn: (req: Q) => Observable<CountAndRows<T>>,
-    componentName: string,
-    filter: any,
-    orderBy: ColumnType<T>,
-    actions?: ActionButton<T>[],
-    additionParams?: Partial<Omit<Q, keyof BaseListRequest>>,
-    filterOptions?: TableFilterOptionsData<string | string[] | number>,
-    updateFilterFn?: TableFilterUpdateFn<Q>,
-    exportXlsxFileNameGenerationFn?: (req?: Q) => string,
-    extendedRowPredicate?: (row: T) => boolean;
-    orderDirection?: 'asc' | 'desc';
-    shortColumns?: ColumnsType<T>;
-    isInnerTable?: boolean,
-    columnsForXlsxExport?: 'all' | ColumnsType<T>,
-    columnsForCopy?: ColumnName<T>[]
-  }): Observable<OneTableData<T, Q>> {
+  makeOneTableData<T extends {}, Q extends BaseListRequest = BaseListRequest>(config: MakeOneTableConfig<T, Q>): Observable<OneTableData<T, Q>> {
     const filterOptions = config.filterOptions ? new TableFilterOptions<Q>(config.filterOptions, config.updateFilterFn) : undefined;
     return this.basePersonSettingsFiltered$.pipe(
       distinctUntilKeyChanged('paginatorDefaultSize'),
