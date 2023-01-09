@@ -25,6 +25,7 @@
 - [TableFilterOption](interfaces/TableFilterOption.md)
 - [IconColumnData](interfaces/IconColumnData.md)
 - [BasePersonSettings](interfaces/BasePersonSettings.md)
+- [MakeOneTableConfig](interfaces/MakeOneTableConfig.md)
 
 ### Type Aliases
 

@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git@github.com:axrl/common.git"
   },
-  "version": "1.0.15",
+  "version": "1.0.16",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -20,9 +20,9 @@
     "@angular/core": "^15.0.4",
     "@angular/router": "^15.0.4",
     "@angular/animations": "^15.0.4",
-    "@angular/cdk": "^15.0.3",
-    "@angular/material": "^15.0.3",
-    "@axrl/common": "^1.0.20",
+    "@angular/cdk": "^15.0.4",
+    "@angular/material": "^15.0.4",
+    "@axrl/common": "^1.0.21",
     "@axrl/ngx-extended-form-builder": "^1.2.7",
     "uuid": "^9.0.0",
     "xlsx": "^0.18.5",

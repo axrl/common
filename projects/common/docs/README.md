@@ -36,6 +36,7 @@
 - [getFilteredData](README.md#getfiltereddata)
 - [isEqualItems](README.md#isequalitems)
 - [isValue](README.md#isvalue)
+- [objectKeys](README.md#objectkeys)
 - [trackByFn](README.md#trackbyfn)
 - [blobDownloader](README.md#blobdownloader)
 - [makeHttpParams](README.md#makehttpparams)
@@ -434,6 +435,32 @@ isValue
 #### Returns
 
 value is NonNullable<T\>
+
+___
+
+### objectKeys
+
+▸ **objectKeys**<`T`\>(`source`): keyof `T`[]
+
+Типизированная версия стандартного метода Object.keys
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | extends `Object` |
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `source` | `T` | любой объект |
+
+#### Returns
+
+keyof `T`[]
+
+массив ключей в source
 
 ___
 

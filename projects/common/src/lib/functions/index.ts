@@ -5,3 +5,4 @@ export { createObservable } from './create-observable';
 export { createSubject } from './create-subject';
 export { getFilteredData } from './get-filtered-data';
 export { delayedObservable } from './delayed-observable';
+export { objectKeys } from './object-keys';

@@ -137,23 +137,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `config` | `Object` |
-| `config.defaultColumns` | [`ColumnsType`](../README.md#columnstype)<`T`\> |
-| `config.sourceFn` | (`req`: `Q`) => `Observable`<[`CountAndRows`](../interfaces/CountAndRows.md)<`T`\>\> |
-| `config.componentName` | `string` |
-| `config.filter` | `any` |
-| `config.orderBy` | [`ColumnType`](../README.md#columntype)<`T`\> |
-| `config.actions?` | [`ActionButton`](ActionButton.md)<`T`\>[] |
-| `config.additionParams?` | `Partial`<`Omit`<`Q`, keyof [`BaseListRequest`](BaseListRequest.md)\>\> |
-| `config.filterOptions?` | [`TableFilterOptionsData`](../README.md#tablefilteroptionsdata)<`string` \| `number` \| `string`[]\> |
-| `config.updateFilterFn?` | [`TableFilterUpdateFn`](../README.md#tablefilterupdatefn)<`Q`\> |
-| `config.exportXlsxFileNameGenerationFn?` | (`req?`: `Q`) => `string` |
-| `config.extendedRowPredicate?` | (`row`: `T`) => `boolean` |
-| `config.orderDirection?` | ``"asc"`` \| ``"desc"`` |
-| `config.shortColumns?` | [`ColumnsType`](../README.md#columnstype)<`T`\> |
-| `config.isInnerTable?` | `boolean` |
-| `config.columnsForXlsxExport?` | ``"all"`` \| [`ColumnsType`](../README.md#columnstype)<`T`\> |
-| `config.columnsForCopy?` | [`ColumnName`](../README.md#columnname)<`T`\>[] |
+| `config` | [`MakeOneTableConfig`](../interfaces/MakeOneTableConfig.md)<`T`, `Q`\> |
 
 #### Returns
 
