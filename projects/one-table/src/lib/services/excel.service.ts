@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { utils, read, writeFile } from 'xlsx';
 import type { WorkBook } from 'xlsx';
 import { map, Observable } from 'rxjs';
-import { TranslationsService, isValue } from '@axrl/common';
+import { TranslationsService, isValue, objectKeys } from '@axrl/common';
 
 @Injectable({
   providedIn: 'root'
@@ -54,7 +54,7 @@ export class ExcelService {
           const keys: { [key: string]: string; } = {};
           this.create(
             data.map(
-              item => (<(keyof T)[]>Object.keys(item)).reduce(
+              item => objectKeys(item).reduce(
                 (acc: Record<string, string>, key: keyof T) => {
                   if (key !== 'interfaceType' && !(item[key] instanceof Observable)) {
                     const newKey = this.translationService.translate(translations, String(key));

@@ -1,6 +1,6 @@
 import { of } from 'rxjs';
 import type { Observable } from 'rxjs';
-import { isValue } from '@axrl/common';
+import { isValue, objectKeys } from '@axrl/common';
 
 export class BaseListRequest {
   Next: number;
@@ -57,8 +57,8 @@ export class AllItemsOneTableDataSource<T extends object, Q extends BaseListRequ
     const value = !isValue(req.filter) || (typeof req.filter === 'object' && Object.keys(req.filter).length == 0) ? this.data.slice() : this.data.filter(
       el => {
         if (typeof req.filter !== 'string' || req.filter[0] == '{') {
-          const filter = req.filter[0] == '{' ? JSON.parse(req.filter) : req.filter;
-          return (<(keyof T)[]>Object.keys(filter)).some(
+          const filter: Record<keyof T, any> = req.filter[0] == '{' ? JSON.parse(req.filter) : req.filter;
+          return objectKeys(filter).some(
             key => {
               const replacedKey = <keyof T>(<string>key).replace(/From|To/, '');
               switch (true) {
@@ -73,7 +73,7 @@ export class AllItemsOneTableDataSource<T extends object, Q extends BaseListRequ
             }
           );
         } else {
-          return (<(keyof T)[]>Object.keys(el)).some(key => String(el[key]).includes(req.filter));
+          return objectKeys(el).some(key => String(el[key]).includes(req.filter));
         }
       });
     this.previousTriggerValue = { ...req };

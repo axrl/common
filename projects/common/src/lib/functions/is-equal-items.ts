@@ -1,5 +1,6 @@
 import { Observable } from 'rxjs';
 import { isValue } from './is-value';
+import { objectKeys } from './object-keys';
 
 /**
  * Функция для сравнения двух переменных.
@@ -29,8 +30,8 @@ export function isEqualItems<T>(a: T, b: T): boolean {
         if (typeof a == 'object') {
           if (typeof b == 'object') {
 
-            const keysA = <(keyof T)[]>Object.keys(a);
-            const keysB = <(keyof T)[]>Object.keys(b);
+            const keysA = objectKeys(a);
+            const keysB = objectKeys(b);
             return keysA.length === keysB.length && keysA.every(key => isEqualItems(a[key], b[key]));
 
           } else {
