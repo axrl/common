@@ -34,12 +34,6 @@ export class TableFilterOptions<Q extends BaseListRequest> {
 };
 
 export type FilterFormValueType = Record<string, string | number | undefined | null>;
-type FormKey = keyof FilterFormValueType & string;
-
-interface AvailableFilterItem {
-  key: string;
-  translateName: string | undefined
-}
 
 export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequest> {
   showedColumns$: Observable<ColumnsType<T>>;
@@ -191,7 +185,7 @@ export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequ
     return isValue(this.getOption(controlName)?.values);
   }
 
-  addFilter(name: FormKey) {
+  addFilter(name: keyof FilterFormValueType) {
 
     if (isValue(this.filterOptions) && isValue(this.filterForm)) {
       if (this.isDateControl(name)) {
@@ -207,13 +201,13 @@ export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequ
           )
         );
       } else {
-        this.filterForm.addControl(name, makeForm<FilterFormValueType[FormKey]>(this._trigger.value.filter[name] || null));
+        this.filterForm.addControl(name, makeForm<FilterFormValueType[keyof FilterFormValueType]>(this._trigger.value.filter[name] || null));
       };
 
     };
   }
 
-  delFilter(name: FormKey) {
+  delFilter(name: keyof FilterFormValueType) {
     if (isValue(this.filterOptions)) {
       const normalizedName = String(name).replace(/From|To/, '');
       if (this.isDateControl(String(name))) {
@@ -246,7 +240,7 @@ export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequ
           if (this.isDateControl(key)) {
             val.filter[key] = formatDate(
               val.filter[key],
-              key.endsWith('From') ? 'yyyy-MM-dd 00:00:00' : 'yyyy-MM-dd 23:59:59',
+              key.endsWith('From') ? 'yyyy-MM-ddT00:00:00' : 'yyyy-MM-ddT23:59:59',
               'en'
             );
           };
@@ -268,8 +262,10 @@ export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequ
       }) : [];
   }
 
-  /** @internal */
-  get availableFilters(): AvailableFilterItem[] {
+  get availableFilters(): Array<{
+    key: string;
+    translateName: string | undefined
+  }> {
     return isValue(this.filterOptions) && isValue(this.filterForm) ?
       Object.keys(this.filterOptions.options).filter(
         key => !this.getOption(key)?.hidden && !this.usedFilters.some(used => used.includes(key))

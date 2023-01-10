@@ -3,43 +3,42 @@
     <ng-container *ngIf="inputData.filterOptions && inputData.filterForm">
       <mat-card class="filter-form-container" [@openClose]="(openTrigger | async) === true ? 'open' : 'closed'"
         *ngIf="inputData.filterForm && inputData._trigger">
-        <form (submit)="inputData.submit()" [formGroup]="inputData.filterForm">
-          <div class="one-table-columns is-mobile is-multiline">
-            <ng-container *ngFor="let item of inputData.showedUsedFilters; trackBy:trackByFn">
-              <div class="one-table-column is-narrow">
-                <mat-form-field appearance="fill" [ngSwitch]="true" class="table-filter-form-field"
-                  [class]="inputData.getOption(item)?.required ? ' required-field':''">
-                  <mat-label>{{ inputData.getOption(item)?.translateName | translate }}
-                    {{inputData.isDateControl(item)?
-                    (inputData.getOption(item)?.translateKey(item) | translate ) :'' }}
-                  </mat-label>
-                  <input *ngSwitchCase="inputData.isDateControl(item)" matInput type="date" [formControlName]="item">
-                  <mat-select [formControlName]="item" *ngSwitchCase="inputData.isSelectable(item)"
-                    (selectionChange)="inputData.submit()">
-                    <mat-option *ngFor="let option of (inputData.getOption(item)?.values  ?? []); trackBy: trackByFn"
-                      [value]="option">
-                      {{inputData.getOption(item)?.translateKey(option) | translate }}
-                    </mat-option>
-                  </mat-select>
-                  <input matInput [formControlName]="item" *ngSwitchDefault>
-                  <mat-error *ngIf="inputData.filterForm.controls?.[item]?.errors"> {{
-                    inputData.filterForm.controls[item] | controlErrorMessage | translate }} </mat-error>
-                </mat-form-field>
-                <button type="button" mat-icon-button class="delete-table-filter"
-                  *ngIf="!inputData.getOption(item)?.required" (click)="inputData.delFilter(item)">
+        <form (submit)="inputData.submit()" [formGroup]="inputData.filterForm"
+          class="one-table-columns is-mobile is-multiline">
+          <ng-container *ngFor="let item of inputData.showedUsedFilters; trackBy:trackByFn">
+            <div class="one-table-column is-narrow">
+              <mat-form-field appearance="fill" [ngSwitch]="true" class="table-filter-form-field">
+                <mat-label>{{ inputData.getOption(item)?.translateName | translate }}
+                  {{inputData.isDateControl(item)?
+                  (inputData.getOption(item)?.translateKey(item) | translate ) :'' }}
+                </mat-label>
+                <input *ngSwitchCase="inputData.isDateControl(item)" matInput type="date" [formControlName]="item">
+                <mat-select [formControlName]="item" *ngSwitchCase="inputData.isSelectable(item)"
+                  (selectionChange)="inputData.submit()">
+                  <mat-option *ngFor="let option of (inputData.getOption(item)?.values  ?? []); trackBy: trackByFn"
+                    [value]="option">
+                    {{inputData.getOption(item)?.translateKey(option) | translate }}
+                  </mat-option>
+                </mat-select>
+                <input matInput [formControlName]="item" *ngSwitchDefault>
+                <button type="button" mat-icon-button matIconSuffix *ngIf="!inputData.getOption(item)?.required"
+                  (click)="inputData.delFilter(item)">
                   <mat-icon> close</mat-icon>
                 </button>
-              </div>
-            </ng-container>
-          </div>
+                <mat-error *ngIf="inputData.filterForm.controls?.[item]?.errors"> {{
+                  inputData.filterForm.controls[item] | controlErrorMessage | translate }} </mat-error>
+              </mat-form-field>
+            </div>
+          </ng-container>
         </form>
-        <div class="one-table-column is-narrow add-filter">
-          <button mat-icon-button [matMenuTriggerFor]="addFilterMenu" *ngIf="inputData.availableFilters.length > 0">
+        <div class="form-end-line-buttons">
+          <button mat-icon-button type="button" [matMenuTriggerFor]="addFilterMenu"
+            *ngIf="inputData.availableFilters.length > 0">
             <mat-icon>add</mat-icon>
           </button>
-        </div>
-        <div class="one-table-column is-narrow submit-filter">
-          <button mat-icon-button color="accent" (click)="inputData.submit()" [disabled]="inputData.filterForm.invalid">
+
+          <button mat-icon-button color="accent" type="button" (click)="inputData.submit()"
+            [disabled]="inputData.filterForm.invalid">
             <mat-icon>done</mat-icon>
           </button>
         </div>
@@ -63,7 +62,7 @@
     </ng-container>
 
     <div class="one-table-columns">
-      <div class="one-table-column is-overflow-x-hidden-column" [class]="!!inputData.shortColumns ? 'is-half': 'is-full'">
+      <div class="one-table-column is-overflow-x-hidden" [class]="!!inputData.shortColumns ? 'is-half': 'is-full'">
         <div class="table-container">
           <table mat-table [id]="inputData.id" [dataSource]="inputData.dataSourceRows" matSort
             [matSortDisableClear]="true" [matSortActive]="(inputData.trigger | async)?.orderBy|| ''"

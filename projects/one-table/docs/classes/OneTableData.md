@@ -51,6 +51,7 @@
 
 - [usedFilters](OneTableData.md#usedfilters)
 - [showedUsedFilters](OneTableData.md#showedusedfilters)
+- [availableFilters](OneTableData.md#availablefilters)
 
 ## Properties
 
@@ -379,3 +380,13 @@ ___
 #### Returns
 
 `string`[]
+
+___
+
+### availableFilters
+
+• `get` **availableFilters**(): { `key`: `string` ; `translateName`: `undefined` \| `string`  }[]
+
+#### Returns
+
+{ `key`: `string` ; `translateName`: `undefined` \| `string`  }[]

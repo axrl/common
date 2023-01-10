@@ -20,10 +20,76 @@
   }
 }
 
+.one-table-columns {
+  display: flex;
+  width: 100%;
+
+  &.is-multiline {
+    flex-wrap: wrap
+  }
+}
+
+.one-table-column {
+  display: block;
+  flex-basis: 0;
+  flex-grow: 1;
+  flex-shrink: 1;
+  padding: 0.75rem;
+
+  &.is-overflow-x-hidden {
+    overflow-x: hidden;
+  }
+
+  &.rigth-column {
+    .fadeInRight {
+      padding-top: 0.75rem;
+      animation-name: oneTableRightColumnFadeInRight;
+      animation-delay: 0s;
+      animation-duration: 0.5s;
+      animation-timing-function: ease-in-out;
+      animation-fill-mode: none;
+
+      mat-card-actions {
+        flex-wrap: wrap;
+
+        a,
+        button {
+          &.action-button {
+            margin: 0.5rem;
+            padding: 1rem;
+            height: auto !important;
+
+            mat-icon {
+              margin-right: 1rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .one-table-columns.is-mobile>&.is-narrow {
+    flex: none;
+    width: unset;
+  }
+
+  .one-table-columns.is-mobile>&.is-full {
+    flex: none;
+    width: 100%;
+  }
+
+  .one-table-columns.is-mobile>&.is-half {
+    flex: none;
+    width: 50%;
+  }
+}
+
 :host {
 
   mat-card.filter-form-container {
     display: flex;
+    min-height: 6.125rem;
+    justify-content: space-between;
     flex-direction: row;
     align-items: center;
     border-top-left-radius: 0;
@@ -31,24 +97,23 @@
 
     mat-form-field.table-filter-form-field {
       width: 15rem;
+    }
 
-      &.required-field {
-        width: 16rem;
+    .form-end-line-buttons {
+      display: flex;
+      flex: none;
+      width: unset;
+
+      button {
+        margin: 0.25rem;
       }
     }
 
-    button.mat-icon-button.delete-table-filter {
-      width: 1rem;
-      height: 1rem;
-      line-height: normal;
-      margin-top: 0.75rem;
-      float: right;
 
-      mat-icon {
-        font-size: 1.25rem;
-      }
+    .one-table-columns.is-mobile &.is-narrow {
+      padding-left: 0.25rem;
+      padding-right: 0.25rem;
     }
-
   }
 
   .show-hide-button-block {
@@ -125,93 +190,5 @@
   .table-bottom-block {
     width: 100%;
     margin-top: 0.5rem;
-  }
-}
-
-.one-table-columns {
-  display: flex;
-  width: 100%;
-
-  &.is-multiline {
-    flex-wrap: wrap
-  }
-}
-
-.one-table-column {
-  display: block;
-  flex-basis: 0;
-  flex-grow: 1;
-  flex-shrink: 1;
-  padding: 0.75rem;
-
-  &.is-overflow-x-hidden-column {
-    overflow-x: hidden;
-  }
-
-  &.rigth-column {
-    .fadeInRight {
-      padding-top: 0.75rem;
-      animation-name: oneTableRightColumnFadeInRight;
-      animation-delay: 0s;
-      animation-duration: 0.5s;
-      animation-timing-function: ease-in-out;
-      animation-fill-mode: none;
-
-      mat-card-actions {
-        flex-wrap: wrap;
-
-        a,
-        button {
-          &.action-button {
-            margin: 0.5rem;
-            padding: 1rem;
-            height: auto !important;
-
-            mat-icon {
-              margin-right: 1rem;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  mat-card.filter-form-container .one-table-columns.is-mobile &.is-narrow {
-    padding-left: 0.25rem;
-    padding-right: 0.25rem;
-
-    &.add-filter,
-    &.submit-filter {
-      display: flex;
-    }
-
-    &.submit-filter {
-      padding-left: 0.75rem;
-      padding-right: 0.75rem;
-    }
-
-    &.add-filter {
-      justify-content: center;
-      align-items: center;
-      margin-left: 0;
-      margin-right: 0;
-      padding-left: 0;
-      padding-right: 0;
-    }
-  }
-
-  .one-table-columns.is-mobile>&.is-narrow {
-    flex: none;
-    width: unset;
-  }
-
-  .one-table-columns.is-mobile>&.is-full {
-    flex: none;
-    width: 100%;
-  }
-
-  .one-table-columns.is-mobile>&.is-half {
-    flex: none;
-    width: 50%;
   }
 }
