@@ -32,6 +32,7 @@
 
 - [createObservable](README.md#createobservable)
 - [createSubject](README.md#createsubject)
+- [deepClone](README.md#deepclone)
 - [delayedObservable](README.md#delayedobservable)
 - [getFilteredData](README.md#getfiltereddata)
 - [isEqualItems](README.md#isequalitems)
@@ -312,6 +313,35 @@ ___
 #### Returns
 
 `BehaviorSubject`<`T` \| ``null``\>
+
+___
+
+### deepClone
+
+▸ **deepClone**<`T`\>(`source`): `T`
+
+**`Function`**
+
+deepClone()
+Функция для "глубокого" рекурсивного клонирования любых объектов
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | extends `unknown` |
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `source` | `T` | объект, который требуется скопировать |
+
+#### Returns
+
+`T`
+
+полная копия объекта объекта, полученного в качестве аргумента
 
 ___
 

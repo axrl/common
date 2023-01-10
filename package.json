@@ -42,7 +42,7 @@
     "@angular/forms": "^15.0.4",
     "@angular/material": "^15.0.4",
     "@angular/router": "^15.0.4",
-    "@axrl/common": "^1.0.21",
+    "@axrl/common": "^1.0.22",
     "@axrl/ngx-extended-form-builder": "^1.2.7",
     "listr": "^0.14.3",
     "rxjs": "^7.8.0",

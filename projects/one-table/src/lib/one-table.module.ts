@@ -21,7 +21,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { OneTableExpandedRowContentProjectDirective, CmkTableKeyboardListenerDirective } from './directives';
 import { OneTableComponent } from './one-table.component';
 import { ColumnPipe } from './pipes';
-import { PERSON_SETTINGS_START_VALUE } from './services/one-table.service';
+import { PERSON_SETTINGS_START_VALUE } from './models';
 
 @NgModule({
   declarations:
