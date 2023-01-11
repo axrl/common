@@ -7,7 +7,7 @@ import { Observable } from "rxjs";
  * На вход принимает некий тип T, возвращает список только строковых ключей этого типа, при этом значения этих ключей не являются Observable или Function.
  */
 export type StringKeys<T> = {
-  [K in keyof T]: T[K] extends Observable<unknown> | Function ?
+  [K in keyof T]-?: T[K] extends Observable<unknown> | Function ?
   never :
   K extends string ?
   K : never;
@@ -16,31 +16,39 @@ export type StringKeys<T> = {
 /**
  * Вспомогательный alias-тип ключей в объекте Map, содержащем конфигурацию валидаторов контролов.
  */
-export type ControlsNames<T> = T extends Observable<unknown> | Function ?
-  never :
+export type ControlsNames<T> = T extends null | undefined | number | bigint | boolean | symbol | string ?
+  'main' :
   T extends Array<infer U> ?
   'main' | 'mainItems' | `mainItems.${PropertyesKeys<U>}` :
+  T extends Observable<unknown> | Function ?
+  never :
   'main' | PropertyesKeys<T>;
+
 /**
  * Вспомогательная утилита типа.
- * На вход принимает некий тип T, возвращает только строковые ключи этого типа, значения которых не являются Observable или Function.
+ * На вход принимает некий тип T, возвращает только строковые ключи этого типа, значения которых не являются Observable или Function, а также 
+ * строковые ключи всех вложенных объектов и объектов внутри вложенных массивов разделенных символом "." (точкой), так называемый "dot-like path".
+ * Названия ключей также дополнительно модифицируются применимо к специфики использования только для данной библиотеки!
  */
-export type PropertyesKeys<T> = T extends undefined | null | number | boolean | symbol | Observable<unknown> | Function ?
+export type PropertyesKeys<T> = T extends undefined | null | number | bigint | boolean | symbol | Observable<unknown> | Function ?
   never :
   T extends string ?
   T :
   T extends Array<infer U> ?
   PropertyesKeys<U> :
+  T extends {} ?
   {
     [K in keyof T]-?: K extends string ?
-    T[K] extends (string | number | boolean | symbol | undefined | null) ?
+    T[K] extends (string | number | bigint | boolean | symbol | undefined | null) ?
     K :
     T[K] extends Observable<unknown> | Function ?
     never :
     T[K] extends Array<infer U> ?
-    `${K}Items.${PropertyesKeys<U>}` | `${K}Items` | K :
-    `${K}.${PropertyesKeys<T[K]>}` | K : never
-  }[keyof T];
+    K | `${K}Items.${PropertyesKeys<U>}` | `${K}Items` :
+    K | `${K}.${PropertyesKeys<T[K]>}` : never
+  }[keyof T] :
+  never;
+
 /**
  * Упрощенная запись для типа объекта FormGroup, образованного из типа T.
  */
@@ -51,23 +59,12 @@ export type FormGroupType<T> = FormGroup<{
   FormControl<boolean> :
   T[K] extends number ?
   FormControl<number> :
+  T[K] extends bigint ?
+  FormControl<bigint> :
   T extends symbol ?
   FormControl<T[K]> :
   ScanFormType<T[K]>
 }>;
-
-/*
-export type FormGroupType<T extends object> = FormGroup<{
-  [K in keyof T]: T[K] extends string ?
-  FormControl<T[K]> :
-  T[K] extends boolean ?
-  FormControl<T[K]> :
-  T[K] extends number ?
-  FormControl<number> :
-  T extends symbol ?
-  FormControl<T> :
-  ScanFormType<T[K]>;
-}>;*/
 
 /**
  * Универсальный тип-утилита.
@@ -85,10 +82,9 @@ export type ScanFormType<T> = T extends AbstractControl<unknown, unknown> ?
   FormArray<ScanFormType<U>> :
   T extends object ?
   FormGroupType<T> :
-  FormControl<T>
-  ;
+  FormControl<T>;
 
-type MakeControlOptions = Omit<FormControlOptions, 'validators' | 'asyncValidators'> & {
+export type MakeControlOptions = Omit<FormControlOptions, 'validators' | 'asyncValidators'> & {
   disabled?: boolean;
   validators?: ValidatorFn[];
   asyncValidators?: AsyncValidatorFn[];
@@ -235,7 +231,8 @@ export function makeForm<T extends unknown>(
     source instanceof Array<unknown> ?
       makeArray(source, options) :
       makeGroup(<object>source, 'main', options) :
-    makeControl(<undefined | null | number | boolean | symbol | string>source, options);
+    makeControl(<undefined | null | number | bigint | boolean | symbol | string>source, options);
+
   return <ScanFormType<T>>form;
 };
 
@@ -288,7 +285,7 @@ function addValidationErrors(additionErrors: ValidationErrors, currentErrors: Va
   );
 }
 
-function makeControl<T extends undefined | null | number | boolean | symbol | string>(
+function makeControl<T extends undefined | null | number | bigint | boolean | symbol | string>(
   source: T | FormControl<T | null>,
   options?: Map<ControlsNames<T>, MakeControlOptions>
 ): FormControl<T | null> {
@@ -316,7 +313,7 @@ function makeGroup<T extends object = object>(
   internalKey: ControlsNames<T>,
   options?: Map<ControlsNames<T>, MakeControlOptions>
 ): FormGroupType<T> {
-  const controlOptions = getValidatorsOrNull(internalKey, options, false);
+  const controlOptions = getValidatorsOrNull(internalKey, options, true);
   const result = source instanceof FormGroup<{ [K in StringKeys<T>]: ScanFormType<T[K]>; }> ?
     source :
     (<[StringKeys<T>, T[StringKeys<T>]][]>Object.entries(source)).reduce(
@@ -355,7 +352,7 @@ function makeArray<T extends Array<unknown>, E = T extends Array<infer U> ? U : 
   source: E[] | FormArray<ScanFormType<E>>,
   options?: Map<ControlsNames<T>, MakeControlOptions>
 ): FormArray<ScanFormType<E>> {
-  const controlOptions = getValidatorsOrNull(<ControlsNames<T>>'main', options, false);
+  const controlOptions = getValidatorsOrNull(<ControlsNames<T>>'main', options, true);
   const result = source instanceof FormArray ?
     source :
     new FormArray(

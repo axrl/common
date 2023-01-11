@@ -9,6 +9,7 @@
 - [PropertyesKeys](README.md#propertyeskeys)
 - [FormGroupType](README.md#formgrouptype)
 - [ScanFormType](README.md#scanformtype)
+- [MakeControlOptions](README.md#makecontroloptions)
 
 ### Functions
 
@@ -19,7 +20,7 @@
 
 ### StringKeys
 
-Ƭ **StringKeys**<`T`\>: { [K in keyof T]: T[K] extends Observable<unknown\> \| Function ? never : K extends string ? K : never }[keyof `T`]
+Ƭ **StringKeys**<`T`\>: { [K in keyof T]-?: T[K] extends Observable<unknown\> \| Function ? never : K extends string ? K : never }[keyof `T`]
 
 Вспомогательная утилита типа.
 На вход принимает некий тип T, возвращает список только строковых ключей этого типа, при этом значения этих ключей не являются Observable или Function.
@@ -34,7 +35,7 @@ ___
 
 ### ControlsNames
 
-Ƭ **ControlsNames**<`T`\>: `T` extends `Observable`<`unknown`\> \| `Function` ? `never` : `T` extends infer U[] ? ``"main"`` \| ``"mainItems"`` \| \`mainItems.${PropertyesKeys<U\>}\` : ``"main"`` \| [`PropertyesKeys`](README.md#propertyeskeys)<`T`\>
+Ƭ **ControlsNames**<`T`\>: `T` extends ``null`` \| `undefined` \| `number` \| `bigint` \| `boolean` \| `symbol` \| `string` ? ``"main"`` : `T` extends infer U[] ? ``"main"`` \| ``"mainItems"`` \| \`mainItems.${PropertyesKeys<U\>}\` : `T` extends `Observable`<`unknown`\> \| `Function` ? `never` : ``"main"`` \| [`PropertyesKeys`](README.md#propertyeskeys)<`T`\>
 
 Вспомогательный alias-тип ключей в объекте Map, содержащем конфигурацию валидаторов контролов.
 
@@ -48,10 +49,12 @@ ___
 
 ### PropertyesKeys
 
-Ƭ **PropertyesKeys**<`T`\>: `T` extends `undefined` \| ``null`` \| `number` \| `boolean` \| `symbol` \| `Observable`<`unknown`\> \| `Function` ? `never` : `T` extends `string` ? `T` : `T` extends infer U[] ? [`PropertyesKeys`](README.md#propertyeskeys)<`U`\> : { [K in keyof T]-?: K extends string ? T[K] extends string \| number \| boolean \| symbol \| undefined \| null ? K : T[K] extends Observable<unknown\> \| Function ? never : T[K] extends (infer U)[] ? \`${K}Items.${PropertyesKeys<U\>}\` \| \`${K}Items\` \| K : \`${K}.${PropertyesKeys<T[K]\>}\` \| K : never }[keyof `T`]
+Ƭ **PropertyesKeys**<`T`\>: `T` extends `undefined` \| ``null`` \| `number` \| `bigint` \| `boolean` \| `symbol` \| `Observable`<`unknown`\> \| `Function` ? `never` : `T` extends `string` ? `T` : `T` extends infer U[] ? [`PropertyesKeys`](README.md#propertyeskeys)<`U`\> : `T` extends {} ? { [K in keyof T]-?: K extends string ? T[K] extends string \| number \| bigint \| boolean \| symbol \| undefined \| null ? K : T[K] extends Observable<unknown\> \| Function ? never : T[K] extends (infer U)[] ? K \| \`${K}Items.${PropertyesKeys<U\>}\` \| \`${K}Items\` : K \| \`${K}.${PropertyesKeys<T[K]\>}\` : never }[keyof `T`] : `never`
 
 Вспомогательная утилита типа.
-На вход принимает некий тип T, возвращает только строковые ключи этого типа, значения которых не являются Observable или Function.
+На вход принимает некий тип T, возвращает только строковые ключи этого типа, значения которых не являются Observable или Function, а также 
+строковые ключи всех вложенных объектов и объектов внутри вложенных массивов разделенных символом "." (точкой), так называемый "dot-like path".
+Названия ключей также дополнительно модифицируются применимо к специфики использования только для данной библиотеки!
 
 #### Type parameters
 
@@ -63,7 +66,7 @@ ___
 
 ### FormGroupType
 
-Ƭ **FormGroupType**<`T`\>: `FormGroup`<{ [K in StringKeys<T\>]: T[K] extends string ? FormControl<T[K]\> : T[K] extends boolean ? FormControl<boolean\> : T[K] extends number ? FormControl<number\> : T extends symbol ? FormControl<T[K]\> : ScanFormType<T[K]\> }\>
+Ƭ **FormGroupType**<`T`\>: `FormGroup`<{ [K in StringKeys<T\>]: T[K] extends string ? FormControl<T[K]\> : T[K] extends boolean ? FormControl<boolean\> : T[K] extends number ? FormControl<number\> : T[K] extends bigint ? FormControl<bigint\> : T extends symbol ? FormControl<T[K]\> : ScanFormType<T[K]\> }\>
 
 Упрощенная запись для типа объекта FormGroup, образованного из типа T.
 
@@ -91,6 +94,12 @@ Observable-значений ( в т.ч., к примеру, Subject  * и EventE
 | Name |
 | :------ |
 | `T` |
+
+___
+
+### MakeControlOptions
+
+Ƭ **MakeControlOptions**: `Omit`<`FormControlOptions`, ``"validators"`` \| ``"asyncValidators"``\> & { `disabled?`: `boolean` ; `validators?`: `ValidatorFn`[] ; `asyncValidators?`: `AsyncValidatorFn`[]  }
 
 ## Functions
 
@@ -123,7 +132,7 @@ Observable - значений(в т.ч., к примеру, Subject * и EventEm
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `source` | `T` | источник данных типа T для создания формы. * |
-| `options?` | `Map`<[`ControlsNames`](README.md#controlsnames)<`T`\>, `MakeControlOptions`\> | - |
+| `options?` | `Map`<[`ControlsNames`](README.md#controlsnames)<`T`\>, [`MakeControlOptions`](README.md#makecontroloptions)\> | - |
 
 #### Returns
 
