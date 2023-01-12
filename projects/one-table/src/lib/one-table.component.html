@@ -21,7 +21,7 @@
                   </mat-option>
                 </mat-select>
                 <input matInput [formControlName]="item" *ngSwitchDefault>
-                <button mat-icon-button matIconSuffix type="button" [matTooltip]="'remove_filter'|translate"
+                <button mat-icon-button matIconSuffix type="button" [matTooltip]="('remove_filter'|translate) ?? ''"
                   *ngIf="!inputData.getOption(item)?.required"
                   (click)="deleteFilterFromForm(item, inputData,showedColumns)">
                   <mat-icon> close</mat-icon>
@@ -33,17 +33,16 @@
           </ng-container>
         </form>
         <div class="form-end-line-buttons">
-          <button mat-icon-button type="button" [matTooltip]="'add_filter'|translate"
+          <button mat-icon-button type="button" [matTooltip]="('add_filter'|translate) ?? ''"
             [matMenuTriggerFor]="addFilterMenu" *ngIf="inputData.availableFilters.length > 0">
             <mat-icon>add</mat-icon>
           </button>
-          <button mat-icon-button color="accent" type="button" [matTooltip]="'reset_filters'|translate"
+          <button mat-icon-button color="accent" type="button" [matTooltip]="('reset_filters'|translate) ?? ''"
             (click)="resetFilterFormToDefault(inputData,showedColumns)" [disabled]="inputData.filterForm.invalid">
             <mat-icon>settings_backup_restore</mat-icon>
           </button>
-          <button mat-icon-button color="accent" type="submit" [matTooltip]="'submit'|translate"
-            (click)="submitFilterForm(inputData,showedColumns,triggerValue)  "
-            [disabled]="inputData.filterForm.invalid">
+          <button mat-icon-button color="accent" type="submit" [matTooltip]="('submit'|translate) ?? ''"
+            (click)="submitFilterForm(inputData,showedColumns,triggerValue)" [disabled]="inputData.filterForm.invalid">
             <mat-icon>done</mat-icon>
           </button>
         </div>
