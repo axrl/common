@@ -2,8 +2,8 @@
   <ng-container *ngIf="inputData.showedColumns$ | async as showedColumns">
     <ng-container *ngIf="inputData.filterOptions && inputData.filterForm">
       <mat-card class="filter-form-container" [@openClose]="(openTrigger | async) === true ? 'open' : 'closed'"
-        *ngIf="inputData.filterForm && inputData._trigger">
-        <form (submit)="inputData.submit()" [formGroup]="inputData.filterForm"
+        *ngIf="inputData.trigger |async as triggerValue">
+        <form (submit)="submitFilterForm(inputData,showedColumns,triggerValue)" [formGroup]="inputData.filterForm"
           class="one-table-columns is-mobile is-multiline">
           <ng-container *ngFor="let item of inputData.showedUsedFilters; trackBy:trackByFn">
             <div class="one-table-column is-narrow">
@@ -14,7 +14,7 @@
                 </mat-label>
                 <input *ngSwitchCase="inputData.isDateControl(item)" matInput type="date" [formControlName]="item">
                 <mat-select [formControlName]="item" *ngSwitchCase="inputData.isSelectable(item)"
-                  (selectionChange)="inputData.submit()">
+                  (selectionChange)="submitFilterForm(inputData,showedColumns,triggerValue)">
                   <mat-option *ngFor="let option of (inputData.getOption(item)?.values  ?? []); trackBy: trackByFn"
                     [value]="option">
                     {{inputData.getOption(item)?.translateKey(option) | translate }}
@@ -22,7 +22,7 @@
                 </mat-select>
                 <input matInput [formControlName]="item" *ngSwitchDefault>
                 <button type="button" mat-icon-button matIconSuffix *ngIf="!inputData.getOption(item)?.required"
-                  (click)="inputData.delFilter(item)">
+                  (click)="deleteFilterFromForm(item, inputData,showedColumns)">
                   <mat-icon> close</mat-icon>
                 </button>
                 <mat-error *ngIf="inputData.filterForm.controls?.[item]?.errors"> {{
@@ -36,8 +36,12 @@
             *ngIf="inputData.availableFilters.length > 0">
             <mat-icon>add</mat-icon>
           </button>
-
-          <button mat-icon-button color="accent" type="button" (click)="inputData.submit()"
+          <button mat-icon-button color="accent" type="button"
+            (click)="resetFilterFormToDefault(inputData,showedColumns)" [disabled]="inputData.filterForm.invalid">
+            <mat-icon>settings_backup_restore</mat-icon>
+          </button>
+          <button mat-icon-button color="accent" type="submit"
+            (click)="submitFilterForm(inputData,showedColumns,triggerValue)  "
             [disabled]="inputData.filterForm.invalid">
             <mat-icon>done</mat-icon>
           </button>
@@ -102,7 +106,7 @@
                   </ng-container>
                 </ng-container>
                 <ng-container *ngSwitchCase="column === 'select'">
-                  <mat-checkbox *ngIf="isAvailableAction('selectItem', inputData.action);else elseBlock"
+                  <mat-checkbox *ngIf="isAvailableAction('selectItem', inputData.actions);else elseBlock"
                     (change)="clickedAction('selectItem',row, inputData)" [checked]='row?.selected'></mat-checkbox>
                   <ng-template #elseBlock>
                     <button (click)="clickedAction('selectSingle',row, inputData)" mat-stroked-button
@@ -110,7 +114,7 @@
                   </ng-template>
                 </ng-container>
                 <ng-container *ngSwitchCase="column === 'action'">
-                  <ng-container *ngIf="getActualAction(row,inputData.action) as actualActions">
+                  <ng-container *ngIf="getActualAction(row,inputData.actions) as actualActions">
                     <button mat-icon-button [matMenuTriggerData]="{actualActions}" *ngIf="actualActions.length > 0"
                       [matMenuTriggerFor]="menu" color="accent">
                       <mat-icon>more_vert</mat-icon>
@@ -223,7 +227,7 @@
       <div class="one-table-column is-half is-overflow-x-hidden-column" *ngIf="inputData.shortColumns">
         <mat-card class="mat-elevation-z8 fadeInRight"
           *ngIf="getSelectedItem(inputData.dataSourceRows) | async as selectedItem">
-          <mat-card-actions *ngIf="getActualAction(selectedItem,inputData.action) as actualActions">
+          <mat-card-actions *ngIf="getActualAction(selectedItem,inputData.actions) as actualActions">
             <ng-container *ngFor="let act of actualActions; trackBy:trackByFn">
               <button class="action-button" mat-stroked-button *ngIf="!act.routerLink; else linkAction"
                 (click)="clickedAction(act.action,selectedItem,inputData)">

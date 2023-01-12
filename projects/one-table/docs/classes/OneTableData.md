@@ -25,7 +25,7 @@
 - [defaultColumns](OneTableData.md#defaultcolumns)
 - [sourceFn](OneTableData.md#sourcefn)
 - [componentName](OneTableData.md#componentname)
-- [action](OneTableData.md#action)
+- [actions](OneTableData.md#actions)
 - [filterOptions](OneTableData.md#filteroptions)
 - [exportXlsxFileNameGenerationFn](OneTableData.md#exportxlsxfilenamegenerationfn)
 - [extendedRowPredicate](OneTableData.md#extendedrowpredicate)
@@ -43,6 +43,7 @@
 - [getOption](OneTableData.md#getoption)
 - [isDateControl](OneTableData.md#isdatecontrol)
 - [isSelectable](OneTableData.md#isselectable)
+- [resetFilterFormToDefault](OneTableData.md#resetfilterformtodefault)
 - [addFilter](OneTableData.md#addfilter)
 - [delFilter](OneTableData.md#delfilter)
 - [submit](OneTableData.md#submit)
@@ -161,9 +162,9 @@ ___
 
 ___
 
-### action
+### actions
 
-• `Optional` **action**: [`ActionButton`](ActionButton.md)<`T`\>[]
+• `Optional` **actions**: [`ActionButton`](ActionButton.md)<`T`\>[]
 
 ___
 
@@ -227,7 +228,7 @@ ___
 
 ### columnsForXlsxExport
 
-• **columnsForXlsxExport**: [`ColumnsType`](../README.md#columnstype)<`T`\> \| ``"all"`` \| ``"default"``
+• **columnsForXlsxExport**: ``"all"`` \| [`ColumnsType`](../README.md#columnstype)<`T`\> \| ``"default"``
 
 ___
 
@@ -252,24 +253,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `config` | `Object` |
-| `config.paginatorDefaultSize` | `number` |
-| `config.defaultColumns` | [`ColumnsType`](../README.md#columnstype)<`T`\> |
-| `config.showedColumns$` | `Observable`<[`ColumnsType`](../README.md#columnstype)<`T`\>\> |
-| `config.sourceFn` | (`req`: `Q`) => `Observable`<[`CountAndRows`](../interfaces/CountAndRows.md)<`T`\>\> |
-| `config.componentName` | `string` |
-| `config.filter?` | `any` |
-| `config.orderBy` | ``""`` \| [`ColumnType`](../README.md#columntype)<`T`\> |
-| `config.action?` | [`ActionButton`](ActionButton.md)<`T`\>[] |
-| `config.additionParams?` | `Partial`<`Omit`<`Q`, keyof [`BaseListRequest`](BaseListRequest.md)\>\> |
-| `config.filterOptions?` | [`TableFilterOptions`](TableFilterOptions.md)<`Q`\> |
-| `config.exportXlsxFileNameGenerationFn?` | (`req?`: `Q`) => `string` |
-| `config.extendedRowPredicate?` | (`row`: `T`) => `boolean` |
-| `config.orderDirection?` | ``"asc"`` \| ``"desc"`` |
-| `config.shortColumns?` | [`ColumnsType`](../README.md#columnstype)<`T`\> |
-| `config.isInnerTable?` | `boolean` |
-| `config.columnsForXlsxExport?` | [`ColumnsType`](../README.md#columnstype)<`T`\> \| ``"all"`` \| ``"default"`` |
-| `config.columnsForCopy?` | [`ColumnName`](../README.md#columnname)<`T`\>[] |
+| `config` | [`OneTableDataConfig`](../README.md#onetabledataconfig)<`T`, `Q`\> |
 
 ## Methods
 
@@ -321,6 +305,22 @@ ___
 
 ___
 
+### resetFilterFormToDefault
+
+▸ **resetFilterFormToDefault**(`afterTriggerUpdateCb`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `afterTriggerUpdateCb` | (`triggerValue`: `Q`) => `void` |
+
+#### Returns
+
+`void`
+
+___
+
 ### addFilter
 
 ▸ **addFilter**(`name`): `void`
@@ -339,13 +339,14 @@ ___
 
 ### delFilter
 
-▸ **delFilter**(`name`): `void`
+▸ **delFilter**(`name`, `afterTriggerUpdateCb`): `void`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `name` | `string` |
+| `afterTriggerUpdateCb` | (`triggerValue`: `Q`) => `void` |
 
 #### Returns
 
@@ -355,7 +356,14 @@ ___
 
 ### submit
 
-▸ **submit**(): `void`
+▸ **submit**(`triggerValue`, `afterTriggerUpdateCb`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `triggerValue` | `Q` |
+| `afterTriggerUpdateCb` | (`triggerValue`: `Q`) => `void` |
 
 #### Returns
 

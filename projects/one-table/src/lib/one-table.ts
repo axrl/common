@@ -1,5 +1,5 @@
 import type { Observable } from 'rxjs';
-import { isValue } from '@axrl/common';
+import { deepClone, isValue, objectKeys } from '@axrl/common';
 import { BehaviorSubject, of, catchError, map, shareReplay, switchMap } from 'rxjs';
 import type { ColumnsType, ColumnType, CountAndRows, ActionButton, ColumnName } from './models';
 import { BaseListRequest } from './models';
@@ -53,7 +53,7 @@ export interface MakeOneTableConfig<T extends {}, Q extends BaseListRequest = Ba
    * Объект с параметрами, которые будут использоваться для задания начальных значений в форме фильтрации таблицы и, как следствие,
    * передаваться в качестве значения поля filter в объекте BaseListRequest при вызове sourceFn
    */
-  filter: any,
+  filter: unknown,
 
   /** Колонка, по которой изначально будут отсортированы данные таблицы */
   orderBy: ColumnType<T>,
@@ -120,7 +120,20 @@ export interface MakeOneTableConfig<T extends {}, Q extends BaseListRequest = Ba
    * Список колонок, внутри которых рядом с данными будет дополнительно выведена кнопка, позволящая скопировать значение ячейки таблицы.
    */
   columnsForCopy?: ColumnName<T>[]
-}
+};
+
+/**
+ * Alias-тип для объекта конфигурации таблицы, передаваемый в качестве параметра в конструктор класса OneTableData.
+ */
+export type OneTableDataConfig<
+  T extends {},
+  Q extends BaseListRequest = BaseListRequest
+> = Omit<MakeOneTableConfig<T, Q>, 'filterOptions' | 'updateFilterFn'> & {
+  filterOptions?: TableFilterOptions<Q>;
+  paginatorDefaultSize: number;
+  showedColumns$: Observable<ColumnsType<T>>;
+  defaultFilter: unknown
+};
 
 export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequest> {
   showedColumns$: Observable<ColumnsType<T>>;
@@ -137,7 +150,7 @@ export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequ
   defaultColumns: ColumnsType<T>;
   sourceFn: (req: Q) => Observable<CountAndRows<T>>;
   componentName: string;
-  action?: ActionButton<T>[];
+  actions?: ActionButton<T>[];
   filterOptions?: TableFilterOptions<Q>;
   exportXlsxFileNameGenerationFn: (req?: Q) => string;
   extendedRowPredicate?: (row: T) => boolean;
@@ -146,28 +159,11 @@ export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequ
   columnsForXlsxExport: 'all' | 'default' | ColumnsType<T>;
   columnsForCopy: ColumnName<T>[];
 
-  constructor(config: {
-    paginatorDefaultSize: number,
-    defaultColumns: ColumnsType<T>,
-    showedColumns$: Observable<ColumnsType<T>>,
-    sourceFn: (req: Q) => Observable<CountAndRows<T>>,
-    componentName: string,
-    filter?: any,
-    orderBy: ColumnType<T> | '',
-    action?: ActionButton<T>[],
-    additionParams?: Partial<Omit<Q, keyof BaseListRequest>>,
-    filterOptions?: TableFilterOptions<Q>,
-    exportXlsxFileNameGenerationFn?: (req?: Q) => string,
-    extendedRowPredicate?: (row: T) => boolean,
-    orderDirection?: 'asc' | 'desc',
-    shortColumns?: ColumnsType<T>,
-    isInnerTable?: boolean,
-    columnsForXlsxExport?: 'all' | 'default' | ColumnsType<T>,
-    columnsForCopy?: ColumnName<T>[]
-  }) {
+  constructor(private readonly config: OneTableDataConfig<T, Q>) {
+
     this.defaultColumns = config.defaultColumns;
     this.sourceFn = config.sourceFn;
-    this.action = config.action;
+    this.actions = config.actions;
     this.componentName = config.componentName;
     const defaultExportXlsxFileNameGenerationFn = () => 'exportedData';
     this.exportXlsxFileNameGenerationFn = config.exportXlsxFileNameGenerationFn ?? defaultExportXlsxFileNameGenerationFn;
@@ -191,16 +187,7 @@ export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequ
       );
     };
     this._trigger = new BehaviorSubject<Q>(
-      <Q>{
-        ... new BaseListRequest(
-          config.paginatorDefaultSize,
-          0,
-          config.filter ?? '',
-          typeof config.orderBy === 'string' ? config.orderBy : config.orderBy.column,
-          config.orderDirection ?? 'desc'
-        ),
-        ... (config.additionParams ?? {})
-      }
+      this._createTriggerValue()
     );
     this.trigger = this._trigger.asObservable();
     this.dataSource = this._trigger.pipe(
@@ -221,12 +208,54 @@ export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequ
     );
     this.filterOptions = config.filterOptions;
     if (isValue(this.filterOptions)) {
-      const startValue = this._trigger.value;
-      const optionsKeys: (keyof TableFilterOptions<Q>['options'])[] = Object.keys(this.filterOptions.options);
+      this.setFilterForm(this._trigger.value)
+    };
+
+    console.log(this);
+
+  };
+
+  /**
+   * Фабричный метод создания объекта с типом Q.
+   * Необходим для установки исходного значения потока @this._trigger.
+   * @returns Объект с типом Q
+   */
+  private _createTriggerValue(): Q {
+    return deepClone(<Q>{
+      ... new BaseListRequest(
+        this.config.paginatorDefaultSize,
+        0,
+        this.config.filter ?? '',
+        typeof this.config.orderBy === 'string' ? this.config.orderBy : this.config.orderBy.column,
+        this.config.orderDirection ?? 'desc'
+      ),
+      ... this.config.additionParams
+    });
+  }
+
+  getOption(name: keyof TableFilterOptions<Q>['options']): TableFilterOption<string | number | string[]> | undefined {
+    return this.filterOptions?.options[String(name).replace(/From|To/, '')];
+  }
+
+  isDateControl(controlName: string): boolean {
+    return isValue(this.getOption(controlName)?.dateControl);
+  }
+
+  isSelectable(controlName: string): boolean {
+    return isValue(this.getOption(controlName)?.values);
+  }
+
+  private setFilterForm(startValue: Q): void {
+    const options = this.filterOptions?.options;
+
+    if (isValue(options)) {
+      const optionsKeys = objectKeys(options);
       const oneKey: keyof Q | keyof Q['filter'] = optionsKeys[0];
-      const triggerFilter = optionsKeys.length == 1 ? {
-        [oneKey]: oneKey in startValue ? startValue[oneKey] : startValue.filter
-      } : { ...startValue.filter };
+      const triggerFilter = optionsKeys.length == 1 ?
+        {
+          [oneKey]: oneKey in startValue ? startValue[oneKey] : startValue.filter
+        } :
+        deepClone(startValue.filter);
 
       Object.keys(triggerFilter).forEach(
         key => {
@@ -240,7 +269,7 @@ export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequ
       );
 
       const optionsValidators = optionsKeys.filter(
-        optionKey => this.filterOptions?.options[optionKey].required
+        optionKey => options[optionKey].required
       ).map(
         optionKey => [
           String(optionKey), {
@@ -254,22 +283,16 @@ export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequ
       );
 
       this.filterForm = makeForm<FilterFormValueType>(triggerFilter, new Map(optionsValidators));
-    };
 
-    console.log(this);
+    }
 
-  };
-
-  getOption(name: keyof TableFilterOptions<Q>['options']): TableFilterOption<string | number | string[]> | undefined {
-    return this.filterOptions?.options[String(name).replace(/From|To/, '')];
   }
 
-  isDateControl(controlName: string): boolean {
-    return isValue(this.getOption(controlName)?.dateControl);
-  }
-
-  isSelectable(controlName: string): boolean {
-    return isValue(this.getOption(controlName)?.values);
+  resetFilterFormToDefault(afterTriggerUpdateCb: (triggerValue: Q) => void): void {
+    const currentTriggerValue = deepClone(this._trigger.value);
+    currentTriggerValue.filter = this.config.defaultFilter;
+    this.setFilterForm(currentTriggerValue);
+    this.submit(currentTriggerValue, afterTriggerUpdateCb);
   }
 
   addFilter(name: keyof FilterFormValueType) {
@@ -294,7 +317,7 @@ export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequ
     };
   }
 
-  delFilter(name: keyof FilterFormValueType) {
+  delFilter(name: keyof FilterFormValueType, afterTriggerUpdateCb: (triggerValue: Q) => void) {
     if (isValue(this.filterOptions)) {
       const normalizedName = String(name).replace(/From|To/, '');
       if (this.isDateControl(String(name))) {
@@ -310,29 +333,29 @@ export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequ
         }
       };
 
-      this.submit();
+      this.submit(this._trigger.value, afterTriggerUpdateCb);
     };
   }
 
-  submit() {
+  submit(triggerValue: Q, afterTriggerUpdateCb: (triggerValue: Q) => void) {
     if (isValue(this.filterOptions) && isValue(this.filterForm) && this.filterForm.valid) {
-      const val = this._trigger.value;
-      this.filterOptions.filterUpdate(val, { ...this.filterForm.getRawValue() });
-      val.Offset = 0;
-      Object.keys(val.filter).forEach(
+      this.filterOptions.filterUpdate(triggerValue, deepClone(this.filterForm.getRawValue()));
+      triggerValue.Offset = 0;
+      Object.keys(triggerValue.filter).forEach(
         key => {
           if (this.getOption(key)?.arrayParam) {
-            val.filter[key] = val.filter[key].toString().includes(',') ? val.filter[key].split(',') : [val.filter[key]];
+            triggerValue.filter[key] = triggerValue.filter[key].toString().includes(',') ? triggerValue.filter[key].split(',') : [triggerValue.filter[key]];
           };
           if (this.isDateControl(key)) {
-            val.filter[key] = formatDate(
-              val.filter[key],
+            triggerValue.filter[key] = formatDate(
+              triggerValue.filter[key],
               key.endsWith('From') ? 'yyyy-MM-ddT00:00:00' : 'yyyy-MM-ddT23:59:59',
               'en'
             );
           };
         });
-      this._trigger.next(val);
+      this._trigger.next(triggerValue);
+      afterTriggerUpdateCb(triggerValue);
     };
   }
 

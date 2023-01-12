@@ -9,7 +9,7 @@ import type { Observable } from 'rxjs';
 import { map, switchMap, BehaviorSubject, from } from 'rxjs';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import type { BaseListRequest, OneTableData, ActionEvent, ColumnType, ActionButton, ColumnsType, ColumnConfig } from './models';
-import { createObservable, SnackService, isValue, trackByFn, delayedObservable } from '@axrl/common';
+import { createObservable, SnackService, isValue, trackByFn, delayedObservable, deepClone } from '@axrl/common';
 import { OneTableService, ExcelService } from './services';
 import type { IconColumnData } from './services';
 import { ColumnPipe } from './pipes/column.pipe';
@@ -122,7 +122,7 @@ export class OneTableComponent<T extends {}, Q extends BaseListRequest> implemen
 
   onDblClick(index: number | null, dataElement: T, inputData: OneTableData<T, Q>): void {
     this.selectedItemIndex$.next(index);
-    const availableActions = inputData.action?.filter(action => action.canShow(dataElement));
+    const availableActions = inputData.actions?.filter(action => action.canShow(dataElement));
     if (
       availableActions && availableActions.length > 0 &&
       (inputData.defaultColumns.includes('action') || ['selectSingle', 'selectItem', 'showKmInfo'].includes(availableActions[0]?.action)) &&
@@ -257,9 +257,13 @@ export class OneTableComponent<T extends {}, Q extends BaseListRequest> implemen
             columnsForXlsxExport,
             fileName: event.inputData.exportXlsxFileNameGenerationFn(event.req)
           }) :
-          event.inputData.sourceFn({
-            ...event.req, Offset: 0, Next: event.count
-          }).pipe(
+          event.inputData.sourceFn(
+            deepClone({
+              ...event.req,
+              Offset: 0,
+              Next: event.count
+            })
+          ).pipe(
             map(
               data => ({
                 data: data.Rows,
@@ -348,6 +352,31 @@ export class OneTableComponent<T extends {}, Q extends BaseListRequest> implemen
     this.clipboard.copy(String(text));
     this.snack.showText('Скопировано!');
     return;
+  }
+
+  resetFilterFormToDefault(inputData: OneTableData<T, Q>, showedColumns: ColumnsType<T>) {
+    inputData.resetFilterFormToDefault(
+      req => this.oneTableService.updateUiLayoutFn(inputData.componentName, {
+        columns: showedColumns, req
+      })
+    );
+  }
+
+  submitFilterForm(inputData: OneTableData<T, Q>, showedColumns: ColumnsType<T>, triggerValue: Q) {
+    inputData.submit(
+      triggerValue,
+      req => this.oneTableService.updateUiLayoutFn(inputData.componentName, {
+        columns: showedColumns, req
+      })
+    );
+  }
+
+  deleteFilterFromForm(name: string, inputData: OneTableData<T, Q>, showedColumns: ColumnsType<T>) {
+    inputData.delFilter(name,
+      req => this.oneTableService.updateUiLayoutFn(inputData.componentName, {
+        columns: showedColumns, req
+      })
+    )
   }
 
 };

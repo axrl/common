@@ -71,7 +71,7 @@ ___
 
 ### filter
 
-• **filter**: `any`
+• **filter**: `unknown`
 
 Объект с параметрами, которые будут использоваться для задания начальных значений в форме фильтрации таблицы и, как следствие,
 передаваться в качестве значения поля filter в объекте BaseListRequest при вызове sourceFn
@@ -197,7 +197,7 @@ ___
 
 ### columnsForXlsxExport
 
-• `Optional` **columnsForXlsxExport**: ``"all"`` \| [`ColumnsType`](../README.md#columnstype)<`T`\>
+• `Optional` **columnsForXlsxExport**: [`ColumnsType`](../README.md#columnstype)<`T`\> \| ``"all"``
 
 Используется в случае, если требуется ограничить количество данных, которые будут экспортироваться в xlsx.
 

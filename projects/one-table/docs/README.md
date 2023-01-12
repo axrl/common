@@ -20,12 +20,17 @@
 
 - [ActionEvent](interfaces/ActionEvent.md)
 - [CountAndRows](interfaces/CountAndRows.md)
+- [BasePersonSettings](interfaces/BasePersonSettings.md)
 - [ColumnConfig](interfaces/ColumnConfig.md)
 - [TableIconsDataFn](interfaces/TableIconsDataFn.md)
 - [TableFilterOption](interfaces/TableFilterOption.md)
-- [IconColumnData](interfaces/IconColumnData.md)
-- [BasePersonSettings](interfaces/BasePersonSettings.md)
 - [MakeOneTableConfig](interfaces/MakeOneTableConfig.md)
+- [IconColumnData](interfaces/IconColumnData.md)
+
+### Variables
+
+- [PERSON\_SETTINGS\_START\_VALUE](README.md#person_settings_start_value)
+- [TABLE\_ICON\_DATA\_FN](README.md#table_icon_data_fn)
 
 ### Type Aliases
 
@@ -36,11 +41,25 @@
 - [TableFilterOptionsData](README.md#tablefilteroptionsdata)
 - [TableFilterUpdateFn](README.md#tablefilterupdatefn)
 - [FilterFormValueType](README.md#filterformvaluetype)
+- [OneTableDataConfig](README.md#onetabledataconfig)
 
-### Variables
+## Variables
 
-- [TABLE\_ICON\_DATA\_FN](README.md#table_icon_data_fn)
-- [PERSON\_SETTINGS\_START\_VALUE](README.md#person_settings_start_value)
+### PERSON\_SETTINGS\_START\_VALUE
+
+• `Const` **PERSON\_SETTINGS\_START\_VALUE**: `InjectionToken`<``null`` \| [`BasePersonSettings`](interfaces/BasePersonSettings.md)\>
+
+InjectionToken со стартовым значением для потока с настройками пользователя.
+По умолчанию - использются данные, хранящиеся в localStorage, при их отсутствии - значение по умолчанию.
+
+Если в приложении определена собственная логика хранения пользовательских настроек и стартовое значение 
+будет передаваться в сервис извне - рекомендуется определить токен, используя в качестве стартового значения - null.
+
+___
+
+### TABLE\_ICON\_DATA\_FN
+
+• `Const` **TABLE\_ICON\_DATA\_FN**: `InjectionToken`<[`TableIconsDataFn`](interfaces/TableIconsDataFn.md)\>
 
 ## Type Aliases
 
@@ -139,20 +158,17 @@ ___
 
 Ƭ **FilterFormValueType**: `Record`<`string`, `string` \| `number` \| `undefined` \| ``null``\>
 
-## Variables
-
-### TABLE\_ICON\_DATA\_FN
-
-• `Const` **TABLE\_ICON\_DATA\_FN**: `InjectionToken`<[`TableIconsDataFn`](interfaces/TableIconsDataFn.md)\>
-
 ___
 
-### PERSON\_SETTINGS\_START\_VALUE
+### OneTableDataConfig
 
-• `Const` **PERSON\_SETTINGS\_START\_VALUE**: `InjectionToken`<``null`` \| [`BasePersonSettings`](interfaces/BasePersonSettings.md)\>
+Ƭ **OneTableDataConfig**<`T`, `Q`\>: `Omit`<[`MakeOneTableConfig`](interfaces/MakeOneTableConfig.md)<`T`, `Q`\>, ``"filterOptions"`` \| ``"updateFilterFn"``\> & { `filterOptions?`: [`TableFilterOptions`](classes/TableFilterOptions.md)<`Q`\> ; `paginatorDefaultSize`: `number` ; `showedColumns$`: `Observable`<[`ColumnsType`](README.md#columnstype)<`T`\>\> ; `defaultFilter`: `unknown`  }
 
-InjectionToken со стартовым значением для потока с настройками пользователя.
-По умолчанию - использются данные, хранящиеся в localStorage, при их отсутствии - значение по умолчанию.
+Alias-тип для объекта конфигурации таблицы, передаваемый в качестве параметра в конструктор класса OneTableData.
 
-Если в приложении определена собственная логика хранения пользовательских настроек и стартовое значение 
-будет передаваться в сервис извне - рекомендуется определить токен, используя в качестве стартового значения - null.
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | extends `Object` |
+| `Q` | extends [`BaseListRequest`](classes/BaseListRequest.md) = [`BaseListRequest`](classes/BaseListRequest.md) |

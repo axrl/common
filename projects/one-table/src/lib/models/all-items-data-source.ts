@@ -1,6 +1,6 @@
 import { of } from 'rxjs';
 import type { Observable } from 'rxjs';
-import { isValue, objectKeys } from '@axrl/common';
+import { deepClone, isValue, objectKeys } from '@axrl/common';
 
 export class BaseListRequest {
   Next: number;
@@ -76,7 +76,7 @@ export class AllItemsOneTableDataSource<T extends object, Q extends BaseListRequ
           return objectKeys(el).some(key => String(el[key]).includes(req.filter));
         }
       });
-    this.previousTriggerValue = { ...req };
+    this.previousTriggerValue = deepClone(req);
     return of({
       Count: value.length,
       Rows: value.splice(req.Offset, req.Next)

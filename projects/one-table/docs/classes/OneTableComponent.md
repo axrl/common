@@ -56,6 +56,9 @@
 - [drop](OneTableComponent.md#drop)
 - [resetColumnLayout](OneTableComponent.md#resetcolumnlayout)
 - [copy](OneTableComponent.md#copy)
+- [resetFilterFormToDefault](OneTableComponent.md#resetfilterformtodefault)
+- [submitFilterForm](OneTableComponent.md#submitfilterform)
+- [deleteFilterFromForm](OneTableComponent.md#deletefilterfromform)
 
 ## Constructors
 
@@ -578,6 +581,59 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `text` | `string` \| `number` |
+
+#### Returns
+
+`void`
+
+___
+
+### resetFilterFormToDefault
+
+▸ **resetFilterFormToDefault**(`inputData`, `showedColumns`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `inputData` | [`OneTableData`](OneTableData.md)<`T`, `Q`\> |
+| `showedColumns` | [`ColumnsType`](../README.md#columnstype)<`T`\> |
+
+#### Returns
+
+`void`
+
+___
+
+### submitFilterForm
+
+▸ **submitFilterForm**(`inputData`, `showedColumns`, `triggerValue`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `inputData` | [`OneTableData`](OneTableData.md)<`T`, `Q`\> |
+| `showedColumns` | [`ColumnsType`](../README.md#columnstype)<`T`\> |
+| `triggerValue` | `Q` |
+
+#### Returns
+
+`void`
+
+___
+
+### deleteFilterFromForm
+
+▸ **deleteFilterFromForm**(`name`, `inputData`, `showedColumns`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `name` | `string` |
+| `inputData` | [`OneTableData`](OneTableData.md)<`T`, `Q`\> |
+| `showedColumns` | [`ColumnsType`](../README.md#columnstype)<`T`\> |
 
 #### Returns
 
