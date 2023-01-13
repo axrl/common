@@ -5,32 +5,30 @@
         *ngIf="inputData.trigger |async as triggerValue">
         <form (submit)="submitFilterForm(inputData,showedColumns,triggerValue)" [formGroup]="inputData.filterForm"
           class="one-table-columns is-mobile is-multiline">
-          <ng-container *ngFor="let item of inputData.showedUsedFilters; trackBy:trackByFn">
-            <div class="one-table-column is-narrow">
-              <mat-form-field appearance="fill" [ngSwitch]="true" class="table-filter-form-field">
-                <mat-label>{{ inputData.getOption(item)?.translateName | translate }}
-                  {{inputData.isDateControl(item)?
-                  (inputData.getOption(item)?.translateKey(item) | translate ) :'' }}
-                </mat-label>
-                <input *ngSwitchCase="inputData.isDateControl(item)" matInput type="date" [formControlName]="item">
-                <mat-select [formControlName]="item" *ngSwitchCase="inputData.isSelectable(item)"
-                  (selectionChange)="submitFilterForm(inputData,showedColumns,triggerValue)">
-                  <mat-option *ngFor="let option of (inputData.getOption(item)?.values  ?? []); trackBy: trackByFn"
-                    [value]="option">
-                    {{inputData.getOption(item)?.translateKey(option) | translate }}
-                  </mat-option>
-                </mat-select>
-                <input matInput [formControlName]="item" *ngSwitchDefault>
-                <button mat-icon-button matIconSuffix type="button" [matTooltip]="('remove_filter'|translate) ?? ''"
-                  *ngIf="!inputData.getOption(item)?.required"
-                  (click)="deleteFilterFromForm(item, inputData,showedColumns)">
-                  <mat-icon> close</mat-icon>
-                </button>
-                <mat-error *ngIf="inputData.filterForm.controls?.[item]?.errors"> {{
-                  inputData.filterForm.controls[item] | controlErrorMessage | translate }} </mat-error>
-              </mat-form-field>
-            </div>
-          </ng-container>
+          <div class="one-table-column is-narrow" *ngFor="let item of inputData.showedUsedFilters; trackBy:trackByFn">
+            <mat-form-field appearance="fill" [ngSwitch]="true" class="table-filter-form-field">
+              <mat-label>{{ inputData.getOption(item)?.translateName | translate }}
+                {{inputData.isDateControl(item)?
+                (inputData.getOption(item)?.translateKey(item) | translate ) :'' }}
+              </mat-label>
+              <input *ngSwitchCase="inputData.isDateControl(item)" matInput type="date" [formControlName]="item">
+              <mat-select [formControlName]="item" *ngSwitchCase="inputData.isSelectable(item)"
+                (selectionChange)="submitFilterForm(inputData,showedColumns,triggerValue)">
+                <mat-option *ngFor="let option of (inputData.getOption(item)?.values  ?? []); trackBy: trackByFn"
+                  [value]="option">
+                  {{inputData.getOption(item)?.translateKey(option) | translate }}
+                </mat-option>
+              </mat-select>
+              <input matInput [formControlName]="item" *ngSwitchDefault>
+              <button mat-icon-button matIconSuffix type="button" [matTooltip]="('remove_filter'|translate) ?? ''"
+                *ngIf="!inputData.getOption(item)?.required"
+                (click)="deleteFilterFromForm(item, inputData,showedColumns)">
+                <mat-icon> close</mat-icon>
+              </button>
+              <mat-error *ngIf="inputData.filterForm.controls?.[item]?.errors"> {{
+                inputData.filterForm.controls[item] | controlErrorMessage | translate }} </mat-error>
+            </mat-form-field>
+          </div>
         </form>
         <div class="form-end-line-buttons">
           <button mat-icon-button type="button" [matTooltip]="('add_filter'|translate) ?? ''"
