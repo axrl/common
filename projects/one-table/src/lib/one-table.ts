@@ -28,7 +28,7 @@ export type TableFilterUpdateFn<Q extends BaseListRequest> = (req: Q, values: an
 
 export class TableFilterOptions<Q extends BaseListRequest> {
   constructor(
-    public options: TableFilterOptionsData<string | number | string[]>,
+    public options: TableFilterOptionsData<string | string[] | number | number[]>,
     public filterUpdate: TableFilterUpdateFn<Q> = (req, values) => req.filter = values
   ) { };
 };
@@ -72,7 +72,7 @@ export interface MakeOneTableConfig<T extends {}, Q extends BaseListRequest = Ba
   /**
    *Конфигурация для полей формы фильтрации данных в таблице. 
    */
-  filterOptions?: TableFilterOptionsData<string | string[] | number>,
+  filterOptions?: TableFilterOptionsData<string | string[] | number | number[]>,
 
   /**
    * Функция, которая будет вызываться при каждой отправке данных формы фильтрации. Используется в случаях, если требуется дополнительное преобразование данных
@@ -233,7 +233,7 @@ export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequ
     });
   }
 
-  getOption(name: keyof TableFilterOptions<Q>['options']): TableFilterOption<string | number | string[]> | undefined {
+  getOption<K extends keyof TableFilterOptions<Q>['options']>(name: K): TableFilterOptions<Q>['options'][K] | undefined {
     return this.filterOptions?.options[String(name).replace(/From|To/, '')];
   }
 
