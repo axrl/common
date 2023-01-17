@@ -110,8 +110,14 @@
       .is-narrow {
         padding: 0 0.5rem;
 
-        mat-form-field.table-filter-form-field {
-          width: 15rem;
+        mat-form-field.table-filter {
+          &:not(.is-select) {
+            width: 15rem;
+          }
+
+          &.is-select {
+            width: 20rem;
+          }
         }
       }
     }

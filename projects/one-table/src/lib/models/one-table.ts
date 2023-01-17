@@ -1,13 +1,21 @@
 import type { Observable } from 'rxjs';
 import { deepClone, isValue, objectKeys } from '@axrl/common';
 import { BehaviorSubject, of, catchError, map, shareReplay, switchMap } from 'rxjs';
-import type { ColumnsType, ColumnType, CountAndRows, ActionButton, ColumnName } from './models';
-import { BaseListRequest } from './models';
+import { BaseListRequest } from './all-items-data-source';
+import type { CountAndRows } from './all-items-data-source';
+import type { ColumnsType, ColumnType, ColumnName } from './columns-type';
+import type { ActionButton } from './action-button';
 import type { ValidatorFn } from '@angular/forms';
 import type { FormGroupType } from '@axrl/ngx-extended-form-builder';
 import { makeForm } from '@axrl/ngx-extended-form-builder';
 import { formatDate } from '@angular/common';
 import { v4 as uuidv4 } from 'uuid';
+
+export interface ActionEvent<T extends {}, Q extends BaseListRequest = BaseListRequest> {
+  action: string;
+  element: T;
+  inputData: OneTableData<T, Q>;
+}
 
 export interface TableFilterOption<T> {
   translateName: string;
@@ -241,6 +249,10 @@ export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequ
     return isValue(this.getOption(controlName)?.dateControl);
   }
 
+  matInputType(controlName: string): 'date' | 'text' {
+    return this.isDateControl(controlName) ? 'date' : 'text'
+  }
+
   isSelectable(controlName: string): boolean {
     return isValue(this.getOption(controlName)?.values);
   }
@@ -319,11 +331,11 @@ export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequ
 
   delFilter(name: keyof FilterFormValueType, afterTriggerUpdateCb: (triggerValue: Q) => void) {
     if (isValue(this.filterOptions)) {
-      const normalizedName = String(name).replace(/From|To/, '');
-      if (this.isDateControl(String(name))) {
+      const normalizedName = name.replace(/From|To/, '');
+      if (this.isDateControl(name)) {
         ['From', 'To'].forEach(partkey => {
-          if (this.filterForm?.contains(name)) {
-            const formKey = (normalizedName + partkey);
+          const formKey = (normalizedName + partkey);
+          if (this.filterForm?.contains(formKey)) {
             this.filterForm.removeControl(<never>formKey);
           }
         });
@@ -332,7 +344,7 @@ export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequ
           this.filterForm.removeControl(<never>name);
         }
       };
-
+      
       this.submit(this._trigger.value, afterTriggerUpdateCb);
     };
   }

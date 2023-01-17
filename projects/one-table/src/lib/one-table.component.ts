@@ -67,10 +67,6 @@ export class OneTableComponent<T extends {}, Q extends BaseListRequest> implemen
   @ContentChild(OneTableExpandedRowContentProjectDirective) expandedRowContent: OneTableExpandedRowContentProjectDirective | undefined;
   private columnPipe: ColumnPipe<T> = new ColumnPipe();
 
-  log(event: any) {
-    console.log(event);
-  }
-
   selectedItemIndex$ = new BehaviorSubject<number | null>(null);
   selectedItem$: Observable<T | null> | undefined;
 

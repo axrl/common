@@ -1,12 +1,4 @@
 import { isValue } from '@axrl/common';
-import type { BaseListRequest } from "./all-items-data-source";
-import type { OneTableData } from "../one-table";
-
-export interface ActionEvent<T extends {}, Q extends BaseListRequest = BaseListRequest> {
-  action: string;
-  element: T;
-  inputData: OneTableData<T, Q>;
-}
 
 export class ActionButton<T extends {}> {
   action: string;
