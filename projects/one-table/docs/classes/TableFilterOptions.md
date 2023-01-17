@@ -33,14 +33,14 @@
 
 | Name | Type |
 | :------ | :------ |
-| `options` | [`TableFilterOptionsData`](../README.md#tablefilteroptionsdata)<`string` \| `number` \| `string`[]\> |
+| `options` | [`TableFilterOptionsData`](../README.md#tablefilteroptionsdata)<`string` \| `number` \| `string`[] \| `number`[]\> |
 | `filterUpdate` | [`TableFilterUpdateFn`](../README.md#tablefilterupdatefn)<`Q`\> |
 
 ## Properties
 
 ### options
 
-• **options**: [`TableFilterOptionsData`](../README.md#tablefilteroptionsdata)<`string` \| `number` \| `string`[]\>
+• **options**: [`TableFilterOptionsData`](../README.md#tablefilteroptionsdata)<`string` \| `number` \| `string`[] \| `number`[]\>
 
 ___
 

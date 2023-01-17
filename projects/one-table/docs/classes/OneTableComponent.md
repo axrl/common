@@ -31,7 +31,6 @@
 
 ### Methods
 
-- [log](OneTableComponent.md#log)
 - [cleanSelected](OneTableComponent.md#cleanselected)
 - [getColumnName](OneTableComponent.md#getcolumnname)
 - [getTranslatedColumnName](OneTableComponent.md#gettranslatedcolumnname)
@@ -77,7 +76,7 @@
 
 | Name | Type |
 | :------ | :------ |
-| `tableIconsDataFn` | [`TableIconsDataFn`](../interfaces/TableIconsDataFn.md) |
+| `tableIconsDataFn` | `TableIconsDataFn` |
 | `oneTableService` | [`OneTableService`](OneTableService.md)<[`BasePersonSettings`](../interfaces/BasePersonSettings.md)\> |
 | `excelService` | [`ExcelService`](ExcelService.md) |
 | `clipboard` | `Clipboard_2` |
@@ -171,22 +170,6 @@ ___
  - массив ColumnsType<T> - массив со списком колонок, которые нужно экспортировать.
 
 ## Methods
-
-### log
-
-▸ **log**(`event`): `void`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `event` | `any` |
-
-#### Returns
-
-`void`
-
-___
 
 ### cleanSelected
 

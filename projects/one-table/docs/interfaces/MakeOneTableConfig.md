@@ -106,7 +106,7 @@ ___
 
 ### filterOptions
 
-• `Optional` **filterOptions**: [`TableFilterOptionsData`](../README.md#tablefilteroptionsdata)<`string` \| `number` \| `string`[]\>
+• `Optional` **filterOptions**: [`TableFilterOptionsData`](../README.md#tablefilteroptionsdata)<`string` \| `number` \| `string`[] \| `number`[]\>
 
 Конфигурация для полей формы фильтрации данных в таблице.
 

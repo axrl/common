@@ -42,6 +42,7 @@
 
 - [getOption](OneTableData.md#getoption)
 - [isDateControl](OneTableData.md#isdatecontrol)
+- [matInputType](OneTableData.md#matinputtype)
 - [isSelectable](OneTableData.md#isselectable)
 - [resetFilterFormToDefault](OneTableData.md#resetfilterformtodefault)
 - [addFilter](OneTableData.md#addfilter)
@@ -259,17 +260,23 @@ ___
 
 ### getOption
 
-▸ **getOption**(`name`): `undefined` \| [`TableFilterOption`](../interfaces/TableFilterOption.md)<`string` \| `number` \| `string`[]\>
+▸ **getOption**<`K`\>(`name`): `undefined` \| [`TableFilterOptionsData`](../README.md#tablefilteroptionsdata)<`string` \| `number` \| `string`[] \| `number`[]\>[`K`]
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `K` | extends `string` \| `number` |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `name` | `string` \| `number` |
+| `name` | `K` |
 
 #### Returns
 
-`undefined` \| [`TableFilterOption`](../interfaces/TableFilterOption.md)<`string` \| `number` \| `string`[]\>
+`undefined` \| [`TableFilterOptionsData`](../README.md#tablefilteroptionsdata)<`string` \| `number` \| `string`[] \| `number`[]\>[`K`]
 
 ___
 
@@ -286,6 +293,22 @@ ___
 #### Returns
 
 `boolean`
+
+___
+
+### matInputType
+
+▸ **matInputType**(`controlName`): ``"date"`` \| ``"text"``
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `controlName` | `string` |
+
+#### Returns
+
+``"date"`` \| ``"text"``
 
 ___
 

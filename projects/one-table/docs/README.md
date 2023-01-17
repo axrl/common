@@ -9,20 +9,19 @@
 - [ActionButton](classes/ActionButton.md)
 - [BaseListRequest](classes/BaseListRequest.md)
 - [AllItemsOneTableDataSource](classes/AllItemsOneTableDataSource.md)
-- [OneTableComponent](classes/OneTableComponent.md)
 - [TableFilterOptions](classes/TableFilterOptions.md)
 - [OneTableData](classes/OneTableData.md)
+- [OneTableComponent](classes/OneTableComponent.md)
 - [ColumnPipe](classes/ColumnPipe.md)
 - [ExcelService](classes/ExcelService.md)
 - [OneTableService](classes/OneTableService.md)
 
 ### Interfaces
 
-- [ActionEvent](interfaces/ActionEvent.md)
 - [CountAndRows](interfaces/CountAndRows.md)
 - [BasePersonSettings](interfaces/BasePersonSettings.md)
 - [ColumnConfig](interfaces/ColumnConfig.md)
-- [TableIconsDataFn](interfaces/TableIconsDataFn.md)
+- [ActionEvent](interfaces/ActionEvent.md)
 - [TableFilterOption](interfaces/TableFilterOption.md)
 - [MakeOneTableConfig](interfaces/MakeOneTableConfig.md)
 - [IconColumnData](interfaces/IconColumnData.md)
@@ -30,7 +29,6 @@
 ### Variables
 
 - [PERSON\_SETTINGS\_START\_VALUE](README.md#person_settings_start_value)
-- [TABLE\_ICON\_DATA\_FN](README.md#table_icon_data_fn)
 
 ### Type Aliases
 
@@ -54,12 +52,6 @@ InjectionToken со стартовым значением для потока с
 
 Если в приложении определена собственная логика хранения пользовательских настроек и стартовое значение 
 будет передаваться в сервис извне - рекомендуется определить токен, используя в качестве стартового значения - null.
-
-___
-
-### TABLE\_ICON\_DATA\_FN
-
-• `Const` **TABLE\_ICON\_DATA\_FN**: `InjectionToken`<[`TableIconsDataFn`](interfaces/TableIconsDataFn.md)\>
 
 ## Type Aliases
 
