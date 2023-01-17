@@ -17,20 +17,45 @@ export interface ActionEvent<T extends {}, Q extends BaseListRequest = BaseListR
   inputData: OneTableData<T, Q>;
 }
 
-export interface TableFilterOption<T> {
+export interface TableFilterBaseParams<T> {
   translateName: string;
-  canShow?: (values: any) => boolean;
-  hidden?: boolean;
-  translateKey?: (item: T) => string;
-  dateControl?: boolean;
-  arrayParam?: boolean;
+
+  /** Признак обязательности. Для таких фильтров будет недоступна кнопка "убрать фильтр" */
   required?: boolean;
-  values?: T[];
+
+  /** Используется, чтобы фильтр не отображался в форме (в т.ч. в списке доступных фильтров) */
+  hidden?: boolean;
+  canShow?: (values: any) => boolean;
+
+  /**
+   * Функция, которая будет применяться для перевода:
+   *  - значений, доступных в массиве values (для фильтра с выбором значения из списка)
+   *  - названий полей, соответствующих началу и концу нужного периода времени (для фильтра по дате)
+   */
+  translateKey?: (item: T) => string;
 }
 
-export type TableFilterOptionsData<T> = {
-  [key: string]: TableFilterOption<T>;
+export interface TableFilterDateControlParams<T> extends TableFilterBaseParams<T> {
+  /** 
+ * Признак, что фильтр используется для поля, содержащего дату.
+ * Для такого фильтра будет создано два контрола - с префиксами From и To для выбора начальной и конечной даты периода фильтрации
+ */
+  dateControl: boolean;
+}
+
+export interface TableFilterSelectControlParams<T> extends TableFilterBaseParams<T> {
+  /** Список значений, доступных для выбора */
+  values: T[];
+
+  /**
+   * Признак, что в качестве значений в values используются сериализованные в строку массивы (с разделителем ',' - запятой).
+   */
+  arrayParam?: boolean;
 };
+
+export type TableFilterOption<T> = TableFilterBaseParams<T> | TableFilterDateControlParams<T> | TableFilterSelectControlParams<T>;
+
+export type TableFilterOptionsData<T> = Record<string, TableFilterOption<T>>;
 
 export type TableFilterUpdateFn<Q extends BaseListRequest> = (req: Q, values: any) => void;
 
@@ -41,7 +66,7 @@ export class TableFilterOptions<Q extends BaseListRequest> {
   ) { };
 };
 
-export type FilterFormValueType = Record<string, string | number | undefined | null>;
+export type FilterFormValueType<Q extends BaseListRequest> = Record<keyof TableFilterOptions<Q>['options'] & string, string | number | undefined | null>;
 
 export interface MakeOneTableConfig<T extends {}, Q extends BaseListRequest = BaseListRequest> {
   /**
@@ -84,7 +109,7 @@ export interface MakeOneTableConfig<T extends {}, Q extends BaseListRequest = Ba
 
   /**
    * Функция, которая будет вызываться при каждой отправке данных формы фильтрации. Используется в случаях, если требуется дополнительное преобразование данных
-   * фильтра перед тем, как выполнить запросить очередную порцию данных в sourceFn.
+   * фильтра перед тем, как выполнить запрос очередной порции данных в sourceFn.
    * Первый параметр функции - объект BaseListRequest, который будет в дальнейшем передан в sourceFn.
    * Второй параметр - текущее значение формы с фильтрами.
    */
@@ -130,6 +155,16 @@ export interface MakeOneTableConfig<T extends {}, Q extends BaseListRequest = Ba
   columnsForCopy?: ColumnName<T>[]
 };
 
+export type MakeOneTableConfigWithoutApiPagination<
+  T extends {}
+> = Omit<MakeOneTableConfig<T, BaseListRequest>, 'sourceFn' | 'additionParams'> & {
+
+  /**
+   * Массив данных, которые требуется отобразить в таблице.
+   */
+  data: T[]
+};
+
 /**
  * Alias-тип для объекта конфигурации таблицы, передаваемый в качестве параметра в конструктор класса OneTableData.
  */
@@ -137,9 +172,19 @@ export type OneTableDataConfig<
   T extends {},
   Q extends BaseListRequest = BaseListRequest
 > = Omit<MakeOneTableConfig<T, Q>, 'filterOptions' | 'updateFilterFn'> & {
+
+  /**
+   * Объект, содержащий параметры для формы с фильтрами и метод filterUpdate для дополнительных преобразований значения формы фильтрации перед 
+   */
   filterOptions?: TableFilterOptions<Q>;
+
+  /** Кол-во строк на странице в момент первого отображения страницы */
   paginatorDefaultSize: number;
+
+  /** Observable со списком колонок, которые требуется отобразить в таблице на основании настроек пользователя. */
   showedColumns$: Observable<ColumnsType<T>>;
+
+  /** Данные фильтра "по умолчанию" - исходные данные, а не полученные из настроек пользователя */
   defaultFilter: unknown
 };
 
@@ -151,7 +196,7 @@ export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequ
   dataSourceCount: Observable<number>;
   _trigger: BehaviorSubject<Q>;
   trigger: Observable<Q>;
-  filterForm: FormGroupType<FilterFormValueType> | undefined;
+  filterForm: FormGroupType<FilterFormValueType<Q>> | undefined;
   withExtendedRow: () => boolean;
   id = uuidv4();
   shortColumnsNames?: ColumnsType<T>;
@@ -241,20 +286,21 @@ export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequ
     });
   }
 
-  getOption<K extends keyof TableFilterOptions<Q>['options']>(name: K): TableFilterOptions<Q>['options'][K] | undefined {
+  getOption<K extends keyof FilterFormValueType<Q>>(name: K): TableFilterOptions<Q>['options'][K] | undefined {
     return this.filterOptions?.options[String(name).replace(/From|To/, '')];
   }
 
-  isDateControl(controlName: string): boolean {
-    return isValue(this.getOption(controlName)?.dateControl);
+  private checkDateControlOption<OptionItemType extends string | number | string[] | number[]>(option?: TableFilterOption<OptionItemType>): option is TableFilterDateControlParams<OptionItemType> {
+    return isValue(option) && 'dateControl' in option && isValue(option.dateControl) && option.dateControl
   }
 
-  matInputType(controlName: string): 'date' | 'text' {
-    return this.isDateControl(controlName) ? 'date' : 'text'
+  isSelectable<OptionItemType extends string | number | string[] | number[]>(option?: TableFilterOption<OptionItemType>): option is TableFilterSelectControlParams<OptionItemType> {
+    return isValue(option) && 'values' in option && isValue(option.values);
   }
 
-  isSelectable(controlName: string): boolean {
-    return isValue(this.getOption(controlName)?.values);
+  isDateControl<K extends keyof FilterFormValueType<Q>>(controlName: K) {
+    const option = this.getOption(controlName);
+    return this.checkDateControlOption(option);
   }
 
   private setFilterForm(startValue: Q): void {
@@ -269,13 +315,15 @@ export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequ
         } :
         deepClone(startValue.filter);
 
-      Object.keys(triggerFilter).forEach(
+      objectKeys(triggerFilter).forEach(
         key => {
-          if (this.getOption(key)?.arrayParam) {
+          const option = this.getOption(String(key));
+          if (isValue(option) && 'arrayParam' in option && isValue(option.arrayParam)) {
             triggerFilter[key] = triggerFilter[key].join(',');
-          };
-          if (this.isDateControl(key)) {
-            triggerFilter[key] = formatDate(triggerFilter[key], 'yyyy-MM-dd', 'en');
+          } else {
+            if (this.isDateControl(String(key))) {
+              triggerFilter[key] = formatDate(triggerFilter[key], 'yyyy-MM-dd', 'en');
+            };
           };
         }
       );
@@ -284,7 +332,7 @@ export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequ
         optionKey => options[optionKey].required
       ).map(
         optionKey => [
-          String(optionKey), {
+          optionKey, {
             validators: <ValidatorFn[]>[
               control => isValue(control.value) ? null : {
                 [optionKey]: 'field_is_required'
@@ -294,7 +342,7 @@ export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequ
         ] as const
       );
 
-      this.filterForm = makeForm<FilterFormValueType>(triggerFilter, new Map(optionsValidators));
+      this.filterForm = makeForm<FilterFormValueType<Q>>(triggerFilter, new Map(optionsValidators));
 
     }
 
@@ -307,7 +355,7 @@ export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequ
     this.submit(currentTriggerValue, afterTriggerUpdateCb);
   }
 
-  addFilter(name: keyof FilterFormValueType) {
+  addFilter<K extends keyof FilterFormValueType<Q>>(name: K) {
 
     if (isValue(this.filterOptions) && isValue(this.filterForm)) {
       if (this.isDateControl(name)) {
@@ -323,13 +371,13 @@ export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequ
           )
         );
       } else {
-        this.filterForm.addControl(name, makeForm<FilterFormValueType[keyof FilterFormValueType]>(this._trigger.value.filter[name] || null));
+        this.filterForm.addControl(name, makeForm<FilterFormValueType<Q>[K]>(this._trigger.value.filter[name] || null));
       };
 
     };
   }
 
-  delFilter(name: keyof FilterFormValueType, afterTriggerUpdateCb: (triggerValue: Q) => void) {
+  delFilter<K extends keyof FilterFormValueType<Q>>(name: K, afterTriggerUpdateCb: (triggerValue: Q) => void) {
     if (isValue(this.filterOptions)) {
       const normalizedName = name.replace(/From|To/, '');
       if (this.isDateControl(name)) {
@@ -344,7 +392,7 @@ export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequ
           this.filterForm.removeControl(<never>name);
         }
       };
-      
+
       this.submit(this._trigger.value, afterTriggerUpdateCb);
     };
   }
@@ -353,17 +401,19 @@ export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequ
     if (isValue(this.filterOptions) && isValue(this.filterForm) && this.filterForm.valid) {
       this.filterOptions.filterUpdate(triggerValue, deepClone(this.filterForm.getRawValue()));
       triggerValue.Offset = 0;
-      Object.keys(triggerValue.filter).forEach(
+      objectKeys(triggerValue.filter).forEach(
         key => {
-          if (this.getOption(key)?.arrayParam) {
+          const option = this.getOption(String(key));
+          if (isValue(option) && 'arrayParam' in option && isValue(option.arrayParam)) {
             triggerValue.filter[key] = triggerValue.filter[key].toString().includes(',') ? triggerValue.filter[key].split(',') : [triggerValue.filter[key]];
-          };
-          if (this.isDateControl(key)) {
-            triggerValue.filter[key] = formatDate(
-              triggerValue.filter[key],
-              key.endsWith('From') ? 'yyyy-MM-ddT00:00:00' : 'yyyy-MM-ddT23:59:59',
-              'en'
-            );
+          } else {
+            if (this.isDateControl(String(key))) {
+              triggerValue.filter[key] = formatDate(
+                triggerValue.filter[key],
+                String(key).endsWith('From') ? 'yyyy-MM-ddT00:00:00' : 'yyyy-MM-ddT23:59:59',
+                'en'
+              );
+            };
           };
         });
       this._trigger.next(triggerValue);
@@ -371,12 +421,12 @@ export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequ
     };
   }
 
-  get usedFilters(): string[] {
+  get usedFilters(): Array<keyof FilterFormValueType<Q>> {
     return isValue(this.filterOptions) && isValue(this.filterForm) ?
-      Object.keys(this.filterForm.controls).filter(el => !this.getOption(el)?.hidden) : [];
+      objectKeys(this.filterForm.controls).filter(el => !this.getOption(el)?.hidden) : [];
   }
 
-  get showedUsedFilters(): string[] {
+  get showedUsedFilters(): Array<keyof FilterFormValueType<Q>> {
     return isValue(this.filterOptions) && isValue(this.filterForm) ? this.usedFilters.filter(
       filterName => {
         const canShow = this.getOption(filterName)?.canShow;
@@ -389,7 +439,7 @@ export class OneTableData<T extends {}, Q extends BaseListRequest = BaseListRequ
     translateName: string | undefined
   }> {
     return isValue(this.filterOptions) && isValue(this.filterForm) ?
-      Object.keys(this.filterOptions.options).filter(
+      objectKeys(this.filterOptions.options).filter(
         key => !this.getOption(key)?.hidden && !this.usedFilters.some(used => used.includes(key))
       ).map(
         key => ({ key, translateName: this.filterOptions?.options[key].translateName })

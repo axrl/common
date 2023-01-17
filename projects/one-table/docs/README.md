@@ -22,7 +22,9 @@
 - [BasePersonSettings](interfaces/BasePersonSettings.md)
 - [ColumnConfig](interfaces/ColumnConfig.md)
 - [ActionEvent](interfaces/ActionEvent.md)
-- [TableFilterOption](interfaces/TableFilterOption.md)
+- [TableFilterBaseParams](interfaces/TableFilterBaseParams.md)
+- [TableFilterDateControlParams](interfaces/TableFilterDateControlParams.md)
+- [TableFilterSelectControlParams](interfaces/TableFilterSelectControlParams.md)
 - [MakeOneTableConfig](interfaces/MakeOneTableConfig.md)
 - [TableIconsDataFn](interfaces/TableIconsDataFn.md)
 - [IconColumnData](interfaces/IconColumnData.md)
@@ -38,9 +40,11 @@
 - [ColumnName](README.md#columnname)
 - [ColumnType](README.md#columntype)
 - [ColumnsType](README.md#columnstype)
+- [TableFilterOption](README.md#tablefilteroption)
 - [TableFilterOptionsData](README.md#tablefilteroptionsdata)
 - [TableFilterUpdateFn](README.md#tablefilterupdatefn)
 - [FilterFormValueType](README.md#filterformvaluetype)
+- [MakeOneTableConfigWithoutApiPagination](README.md#makeonetableconfigwithoutapipagination)
 - [OneTableDataConfig](README.md#onetabledataconfig)
 
 ## Variables
@@ -111,9 +115,9 @@ ___
 
 ___
 
-### TableFilterOptionsData
+### TableFilterOption
 
-Ƭ **TableFilterOptionsData**<`T`\>: `Object`
+Ƭ **TableFilterOption**<`T`\>: [`TableFilterBaseParams`](interfaces/TableFilterBaseParams.md)<`T`\> \| [`TableFilterDateControlParams`](interfaces/TableFilterDateControlParams.md)<`T`\> \| [`TableFilterSelectControlParams`](interfaces/TableFilterSelectControlParams.md)<`T`\>
 
 #### Type parameters
 
@@ -121,9 +125,17 @@ ___
 | :------ |
 | `T` |
 
-#### Index signature
+___
 
-▪ [key: `string`]: [`TableFilterOption`](interfaces/TableFilterOption.md)<`T`\>
+### TableFilterOptionsData
+
+Ƭ **TableFilterOptionsData**<`T`\>: `Record`<`string`, [`TableFilterOption`](README.md#tablefilteroption)<`T`\>\>
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
 
 ___
 
@@ -156,7 +168,25 @@ ___
 
 ### FilterFormValueType
 
-Ƭ **FilterFormValueType**: `Record`<`string`, `string` \| `number` \| `undefined` \| ``null``\>
+Ƭ **FilterFormValueType**<`Q`\>: `Record`<keyof [`TableFilterOptions`](classes/TableFilterOptions.md)<`Q`\>[``"options"``] & `string`, `string` \| `number` \| `undefined` \| ``null``\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `Q` | extends [`BaseListRequest`](classes/BaseListRequest.md) |
+
+___
+
+### MakeOneTableConfigWithoutApiPagination
+
+Ƭ **MakeOneTableConfigWithoutApiPagination**<`T`\>: `Omit`<[`MakeOneTableConfig`](interfaces/MakeOneTableConfig.md)<`T`, [`BaseListRequest`](classes/BaseListRequest.md)\>, ``"sourceFn"`` \| ``"additionParams"``\> & { `data`: `T`[]  }
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | extends `Object` |
 
 ___
 

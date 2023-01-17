@@ -41,9 +41,8 @@
 ### Methods
 
 - [getOption](OneTableData.md#getoption)
-- [isDateControl](OneTableData.md#isdatecontrol)
-- [matInputType](OneTableData.md#matinputtype)
 - [isSelectable](OneTableData.md#isselectable)
+- [isDateControl](OneTableData.md#isdatecontrol)
 - [resetFilterFormToDefault](OneTableData.md#resetfilterformtodefault)
 - [addFilter](OneTableData.md#addfilter)
 - [delFilter](OneTableData.md#delfilter)
@@ -101,7 +100,7 @@ ___
 
 ### filterForm
 
-• **filterForm**: `undefined` \| `FormGroupType`<[`FilterFormValueType`](../README.md#filterformvaluetype)\>
+• **filterForm**: `undefined` \| `FormGroupType`<[`FilterFormValueType`](../README.md#filterformvaluetype)<`Q`\>\>
 
 ___
 
@@ -260,13 +259,13 @@ ___
 
 ### getOption
 
-▸ **getOption**<`K`\>(`name`): `undefined` \| [`TableFilterOptionsData`](../README.md#tablefilteroptionsdata)<`string` \| `number` \| `string`[] \| `number`[]\>[`K`]
+▸ **getOption**<`K`\>(`name`): `undefined` \| [`TableFilterOption`](../README.md#tablefilteroption)<`string` \| `number` \| `string`[] \| `number`[]\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `K` | extends `string` \| `number` |
+| `K` | extends `string` |
 
 #### Parameters
 
@@ -276,51 +275,47 @@ ___
 
 #### Returns
 
-`undefined` \| [`TableFilterOptionsData`](../README.md#tablefilteroptionsdata)<`string` \| `number` \| `string`[] \| `number`[]\>[`K`]
-
-___
-
-### isDateControl
-
-▸ **isDateControl**(`controlName`): `boolean`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `controlName` | `string` |
-
-#### Returns
-
-`boolean`
-
-___
-
-### matInputType
-
-▸ **matInputType**(`controlName`): ``"date"`` \| ``"text"``
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `controlName` | `string` |
-
-#### Returns
-
-``"date"`` \| ``"text"``
+`undefined` \| [`TableFilterOption`](../README.md#tablefilteroption)<`string` \| `number` \| `string`[] \| `number`[]\>
 
 ___
 
 ### isSelectable
 
-▸ **isSelectable**(`controlName`): `boolean`
+▸ **isSelectable**<`OptionItemType`\>(`option?`): option is TableFilterSelectControlParams<OptionItemType\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `OptionItemType` | extends `string` \| `number` \| `string`[] \| `number`[] |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `controlName` | `string` |
+| `option?` | [`TableFilterOption`](../README.md#tablefilteroption)<`OptionItemType`\> |
+
+#### Returns
+
+option is TableFilterSelectControlParams<OptionItemType\>
+
+___
+
+### isDateControl
+
+▸ **isDateControl**<`K`\>(`controlName`): `boolean`
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `K` | extends `string` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `controlName` | `K` |
 
 #### Returns
 
@@ -346,13 +341,19 @@ ___
 
 ### addFilter
 
-▸ **addFilter**(`name`): `void`
+▸ **addFilter**<`K`\>(`name`): `void`
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `K` | extends `string` |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `name` | `string` |
+| `name` | `K` |
 
 #### Returns
 
@@ -362,13 +363,19 @@ ___
 
 ### delFilter
 
-▸ **delFilter**(`name`, `afterTriggerUpdateCb`): `void`
+▸ **delFilter**<`K`\>(`name`, `afterTriggerUpdateCb`): `void`
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `K` | extends `string` |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `name` | `string` |
+| `name` | `K` |
 | `afterTriggerUpdateCb` | (`triggerValue`: `Q`) => `void` |
 
 #### Returns

@@ -33,7 +33,7 @@ export class ExcelService {
       right: 0.7,
       top: 0.75
     };
-    ws['!cols'] = Object.keys(keys).map(
+    ws['!cols'] = objectKeys(keys).map(
       (key, index) => {
         const link = String.fromCharCode(65 + index) + '1';
         const wsName: string = ws[link].v;

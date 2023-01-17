@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { distinctUntilKeyChanged, map } from 'rxjs';
 import type { Observable } from 'rxjs';
-import { BasePersonSettings, OneTableData, TableFilterOptions } from '../models';
-import type { MakeOneTableConfig, BaseListRequest, ColumnsType } from '../models';
+import { AllItemsOneTableDataSource, BasePersonSettings, OneTableData, TableFilterOptions } from '../models';
+import type { MakeOneTableConfig, MakeOneTableConfigWithoutApiPagination, BaseListRequest, ColumnsType } from '../models';
 import { isValue, LanguagePersonSettingsService } from '@axrl/common';
 
 export interface IconColumnData {
@@ -57,6 +57,9 @@ export class OneTableService<Settings extends BasePersonSettings = BasePersonSet
     };
   }
 
+  /**
+   * Создание OneTableData для данных, получаемых запросами API, поддерживающими пагинацию на стороне сервера.
+   */
   makeOneTableData<T extends {}, Q extends BaseListRequest = BaseListRequest>(config: MakeOneTableConfig<T, Q>): Observable<OneTableData<T, Q>> {
     const filterOptions = config.filterOptions ? new TableFilterOptions<Q>(config.filterOptions, config.updateFilterFn) : undefined;
     return this.basePersonSettingsFiltered$.pipe(
@@ -84,6 +87,18 @@ export class OneTableService<Settings extends BasePersonSettings = BasePersonSet
         })
       ),
     );
+  }
+
+  /**
+   * Создание OneTableData для данных, получаемых запросами API, не поддерживающими пагинацию на стороне сервера 
+   * т.е. в ситуациях, когда все данные загружаются в 1 запросе.
+   */
+  makeOneTableDataWithouApiPagination<T extends {}>(config: MakeOneTableConfigWithoutApiPagination<T>) {
+    const instance = new AllItemsOneTableDataSource(config.data);
+    return this.makeOneTableData<T, BaseListRequest>({
+      sourceFn: req => instance.getRequestedData(req),
+      ...config
+    });
   }
 
   private getUserColumns<T extends {}>(

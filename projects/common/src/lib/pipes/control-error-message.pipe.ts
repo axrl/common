@@ -1,7 +1,7 @@
 import { Pipe, InjectionToken, Inject } from '@angular/core';
 import type { PipeTransform } from '@angular/core';
 import type { AbstractControl } from '@angular/forms';
-import { isValue } from '../functions';
+import { isValue, objectKeys } from '../functions';
 
 /**
  * InjectionToken с объектом-словарем сообщений об ошибке валидации контролов формы, используемым ControlErrorMessagePipe для форматирования.
@@ -34,11 +34,11 @@ export class ControlErrorMessagePipe implements PipeTransform {
   ) { };
 
   transform(control: AbstractControl): string {
-   
+
     const errors = control.errors;
     let result = '';
     if (isValue(control) && isValue(errors)) {
-      const keys = Object.keys(errors);
+      const keys = objectKeys(errors);
 
       if (keys.length > 0) {
 

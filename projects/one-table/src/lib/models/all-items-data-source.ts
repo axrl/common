@@ -54,7 +54,7 @@ export class AllItemsOneTableDataSource<T extends object, Q extends BaseListRequ
           };
         });
     };
-    const value = !isValue(req.filter) || (typeof req.filter === 'object' && Object.keys(req.filter).length == 0) ? this.data.slice() : this.data.filter(
+    const value = !isValue(req.filter) || (typeof req.filter === 'object' && objectKeys(req.filter).length == 0) ? this.data.slice() : this.data.filter(
       el => {
         if (typeof req.filter !== 'string' || req.filter[0] == '{') {
           const filter: Record<keyof T, any> = req.filter[0] == '{' ? JSON.parse(req.filter) : req.filter;

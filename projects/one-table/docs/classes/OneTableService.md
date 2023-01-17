@@ -19,6 +19,7 @@
 - [updatePersonSettings](OneTableService.md#updatepersonsettings)
 - [updateUiLayoutFn](OneTableService.md#updateuilayoutfn)
 - [makeOneTableData](OneTableService.md#makeonetabledata)
+- [makeOneTableDataWithouApiPagination](OneTableService.md#makeonetabledatawithouapipagination)
 
 ### Properties
 
@@ -126,6 +127,8 @@ ___
 
 ▸ **makeOneTableData**<`T`, `Q`\>(`config`): `Observable`<[`OneTableData`](OneTableData.md)<`T`, `Q`\>\>
 
+Создание OneTableData для данных, получаемых запросами API, поддерживающими пагинацию на стороне сервера.
+
 #### Type parameters
 
 | Name | Type |
@@ -142,6 +145,31 @@ ___
 #### Returns
 
 `Observable`<[`OneTableData`](OneTableData.md)<`T`, `Q`\>\>
+
+___
+
+### makeOneTableDataWithouApiPagination
+
+▸ **makeOneTableDataWithouApiPagination**<`T`\>(`config`): `Observable`<[`OneTableData`](OneTableData.md)<`T`, [`BaseListRequest`](BaseListRequest.md)\>\>
+
+Создание OneTableData для данных, получаемых запросами API, не поддерживающими пагинацию на стороне сервера 
+т.е. в ситуациях, когда все данные загружаются в 1 запросе.
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | extends `Object` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `config` | [`MakeOneTableConfigWithoutApiPagination`](../README.md#makeonetableconfigwithoutapipagination)<`T`\> |
+
+#### Returns
+
+`Observable`<[`OneTableData`](OneTableData.md)<`T`, [`BaseListRequest`](BaseListRequest.md)\>\>
 
 ## Properties
 
