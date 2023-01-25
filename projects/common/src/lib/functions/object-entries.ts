@@ -15,3 +15,25 @@ export function objectEntries<T extends {}>(source: T) {
     throw 'source - не объект и не массив.'
   }
 }
+
+
+type Permutation<T, U = T> =
+  [T] extends [never] ?
+  [] :
+  U extends infer C
+  ?
+  [C, ...Permutation<Exclude<T, C>>] :
+  [];
+
+interface BaseListRequest {
+  Next: number;
+  Offset: number;
+  filter: any;
+  orderBy?: string | undefined;
+  orderDirection?: 'asc' | 'desc' | '' | undefined;
+}
+
+const a: Permutation<{ [K in keyof BaseListRequest]: K }[keyof BaseListRequest]> = []
+
+
+
