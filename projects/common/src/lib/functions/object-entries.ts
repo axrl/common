@@ -17,23 +17,20 @@ export function objectEntries<T extends {}>(source: T) {
 }
 
 
-type Permutation<T, U = T> =
-  [T] extends [never] ?
+type PermutationKeys<T> = [T] extends [never] ?
   [] :
-  U extends infer C
-  ?
-  [C, ...Permutation<Exclude<T, C>>] :
+  [T] extends [infer U, ... T[]] ?
+  U extends undefined ?
+  [...PermutationKeys<Exclude<T, U>>] :
+  Partial<[U, ...PermutationKeys<Exclude<T, U>>]> :
   [];
 
-interface BaseListRequest {
-  Next: number;
-  Offset: number;
-  filter: any;
-  orderBy?: string | undefined;
-  orderDirection?: 'asc' | 'desc' | '' | undefined;
+type Permutation<T extends {}> = PermutationKeys<keyof T>;
+
+interface Test {
+  a: string;
+  b: string;
+  c: string;
 }
 
-const a: Permutation<{ [K in keyof BaseListRequest]: K }[keyof BaseListRequest]> = []
-
-
-
+const t: Permutation<Test> = ['c'];
