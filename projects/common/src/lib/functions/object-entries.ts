@@ -17,15 +17,15 @@ export function objectEntries<T extends {}>(source: T) {
 }
 
 
-type PermutationKeys<T> = [T] extends [never] ?
+type PermutationKeys<T extends string> = [T] extends [never] ?
   [] :
-  [T] extends [infer U, ... T[]] ?
+  [T] extends [infer U, ...T[]] ?
   U extends undefined ?
   [...PermutationKeys<Exclude<T, U>>] :
   Partial<[U, ...PermutationKeys<Exclude<T, U>>]> :
   [];
 
-type Permutation<T extends {}> = PermutationKeys<keyof T>;
+type Permutation<T extends {}> = PermutationKeys<keyof T & string>;
 
 interface Test {
   a: string;
@@ -34,3 +34,9 @@ interface Test {
 }
 
 const t: Permutation<Test> = ['c'];
+
+type FilterOut<T extends unknown[], P> =
+  T extends [infer A, ...infer Rest]
+  ? [...([A] extends [P] ? [] : [A]), ...FilterOut<Rest, P>]
+  : [];
+
