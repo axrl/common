@@ -2,6 +2,10 @@
 
 ## Table of contents
 
+### Constructors
+
+- [constructor](BaseListRequest.md#constructor)
+
 ### Properties
 
 - [Next](BaseListRequest.md#next)
@@ -10,9 +14,21 @@
 - [orderBy](BaseListRequest.md#orderby)
 - [orderDirection](BaseListRequest.md#orderdirection)
 
-### Constructors
+## Constructors
 
-- [constructor](BaseListRequest.md#constructor)
+### constructor
+
+• **new BaseListRequest**(`Next`, `Offset`, `filter?`, `orderBy?`, `orderDirection?`)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `Next` | `number` |
+| `Offset` | `number` |
+| `filter?` | `any` |
+| `orderBy?` | `string` |
+| `orderDirection?` | ``""`` \| ``"asc"`` \| ``"desc"`` |
 
 ## Properties
 
@@ -43,19 +59,3 @@ ___
 ### orderDirection
 
 • `Optional` **orderDirection**: ``""`` \| ``"asc"`` \| ``"desc"``
-
-## Constructors
-
-### constructor
-
-• **new BaseListRequest**(`Next`, `Offset`, `filter?`, `orderBy?`, `orderDirection?`)
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `Next` | `number` |
-| `Offset` | `number` |
-| `filter?` | `any` |
-| `orderBy?` | `string` |
-| `orderDirection?` | ``""`` \| ``"asc"`` \| ``"desc"`` |

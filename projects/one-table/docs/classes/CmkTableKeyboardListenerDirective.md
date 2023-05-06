@@ -13,6 +13,10 @@
 
 ## Table of contents
 
+### Constructors
+
+- [constructor](CmkTableKeyboardListenerDirective.md#constructor)
+
 ### Properties
 
 - [dataSourceTrigger](CmkTableKeyboardListenerDirective.md#datasourcetrigger)
@@ -21,10 +25,6 @@
 - [isInnerTable](CmkTableKeyboardListenerDirective.md#isinnertable)
 - [spaceEvent](CmkTableKeyboardListenerDirective.md#spaceevent)
 
-### Constructors
-
-- [constructor](CmkTableKeyboardListenerDirective.md#constructor)
-
 ### Methods
 
 - [eventHandlerMatcher](CmkTableKeyboardListenerDirective.md#eventhandlermatcher)
@@ -32,6 +32,25 @@
 - [onEnterHandler](CmkTableKeyboardListenerDirective.md#onenterhandler)
 - [onArrowHandler](CmkTableKeyboardListenerDirective.md#onarrowhandler)
 - [ngOnDestroy](CmkTableKeyboardListenerDirective.md#ngondestroy)
+
+## Constructors
+
+### constructor
+
+• **new CmkTableKeyboardListenerDirective**<`T`, `Q`\>(`elementRef`)
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | extends `Object` |
+| `Q` | extends [`BaseListRequest`](BaseListRequest.md)<`Q`\> |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `elementRef` | `ElementRef`<`any`\> |
 
 ## Properties
 
@@ -62,25 +81,6 @@ ___
 ### spaceEvent
 
 • **spaceEvent**: `EventEmitter`<`T`\>
-
-## Constructors
-
-### constructor
-
-• **new CmkTableKeyboardListenerDirective**<`T`, `Q`\>(`elementRef`)
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `T` | extends `Object` |
-| `Q` | extends [`BaseListRequest`](BaseListRequest.md)<`Q`\> |
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `elementRef` | `ElementRef`<`any`\> |
 
 ## Methods
 

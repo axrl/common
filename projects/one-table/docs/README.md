@@ -29,11 +29,6 @@
 - [TableIconsDataFn](interfaces/TableIconsDataFn.md)
 - [IconColumnData](interfaces/IconColumnData.md)
 
-### Variables
-
-- [PERSON\_SETTINGS\_START\_VALUE](README.md#person_settings_start_value)
-- [TABLE\_ICON\_DATA\_FN](README.md#table_icon_data_fn)
-
 ### Type Aliases
 
 - [PropertyesKeys](README.md#propertyeskeys)
@@ -47,23 +42,10 @@
 - [MakeOneTableConfigWithoutApiPagination](README.md#makeonetableconfigwithoutapipagination)
 - [OneTableDataConfig](README.md#onetabledataconfig)
 
-## Variables
+### Variables
 
-### PERSON\_SETTINGS\_START\_VALUE
-
-• `Const` **PERSON\_SETTINGS\_START\_VALUE**: `InjectionToken`<``null`` \| [`BasePersonSettings`](interfaces/BasePersonSettings.md)\>
-
-InjectionToken со стартовым значением для потока с настройками пользователя.
-По умолчанию - использются данные, хранящиеся в localStorage, при их отсутствии - значение по умолчанию.
-
-Если в приложении определена собственная логика хранения пользовательских настроек и стартовое значение 
-будет передаваться в сервис извне - рекомендуется определить токен, используя в качестве стартового значения - null.
-
-___
-
-### TABLE\_ICON\_DATA\_FN
-
-• `Const` **TABLE\_ICON\_DATA\_FN**: `InjectionToken`<[`TableIconsDataFn`](interfaces/TableIconsDataFn.md)\>
+- [PERSON\_SETTINGS\_START\_VALUE](README.md#person_settings_start_value)
+- [TABLE\_ICON\_DATA\_FN](README.md#table_icon_data_fn)
 
 ## Type Aliases
 
@@ -202,3 +184,21 @@ Alias-тип для объекта конфигурации таблицы, пе
 | :------ | :------ |
 | `T` | extends `Object` |
 | `Q` | extends [`BaseListRequest`](classes/BaseListRequest.md) = [`BaseListRequest`](classes/BaseListRequest.md) |
+
+## Variables
+
+### PERSON\_SETTINGS\_START\_VALUE
+
+• `Const` **PERSON\_SETTINGS\_START\_VALUE**: `InjectionToken`<``null`` \| [`BasePersonSettings`](interfaces/BasePersonSettings.md)\>
+
+InjectionToken со стартовым значением для потока с настройками пользователя.
+По умолчанию - использются данные, хранящиеся в localStorage, при их отсутствии - значение по умолчанию.
+
+Если в приложении определена собственная логика хранения пользовательских настроек и стартовое значение 
+будет передаваться в сервис извне - рекомендуется определить токен, используя в качестве стартового значения - null.
+
+___
+
+### TABLE\_ICON\_DATA\_FN
+
+• `Const` **TABLE\_ICON\_DATA\_FN**: `InjectionToken`<[`TableIconsDataFn`](interfaces/TableIconsDataFn.md)\>

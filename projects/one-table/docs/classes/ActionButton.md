@@ -8,6 +8,10 @@
 
 ## Table of contents
 
+### Constructors
+
+- [constructor](ActionButton.md#constructor)
+
 ### Properties
 
 - [action](ActionButton.md#action)
@@ -15,9 +19,27 @@
 - [routerLink](ActionButton.md#routerlink)
 - [iconName](ActionButton.md#iconname)
 
-### Constructors
+## Constructors
 
-- [constructor](ActionButton.md#constructor)
+### constructor
+
+• **new ActionButton**<`T`\>(`options`)
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | extends `Object` |
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `options` | `Object` | - |
+| `options.action` | `string` | название действия |
+| `options.canShow?` | (`row`: `T`) => `boolean` | условие, при выполнении которого будет отображаться кнопка. По умолчанию = () => true |
+| `options.routerLink?` | (`row?`: `T`) => `any`[] | (необязательный) url, по которому необходимо перейти при клике на кнопку |
+| `options.iconName?` | ``null`` \| `string` | (необязательный) название иконки <mat-icon>, используемое для кнопки |
 
 ## Properties
 
@@ -70,25 +92,3 @@ ___
 ### iconName
 
 • **iconName**: ``null`` \| `string`
-
-## Constructors
-
-### constructor
-
-• **new ActionButton**<`T`\>(`options`)
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `T` | extends `Object` |
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `options` | `Object` | - |
-| `options.action` | `string` | название действия |
-| `options.canShow?` | (`row`: `T`) => `boolean` | условие, при выполнении которого будет отображаться кнопка. По умолчанию = () => true |
-| `options.routerLink?` | (`row?`: `T`) => `any`[] | (необязательный) url, по которому необходимо перейти при клике на кнопку |
-| `options.iconName?` | ``null`` \| `string` | (необязательный) название иконки <mat-icon>, используемое для кнопки |

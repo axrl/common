@@ -9,6 +9,10 @@
 
 ## Table of contents
 
+### Constructors
+
+- [constructor](OneTableData.md#constructor)
+
 ### Properties
 
 - [showedColumns$](OneTableData.md#showedcolumns$)
@@ -34,9 +38,11 @@
 - [columnsForXlsxExport](OneTableData.md#columnsforxlsxexport)
 - [columnsForCopy](OneTableData.md#columnsforcopy)
 
-### Constructors
+### Accessors
 
-- [constructor](OneTableData.md#constructor)
+- [usedFilters](OneTableData.md#usedfilters)
+- [showedUsedFilters](OneTableData.md#showedusedfilters)
+- [availableFilters](OneTableData.md#availablefilters)
 
 ### Methods
 
@@ -48,11 +54,24 @@
 - [delFilter](OneTableData.md#delfilter)
 - [submit](OneTableData.md#submit)
 
-### Accessors
+## Constructors
 
-- [usedFilters](OneTableData.md#usedfilters)
-- [showedUsedFilters](OneTableData.md#showedusedfilters)
-- [availableFilters](OneTableData.md#availablefilters)
+### constructor
+
+• **new OneTableData**<`T`, `Q`\>(`config`)
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | extends `Object` |
+| `Q` | extends [`BaseListRequest`](BaseListRequest.md)<`Q`\> = [`BaseListRequest`](BaseListRequest.md) |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `config` | [`OneTableDataConfig`](../README.md#onetabledataconfig)<`T`, `Q`\> |
 
 ## Properties
 
@@ -236,24 +255,35 @@ ___
 
 • **columnsForCopy**: [`ColumnName`](../README.md#columnname)<`T`\>[]
 
-## Constructors
+## Accessors
 
-### constructor
+### usedFilters
 
-• **new OneTableData**<`T`, `Q`\>(`config`)
+• `get` **usedFilters**(): `string`[]
 
-#### Type parameters
+#### Returns
 
-| Name | Type |
-| :------ | :------ |
-| `T` | extends `Object` |
-| `Q` | extends [`BaseListRequest`](BaseListRequest.md)<`Q`\> = [`BaseListRequest`](BaseListRequest.md) |
+`string`[]
 
-#### Parameters
+___
 
-| Name | Type |
-| :------ | :------ |
-| `config` | [`OneTableDataConfig`](../README.md#onetabledataconfig)<`T`, `Q`\> |
+### showedUsedFilters
+
+• `get` **showedUsedFilters**(): `string`[]
+
+#### Returns
+
+`string`[]
+
+___
+
+### availableFilters
+
+• `get` **availableFilters**(): { `key`: `string` ; `translateName`: `undefined` \| `string`  }[]
+
+#### Returns
+
+{ `key`: `string` ; `translateName`: `undefined` \| `string`  }[]
 
 ## Methods
 
@@ -398,33 +428,3 @@ ___
 #### Returns
 
 `void`
-
-## Accessors
-
-### usedFilters
-
-• `get` **usedFilters**(): `string`[]
-
-#### Returns
-
-`string`[]
-
-___
-
-### showedUsedFilters
-
-• `get` **showedUsedFilters**(): `string`[]
-
-#### Returns
-
-`string`[]
-
-___
-
-### availableFilters
-
-• `get` **availableFilters**(): { `key`: `string` ; `translateName`: `undefined` \| `string`  }[]
-
-#### Returns
-
-{ `key`: `string` ; `translateName`: `undefined` \| `string`  }[]

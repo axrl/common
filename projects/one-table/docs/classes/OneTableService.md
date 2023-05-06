@@ -12,6 +12,12 @@
 
 - [constructor](OneTableService.md#constructor)
 
+### Properties
+
+- [basePersonSettings$](OneTableService.md#basepersonsettings$)
+- [basePersonSettingsFiltered$](OneTableService.md#basepersonsettingsfiltered$)
+- [settingsChanges](OneTableService.md#settingschanges)
+
 ### Methods
 
 - [getFromMemory](OneTableService.md#getfrommemory)
@@ -20,12 +26,6 @@
 - [updateUiLayoutFn](OneTableService.md#updateuilayoutfn)
 - [makeOneTableData](OneTableService.md#makeonetabledata)
 - [makeOneTableDataWithouApiPagination](OneTableService.md#makeonetabledatawithouapipagination)
-
-### Properties
-
-- [basePersonSettings$](OneTableService.md#basepersonsettings$)
-- [basePersonSettingsFiltered$](OneTableService.md#basepersonsettingsfiltered$)
-- [settingsChanges](OneTableService.md#settingschanges)
 
 ## Constructors
 
@@ -44,6 +44,26 @@
 | Name | Type |
 | :------ | :------ |
 | `languagePersonSettingsService` | `LanguagePersonSettingsService`<`Settings`\> |
+
+## Properties
+
+### basePersonSettings$
+
+• **basePersonSettings$**: `Observable`<``null`` \| `Settings`\>
+
+___
+
+### basePersonSettingsFiltered$
+
+• **basePersonSettingsFiltered$**: `Observable`<`Settings`\>
+
+___
+
+### settingsChanges
+
+• **settingsChanges**: `Observable`<`Settings`\>
+
+Поток с данными об обновлениях в настроках.
 
 ## Methods
 
@@ -170,23 +190,3 @@ ___
 #### Returns
 
 `Observable`<[`OneTableData`](OneTableData.md)<`T`, [`BaseListRequest`](BaseListRequest.md)\>\>
-
-## Properties
-
-### basePersonSettings$
-
-• **basePersonSettings$**: `Observable`<``null`` \| `Settings`\>
-
-___
-
-### basePersonSettingsFiltered$
-
-• **basePersonSettingsFiltered$**: `Observable`<`Settings`\>
-
-___
-
-### settingsChanges
-
-• **settingsChanges**: `Observable`<`Settings`\>
-
-Поток с данными об обновлениях в настроках.
