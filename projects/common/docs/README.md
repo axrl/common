@@ -2,6 +2,26 @@
 
 ## Table of contents
 
+### Classes
+
+- [ControlErrorMessagePipe](classes/ControlErrorMessagePipe.md)
+- [RuDateMediumPipe](classes/RuDateMediumPipe.md)
+- [TranslatePipe](classes/TranslatePipe.md)
+- [DialogService](classes/DialogService.md)
+- [LanguagePersonSettingsService](classes/LanguagePersonSettingsService.md)
+- [SnackService](classes/SnackService.md)
+- [TranslationsService](classes/TranslationsService.md)
+- [FileLoaderAndReaderService](classes/FileLoaderAndReaderService.md)
+- [ApiService](classes/ApiService.md)
+- [HttpBusService](classes/HttpBusService.md)
+
+### Interfaces
+
+- [SnackServiceConfig](interfaces/SnackServiceConfig.md)
+- [LanguagePersonSettings](interfaces/LanguagePersonSettings.md)
+- [HttpBusBaseEventData](interfaces/HttpBusBaseEventData.md)
+- [SendEventToBusFnParams](interfaces/SendEventToBusFnParams.md)
+
 ### Type Aliases
 
 - [TransformIncomingDataFn](README.md#transformincomingdatafn)
@@ -21,13 +41,6 @@
 - [CONTROL\_ERROR\_MESSAGES\_PIPE\_DICTIONARY](README.md#control_error_messages_pipe_dictionary)
 - [LANGUAGE\_PERSON\_SETTINGS\_START\_VALUE](README.md#language_person_settings_start_value)
 
-### Interfaces
-
-- [SnackServiceConfig](interfaces/SnackServiceConfig.md)
-- [LanguagePersonSettings](interfaces/LanguagePersonSettings.md)
-- [HttpBusBaseEventData](interfaces/HttpBusBaseEventData.md)
-- [SendEventToBusFnParams](interfaces/SendEventToBusFnParams.md)
-
 ### Functions
 
 - [createObservable](README.md#createobservable)
@@ -37,23 +50,12 @@
 - [getFilteredData](README.md#getfiltereddata)
 - [isEqualItems](README.md#isequalitems)
 - [isValue](README.md#isvalue)
+- [objectEntries](README.md#objectentries)
 - [objectKeys](README.md#objectkeys)
 - [trackByFn](README.md#trackbyfn)
+- [returnFileSize](README.md#returnfilesize)
 - [blobDownloader](README.md#blobdownloader)
 - [makeHttpParams](README.md#makehttpparams)
-
-### Classes
-
-- [ControlErrorMessagePipe](classes/ControlErrorMessagePipe.md)
-- [RuDateMediumPipe](classes/RuDateMediumPipe.md)
-- [TranslatePipe](classes/TranslatePipe.md)
-- [DialogService](classes/DialogService.md)
-- [LanguagePersonSettingsService](classes/LanguagePersonSettingsService.md)
-- [SnackService](classes/SnackService.md)
-- [TranslationsService](classes/TranslationsService.md)
-- [FileLoaderAndReaderService](classes/FileLoaderAndReaderService.md)
-- [ApiService](classes/ApiService.md)
-- [HttpBusService](classes/HttpBusService.md)
 
 ## Type Aliases
 
@@ -99,10 +101,10 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `includeDotJsonToPath?` | `boolean` | Требуется ли добавлять '.json' в конце пути url, по которому сервис будет запрашивать данные для переводов. Если для получения переводов используется endpoint некоего сервиса rest-api - установите значение false. Если для получения переводов используется набор статичных файлов JSON, расположенных по некоему URL - установите true. По умолчанию - true. **`Default`** true |
-| `translationsFolderUrl` | `string` | Первая часть пути url, на который сервис будет делать запрос для получения словаря переводов. Итоговый url, на который будет обращаться сервис за конкретным переводом получается по формуле : translationsFolderUrl + одно из значений в списке языков languages + '.json' (только если для includeDotJsonToPath установлено значение true) **`Default`** 'assets/translations' |
-| `defaultLanguage?` | `string` | Язык, который будет использоватьcя сервисом в качестве языка по умолчанию - к примеру, при старте приложения. **`Default`** 'ru' |
-| `languages` | `string`[] | Список языков, для которых доступны данные для перевода. **`Default`** ['ru'] |
+| `includeDotJsonToPath?` | `boolean` | Требуется ли добавлять '.json' в конце пути url, по которому сервис будет запрашивать данные для переводов. Если для получения переводов используется endpoint некоего сервиса rest-api - установите значение false. Если для получения переводов используется набор статичных файлов JSON, расположенных по некоему URL - установите true. По умолчанию - true. **`Default`** ```ts true ``` |
+| `translationsFolderUrl` | `string` | Первая часть пути url, на который сервис будет делать запрос для получения словаря переводов. Итоговый url, на который будет обращаться сервис за конкретным переводом получается по формуле : translationsFolderUrl + одно из значений в списке языков languages + '.json' (только если для includeDotJsonToPath установлено значение true) **`Default`** ```ts 'assets/translations' ``` |
+| `defaultLanguage?` | `string` | Язык, который будет использоватьcя сервисом в качестве языка по умолчанию - к примеру, при старте приложения. **`Default`** ```ts 'ru' ``` |
+| `languages` | `string`[] | Список языков, для которых доступны данные для перевода. **`Default`** ```ts ['ru'] ``` |
 
 ___
 
@@ -229,6 +231,15 @@ ___
 InjectionToken с объектом конфигурации TranslationConfig.
 
 **`Default`**
+
+```ts
+{
+ *  includeDotJsonToPath: true,
+ *  translationsFolderUrl: 'assets/translations',
+ *  defaultLanguage: 'ru',
+ *  languages: ['ru']
+ * }
+```
 
 ___
 
@@ -468,6 +479,32 @@ value is NonNullable<T\>
 
 ___
 
+### objectEntries
+
+▸ **objectEntries**<`T`\>(`source`): { [K in string \| number \| symbol]: [K, T[K]] }[keyof `T`][]
+
+Типизированная версия стандартного метода Object.entries
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | extends `Object` |
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `source` | `T` | любой объект |
+
+#### Returns
+
+{ [K in string \| number \| symbol]: [K, T[K]] }[keyof `T`][]
+
+массив пар ключ-значение в source
+
+___
+
 ### objectKeys
 
 ▸ **objectKeys**<`T`\>(`source`): keyof `T`[]
@@ -510,6 +547,24 @@ ___
 | :------ | :------ |
 | `index` | `number` |
 | `item` | `T` |
+
+#### Returns
+
+`number`
+
+___
+
+### returnFileSize
+
+▸ **returnFileSize**(`size`): `number`
+
+Форматирует размер файла из байтов в мегабайты
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `size` | `number` |
 
 #### Returns
 

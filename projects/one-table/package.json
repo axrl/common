@@ -13,22 +13,23 @@
   "version": "1.0.23",
   "license": "MIT",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   },
   "peerDependencies": {
-    "@angular/common": "^15.1.0",
-    "@angular/core": "^15.1.0",
-    "@angular/router": "^15.1.0",
-    "@angular/animations": "^15.1.0",
-    "@angular/cdk": "^15.1.0",
-    "@angular/material": "^15.1.0",
-    "@axrl/common": "^1.0.26",
-    "@axrl/ngx-extended-form-builder": "^1.2.9",
+    "@angular/common": ">=15.0.0",
+    "@angular/core": ">=15.0.0",
+    "@angular/router": ">=15.0.0",
+    "@angular/animations": ">=15.0.0",
+    "@angular/cdk": ">=15.0.0",
+    "@angular/material": ">=15.0.0",
+    "@axrl/common": "^1.0.27",
+    "@axrl/ngx-extended-form-builder": "^1.2.10",
     "uuid": "^9.0.0",
     "xlsx": "^0.18.5",
     "rxjs": "^7.8.0"
   },
   "dependencies": {
-    "tslib": "^2.4.1"
+    "tslib": "^2.5.0"
   }
 }

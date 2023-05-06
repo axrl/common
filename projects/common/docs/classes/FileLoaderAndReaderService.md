@@ -6,6 +6,10 @@
 
 - [constructor](FileLoaderAndReaderService.md#constructor)
 
+### Properties
+
+- [returnFileSize](FileLoaderAndReaderService.md#returnfilesize)
+
 ### Methods
 
 - [onlyLoadFile](FileLoaderAndReaderService.md#onlyloadfile)
@@ -17,6 +21,28 @@
 ### constructor
 
 • **new FileLoaderAndReaderService**()
+
+## Properties
+
+### returnFileSize
+
+• **returnFileSize**: (`size`: `number`) => `number` = `returnFileSize`
+
+#### Type declaration
+
+▸ (`size`): `number`
+
+Форматирует размер файла из байтов в мегабайты
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `size` | `number` |
+
+##### Returns
+
+`number`
 
 ## Methods
 

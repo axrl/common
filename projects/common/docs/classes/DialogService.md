@@ -2,13 +2,13 @@
 
 ## Table of contents
 
-### Properties
-
-- [dialog](DialogService.md#dialog)
-
 ### Constructors
 
 - [constructor](DialogService.md#constructor)
+
+### Properties
+
+- [dialog](DialogService.md#dialog)
 
 ### Methods
 
@@ -17,17 +17,17 @@
 - [openWindow](DialogService.md#openwindow)
 - [openWindowAndWaitPromise](DialogService.md#openwindowandwaitpromise)
 
-## Properties
-
-### dialog
-
-• `Private` **dialog**: ``null`` \| `MatDialog`
-
 ## Constructors
 
 ### constructor
 
 • **new DialogService**()
+
+## Properties
+
+### dialog
+
+• `Private` **dialog**: ``null`` \| `MatDialog`
 
 ## Methods
 

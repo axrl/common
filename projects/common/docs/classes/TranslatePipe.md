@@ -6,19 +6,32 @@
 
 ## Table of contents
 
+### Constructors
+
+- [constructor](TranslatePipe.md#constructor)
+
 ### Properties
 
 - [asyncPipe](TranslatePipe.md#asyncpipe)
 - [\_ref](TranslatePipe.md#_ref)
 - [translationService](TranslatePipe.md#translationservice)
 
-### Constructors
-
-- [constructor](TranslatePipe.md#constructor)
-
 ### Methods
 
 - [transform](TranslatePipe.md#transform)
+
+## Constructors
+
+### constructor
+
+• **new TranslatePipe**(`translationService`, `ref`)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `translationService` | [`TranslationsService`](TranslationsService.md) |
+| `ref` | `ChangeDetectorRef` |
 
 ## Properties
 
@@ -37,19 +50,6 @@ ___
 ### translationService
 
 • `Private` **translationService**: [`TranslationsService`](TranslationsService.md)
-
-## Constructors
-
-### constructor
-
-• **new TranslatePipe**(`translationService`, `ref`)
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `translationService` | [`TranslationsService`](TranslationsService.md) |
-| `ref` | `ChangeDetectorRef` |
 
 ## Methods
 
