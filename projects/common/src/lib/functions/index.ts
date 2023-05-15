@@ -8,3 +8,4 @@ export { delayedObservable } from './delayed-observable';
 export { objectKeys } from './object-keys';
 export { objectEntries } from './object-entries';
 export { deepClone } from './deep-clone';
+export * from './make-nullable';
