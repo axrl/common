@@ -61,7 +61,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `value?` | `string` |
+| `value?` | ``null`` \| `string` |
 
 #### Returns
 

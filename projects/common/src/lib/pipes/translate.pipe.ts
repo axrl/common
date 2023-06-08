@@ -1,17 +1,18 @@
 import { ChangeDetectorRef, Pipe } from '@angular/core';
 import type { PipeTransform } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
 import { map } from 'rxjs';
 import { TranslationsService } from '../services';
-import { AsyncPipe } from '@angular/common';
+import { isValue } from '../functions';
 
 @Pipe({
   name: 'translate',
   pure: false,
-  standalone: true
+  standalone: true,
 })
 export class TranslatePipe implements PipeTransform {
-  private asyncPipe: AsyncPipe
-  private _ref: ChangeDetectorRef | null
+  private asyncPipe: AsyncPipe;
+  private _ref: ChangeDetectorRef | null;
 
   constructor(
     private translationService: TranslationsService,
@@ -21,15 +22,15 @@ export class TranslatePipe implements PipeTransform {
     this.asyncPipe = new AsyncPipe(this._ref);
   }
 
-  transform(value?: string) {
-
-    return this.asyncPipe.transform(
-      this.translationService.translations$.pipe(
-        map(
-          translations => this.translationService.translate(translations, value)
-        )
-      )
-    )
+  transform(value?: string | null) {
+    return !isValue(value)
+      ? null
+      : this.asyncPipe.transform(
+          this.translationService.translations$.pipe(
+            map((translations) =>
+              this.translationService.translate(translations, value)
+            )
+          )
+        );
   }
-
 }

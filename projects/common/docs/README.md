@@ -26,6 +26,7 @@
 
 - [TransformIncomingDataFn](README.md#transformincomingdatafn)
 - [TranslationConfig](README.md#translationconfig)
+- [MakeNullable](README.md#makenullable)
 - [HttpBusEventData](README.md#httpbuseventdata)
 - [AdditionalActionCallbackFn](README.md#additionalactioncallbackfn)
 - [ParamsAndHeaders](README.md#paramsandheaders)
@@ -105,6 +106,20 @@ ___
 | `translationsFolderUrl` | `string` | Первая часть пути url, на который сервис будет делать запрос для получения словаря переводов. Итоговый url, на который будет обращаться сервис за конкретным переводом получается по формуле : translationsFolderUrl + одно из значений в списке языков languages + '.json' (только если для includeDotJsonToPath установлено значение true) **`Default`** ```ts 'assets/translations' ``` |
 | `defaultLanguage?` | `string` | Язык, который будет использоватьcя сервисом в качестве языка по умолчанию - к примеру, при старте приложения. **`Default`** ```ts 'ru' ``` |
 | `languages` | `string`[] | Список языков, для которых доступны данные для перевода. **`Default`** ```ts ['ru'] ``` |
+
+___
+
+### MakeNullable
+
+Ƭ **MakeNullable**<`T`\>: { [K in keyof T]: T[K] extends string \| number \| boolean \| bigint \| null \| undefined ? T[K] \| null : MakeNullable<T[K]\> }
+
+Хелпер-утилита типа - для всех полей типа разрешает установить в качестве значения null
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
 
 ___
 
