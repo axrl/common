@@ -9,3 +9,4 @@ export { objectKeys } from './object-keys';
 export { objectEntries } from './object-entries';
 export { deepClone } from './deep-clone';
 export * from './make-nullable';
+export * from './resize-observable';

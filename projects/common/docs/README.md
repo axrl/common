@@ -53,6 +53,7 @@
 - [isValue](README.md#isvalue)
 - [objectEntries](README.md#objectentries)
 - [objectKeys](README.md#objectkeys)
+- [resizeObservable](README.md#resizeobservable)
 - [trackByFn](README.md#trackbyfn)
 - [returnFileSize](README.md#returnfilesize)
 - [blobDownloader](README.md#blobdownloader)
@@ -543,6 +544,22 @@ ___
 keyof `T`[]
 
 массив ключей в source
+
+___
+
+### resizeObservable
+
+▸ **resizeObservable**(`element`): `Observable`<`ResizeObserverEntry`[]\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `element` | `Element` |
+
+#### Returns
+
+`Observable`<`ResizeObserverEntry`[]\>
 
 ___
 
