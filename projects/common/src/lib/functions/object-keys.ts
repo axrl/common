@@ -1,4 +1,4 @@
-import { isValue } from "./is-value"
+import {isValue} from './is-value';
 
 /**
  * Типизированная версия стандартного метода Object.keys
@@ -6,9 +6,9 @@ import { isValue } from "./is-value"
  * @returns массив ключей в source
  */
 export function objectKeys<T extends {}>(source: T): Array<keyof T> {
-  if (isValue(source) && source instanceof Object) {
-    return <Array<keyof T>>Object.keys(source);
-  } else {
-    throw 'source - не объект и не массив.'
-  }
+    if (isValue(source) && source instanceof Object) {
+        return <Array<keyof T>>Object.keys(source);
+    } else {
+        throw new Error('source - не объект и не массив.');
+    }
 }

@@ -26,7 +26,7 @@
     "@axrl/common": "^1.0.30",
     "@axrl/ngx-extended-form-builder": "^1.2.10",
     "uuid": "^9.0.0",
-    "xlsx": "^0.18.5",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.0/xlsx-0.20.0.tgz",
     "rxjs": "^7.8.1"
   },
   "dependencies": {
