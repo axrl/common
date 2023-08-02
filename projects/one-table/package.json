@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git@github.com:axrl/common.git"
   },
-  "version": "1.0.24",
+  "version": "1.0.25",
   "license": "MIT",
   "publishConfig": {
     "access": "public",
@@ -23,7 +23,7 @@
     "@angular/animations": ">=15.0.0",
     "@angular/cdk": ">=15.0.0",
     "@angular/material": ">=15.0.0",
-    "@axrl/common": "^1.0.30",
+    "@axrl/common": "^1.0.32",
     "@axrl/ngx-extended-form-builder": "^1.2.10",
     "uuid": "^9.0.0",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.0/xlsx-0.20.0.tgz",

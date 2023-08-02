@@ -1,3 +1,3 @@
-export function trackByFn<T>(index: number, item: T) {
-  return index;
-};
+export function trackByFn<T>(index: number, item: T): number {
+    return index;
+}

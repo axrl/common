@@ -14,14 +14,14 @@
 
 ### Properties
 
-- [translationsService](LanguagePersonSettingsService.md#translationsservice)
-- [defaultPersonSettingsValue](LanguagePersonSettingsService.md#defaultpersonsettingsvalue)
+- [\_settingsChanges](LanguagePersonSettingsService.md#_settingschanges)
+- [settingsChanges](LanguagePersonSettingsService.md#settingschanges)
 - [storageKey](LanguagePersonSettingsService.md#storagekey)
 - [\_languagePersonSettings$](LanguagePersonSettingsService.md#_languagepersonsettings$)
 - [languagePersonSettings$](LanguagePersonSettingsService.md#languagepersonsettings$)
 - [languagePersonSettingsFiltered$](LanguagePersonSettingsService.md#languagepersonsettingsfiltered$)
-- [\_settingsChanges](LanguagePersonSettingsService.md#_settingschanges)
-- [settingsChanges](LanguagePersonSettingsService.md#settingschanges)
+- [translationsService](LanguagePersonSettingsService.md#translationsservice)
+- [defaultPersonSettingsValue](LanguagePersonSettingsService.md#defaultpersonsettingsvalue)
 
 ### Methods
 
@@ -48,15 +48,17 @@
 
 ## Properties
 
-### translationsService
+### \_settingsChanges
 
-• `Private` **translationsService**: [`TranslationsService`](TranslationsService.md)
+• `Private` **\_settingsChanges**: `EventEmitter`<`Settings`\>
 
 ___
 
-### defaultPersonSettingsValue
+### settingsChanges
 
-• `Private` **defaultPersonSettingsValue**: ``null`` \| `Settings`
+• `Readonly` **settingsChanges**: `Observable`<`Settings`\>
+
+Поток с данными об обновлениях в настроках.
 
 ___
 
@@ -74,33 +76,31 @@ ___
 
 ### languagePersonSettings$
 
-• **languagePersonSettings$**: `Observable`<``null`` \| `Settings`\>
+• `Readonly` **languagePersonSettings$**: `Observable`<``null`` \| `Settings`\>
 
 ___
 
 ### languagePersonSettingsFiltered$
 
-• **languagePersonSettingsFiltered$**: `Observable`<`Settings`\>
+• `Readonly` **languagePersonSettingsFiltered$**: `Observable`<`Settings`\>
 
 ___
 
-### \_settingsChanges
+### translationsService
 
-• `Private` **\_settingsChanges**: `EventEmitter`<`Settings`\>
+• `Private` **translationsService**: [`TranslationsService`](TranslationsService.md)
 
 ___
 
-### settingsChanges
+### defaultPersonSettingsValue
 
-• **settingsChanges**: `Observable`<`Settings`\>
-
-Поток с данными об обновлениях в настроках.
+• `Private` **defaultPersonSettingsValue**: ``null`` \| `Settings`
 
 ## Methods
 
 ### updatePersonSettings
 
-▸ **updatePersonSettings**(`newSettings`, `emitEvent?`): `void`
+▸ **updatePersonSettings**(`newSettings`, `emitEvent?`): `Promise`<`void`\>
 
 #### Parameters
 
@@ -111,4 +111,4 @@ ___
 
 #### Returns
 
-`void`
+`Promise`<`void`\>

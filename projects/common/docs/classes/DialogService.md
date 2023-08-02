@@ -8,7 +8,7 @@
 
 ### Properties
 
-- [dialog](DialogService.md#dialog)
+- [\_dialog](DialogService.md#_dialog)
 
 ### Methods
 
@@ -25,9 +25,9 @@
 
 ## Properties
 
-### dialog
+### \_dialog
 
-• `Private` **dialog**: ``null`` \| `MatDialog`
+• `Private` **\_dialog**: ``null`` \| `MatDialog`
 
 ## Methods
 

@@ -71,10 +71,6 @@
 
 Описание типа для функций трансформации данных, полученных при использовании методов
 
-**`Method`**
-
-`ApiService.getData<T>`
-
 ##### Type parameters
 
 | Name |
@@ -90,6 +86,10 @@
 ##### Returns
 
 `T`
+
+**`Method`**
+
+`ApiService.getData<T>`
 
 ___
 
@@ -276,7 +276,7 @@ ___
 InjectionToken со стартовым значением для потока с настройками пользователя.
 По умолчанию - использются данные, хранящиеся в localStorage, при их отсутствии - значение по умолчанию.
 
-Если в приложении определена собственная логика хранения пользовательских настроек и стартовое значение 
+Если в приложении определена собственная логика хранения пользовательских настроек и стартовое значение
 будет передаваться в сервис извне - рекомендуется определить токен, используя в качестве стартового значения - null.
 
 ## Functions
@@ -347,11 +347,6 @@ ___
 
 ▸ **deepClone**<`T`\>(`source`): `T`
 
-**`Function`**
-
-deepClone()
-Функция для "глубокого" рекурсивного клонирования любых объектов
-
 #### Type parameters
 
 | Name | Type |
@@ -369,6 +364,11 @@ deepClone()
 `T`
 
 полная копия объекта объекта, полученного в качестве аргумента
+
+**`Function`**
+
+deepClone()
+Функция для "глубокого" рекурсивного клонирования любых объектов
 
 ___
 
@@ -451,6 +451,22 @@ ___
 
 ▸ **isValue**<`T`\>(`value`): value is NonNullable<T\>
 
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | extends `unknown` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | `undefined` \| ``null`` \| `T` |
+
+#### Returns
+
+value is NonNullable<T\>
+
 **`Function`**
 
 isValue
@@ -477,27 +493,11 @@ isValue
 В этом примере block_a не будет выполнен, поскольку приведение к типу boolean значения 0 в результате дает false.
 А проверка isValue(a) - вернет true.
 
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `T` | extends `unknown` |
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `value` | `undefined` \| ``null`` \| `T` |
-
-#### Returns
-
-value is NonNullable<T\>
-
 ___
 
 ### objectEntries
 
-▸ **objectEntries**<`T`\>(`source`): { [K in string \| number \| symbol]: [K, T[K]] }[keyof `T`][]
+▸ **objectEntries**<`T`\>(`source`): `ObjectEntry`<`T`\>[]
 
 Типизированная версия стандартного метода Object.entries
 
@@ -515,7 +515,7 @@ ___
 
 #### Returns
 
-{ [K in string \| number \| symbol]: [K, T[K]] }[keyof `T`][]
+`ObjectEntry`<`T`\>[]
 
 массив пар ключ-значение в source
 

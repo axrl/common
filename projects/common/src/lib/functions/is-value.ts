@@ -25,5 +25,5 @@
  *  */
 
 export function isValue<T extends any>(value: T | null | undefined): value is NonNullable<T> {
-  return value !== null && value !== undefined;
+    return value !== null && value !== undefined;
 }
