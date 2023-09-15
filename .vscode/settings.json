@@ -1,62 +1,52 @@
 {
     "typescript.tsdk": "node_modules/typescript/lib",
+    "files.eol": "\n",
     "files.watcherExclude": {
-        "**/.git/objects/**": true,
-        "**/.git/subtree-cache/**": true,
-        "**/node_modules/**": true,
-        "**/bazel-out/**": true,
-        "**/dist/**": true,
-        "**/aio/src/generated/**": true
-      },
-      "search.exclude": {
-        "**/node_modules": true,
-        "**/bower_components": true,
-        "**/bazel-out": true,
-        "**/dist": true,
-        "**/aio/src/generated": true,
-        ".history": true,
-        "**/.cache": true,
-        "**/.angular": true,
-        "**/www": true
-      },
-    "eslint.validate": [
-        "typescript",
-        "html"
-    ],
-    "prettier.endOfLine": "lf",
-    "eslint.options": {
-        "extensions": [
-            ".ts",
-            ".html"
-        ]
+      "**/.git/objects/**": true,
+      "**/.git/subtree-cache/**": true,
+      "**/node_modules/**": true,
+      "**/bazel-out/**": true,
+      "**/dist/**": true,
+      "**/aio/src/generated/**": true
     },
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/bower_components": true,
+      "**/bazel-out": true,
+      "**/dist": true,
+      "**/aio/src/generated": true,
+      ".history": true,
+      "**/.cache": true,
+      "**/.angular": true,
+      "**/www": true
+    },
     "editor.formatOnSave": false,
-    "[typescript]": {
-        "editor.formatOnSave": true,
-        "editor.codeActionsOnSave": {
-            "source.organizeImports": true,
-            "source.fixAll.eslint": true
-        },
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "stylelint.enable": true,
+    "stylelint.configFile": "project/stylelint.config.js",
+    "stylelint.stylelintPath": "project/node_modules/stylelint",
+    "stylelint.snippet": ["scss"],
+    "stylelint.validate": ["css", "scss", "sass"],
+    "eslint.validate": ["typescript", "html"],
+    "eslint.options": {
+      "extensions": [".ts", ".html"]
     },
+    "[typescript]": {
+      "editor.formatOnSave": true,
+      "editor.codeActionsOnSave": {
+        "source.organizeImports": true
+      }
+    },
+    "scss.validate": false,
     "[scss]": {
-        "editor.codeActionsOnSave": {
-            "source.fixAll.stylelint": true
-        },
-        "editor.formatOnSave": true
+      "editor.codeActionsOnSave": {
+        "source.fixAll.stylelint": true
+      },
+      "editor.formatOnSave": true,
     },
     "[html]": {
-        "editor.codeActionsOnSave": {
-            "source.fixAll.eslint": true
-        },
-        "editor.formatOnSave": true
+      "editor.formatOnSave": true
     },
     "[md]": {
-        "editor.formatOnSave": true
+      "editor.formatOnSave": true
     },
-    "[json]": {
-        "editor.formatOnSave": true
-    },
-    "files.eol": "\n",
 }

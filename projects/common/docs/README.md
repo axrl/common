@@ -55,6 +55,7 @@
 - [objectKeys](README.md#objectkeys)
 - [resizeObservable](README.md#resizeobservable)
 - [trackByFn](README.md#trackbyfn)
+- [distinctUntilObjectChanged](README.md#distinctuntilobjectchanged)
 - [returnFileSize](README.md#returnfilesize)
 - [blobDownloader](README.md#blobdownloader)
 - [makeHttpParams](README.md#makehttpparams)
@@ -583,6 +584,26 @@ ___
 #### Returns
 
 `number`
+
+___
+
+### distinctUntilObjectChanged
+
+▸ **distinctUntilObjectChanged**<`T`\>(): `MonoTypeOperatorFunction`<`T`\>
+
+Returns a result Observable that emits all values pushed by the source observable if they
+are distinct in comparison to the last value the result observable emitted.
+Works also for objects and arrays, not just primitive types.
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Returns
+
+`MonoTypeOperatorFunction`<`T`\>
 
 ___
 

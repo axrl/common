@@ -31,7 +31,7 @@
 | Name | Type | Default value |
 | :------ | :------ | :------ |
 | `value` | `undefined` \| `string` \| `number` \| `Date` | `undefined` |
-| `mode` | ``"time"`` \| ``"short"`` \| ``"long"`` | `'short'` |
+| `mode` | ``"short"`` \| ``"long"`` \| ``"time"`` | `'short'` |
 
 #### Returns
 
