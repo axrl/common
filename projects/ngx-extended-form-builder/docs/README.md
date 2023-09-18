@@ -4,7 +4,6 @@
 
 ### Type Aliases
 
-- [StringKeys](README.md#stringkeys)
 - [ControlsNames](README.md#controlsnames)
 - [PropertyesKeys](README.md#propertyeskeys)
 - [FormGroupType](README.md#formgrouptype)
@@ -17,21 +16,6 @@
 - [liftValidationErrors](README.md#liftvalidationerrors)
 
 ## Type Aliases
-
-### StringKeys
-
-Ƭ **StringKeys**<`T`\>: { [K in keyof T]-?: T[K] extends Observable<unknown\> \| Function ? never : K extends string ? K : never }[keyof `T`]
-
-Вспомогательная утилита типа.
-На вход принимает некий тип T, возвращает список только строковых ключей этого типа, при этом значения этих ключей не являются Observable или Function.
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `T` |
-
-___
 
 ### ControlsNames
 
@@ -52,7 +36,7 @@ ___
 Ƭ **PropertyesKeys**<`T`\>: `T` extends `undefined` \| ``null`` \| `number` \| `bigint` \| `boolean` \| `symbol` \| `Observable`<`unknown`\> \| `Function` ? `never` : `T` extends `string` ? `T` : `T` extends infer U[] ? [`PropertyesKeys`](README.md#propertyeskeys)<`U`\> : `T` extends {} ? { [K in keyof T]-?: K extends string ? T[K] extends string \| number \| bigint \| boolean \| symbol \| undefined \| null ? K : T[K] extends Observable<unknown\> \| Function ? never : T[K] extends (infer U)[] ? K \| \`${K}Items.${PropertyesKeys<U\>}\` \| \`${K}Items\` : K \| \`${K}.${PropertyesKeys<T[K]\>}\` : never }[keyof `T`] : `never`
 
 Вспомогательная утилита типа.
-На вход принимает некий тип T, возвращает только строковые ключи этого типа, значения которых не являются Observable или Function, а также 
+На вход принимает некий тип T, возвращает только строковые ключи этого типа, значения которых не являются Observable или Function, а также
 строковые ключи всех вложенных объектов и объектов внутри вложенных массивов разделенных символом "." (точкой), так называемый "dot-like path".
 Названия ключей также дополнительно модифицируются применимо к специфики использования только для данной библиотеки!
 
@@ -66,9 +50,13 @@ ___
 
 ### FormGroupType
 
-Ƭ **FormGroupType**<`T`\>: `FormGroup`<{ [K in StringKeys<T\>]: T[K] extends string ? FormControl<T[K]\> : T[K] extends boolean ? FormControl<boolean\> : T[K] extends number ? FormControl<number\> : T[K] extends bigint ? FormControl<bigint\> : T extends symbol ? FormControl<T[K]\> : ScanFormType<T[K]\> }\>
+Ƭ **FormGroupType**<`T`\>: [`ScanFormType`](README.md#scanformtype)<`T`\>
 
 Упрощенная запись для типа объекта FormGroup, образованного из типа T.
+
+**`Deprecated`**
+
+Используй ScanFormType
 
 #### Type parameters
 
@@ -80,7 +68,7 @@ ___
 
 ### ScanFormType
 
-Ƭ **ScanFormType**<`T`\>: `T` extends `AbstractControl`<`unknown`, `unknown`\> ? `T` : `T` extends ``null`` \| `undefined` ? `never` : `T` extends infer U[] ? `FormArray`<[`ScanFormType`](README.md#scanformtype)<`U`\>\> : `T` extends `object` ? [`FormGroupType`](README.md#formgrouptype)<`T`\> : `FormControl`<`T`\>
+Ƭ **ScanFormType**<`T`\>: `T` extends `AbstractControl` ? `T` : `T` extends \`${string}\` ? `FormControl`<\`${PropertyesKeys<T\>}\`\> : `T` extends `boolean` \| `boolean` ? `FormControl`<`boolean`\> : `T` extends `undefined` \| ``null`` \| `symbol` \| `number` \| `bigint` \| `string` ? `FormControl`<`T`\> : `T` extends infer U[] ? `FormArray`<[`ScanFormType`](README.md#scanformtype)<`U`\>\> : `T` extends {} ? `FormGroup`<{ [K in keyof T]: ScanFormType<T[K]\> }\> : `never`
 
 Универсальный тип-утилита.
 Для любого типа Т выводит правильный тип создаваемой формы, включая любой уровень вложенности.
@@ -107,20 +95,6 @@ ___
 
 ▸ **makeForm**<`T`\>(`source`, `options?`): [`ScanFormType`](README.md#scanformtype)<`T`\>
 
-**`Function`**
-
-makeForm<T>
-  Фабричная функция для создания Angular Reactive Form.
-В отличие от стандартного FormBuilder - а в пакете @angular/forms, при создании формы из сложных объектов,
-сохраняется вложенность контролов - каждый вложенный объект превращается во вложенную FormGroup,
-  обычные свойства объектов становятся FormControl - ами, а массивы - FormArray - ми.
-При этом создаваемая форма имеет более строгую типизацию.
-
-  ВАЖНО!
-   Чтобы избежать ошибки переполнения стэка вызовов в рекурсивном процессе создания формы, для любых;
-Observable - значений(в т.ч., к примеру, Subject * и EventEmitter) соответствующий элемент формы не создается.
- *
-
 #### Type parameters
 
 | Name | Type |
@@ -139,6 +113,20 @@ Observable - значений(в т.ч., к примеру, Subject * и EventEm
 [`ScanFormType`](README.md#scanformtype)<`T`\>
 
 объект типизированной формы - FormGroup, FormArray или FormControl в зависимости от типа значения source.
+
+**`Function`**
+
+makeForm<T>
+  Фабричная функция для создания Angular Reactive Form.
+В отличие от стандартного FormBuilder - а в пакете @angular/forms, при создании формы из сложных объектов,
+сохраняется вложенность контролов - каждый вложенный объект превращается во вложенную FormGroup,
+  обычные свойства объектов становятся FormControl - ами, а массивы - FormArray - ми.
+При этом создаваемая форма имеет более строгую типизацию.
+
+  ВАЖНО!
+   Чтобы избежать ошибки переполнения стэка вызовов в рекурсивном процессе создания формы, для любых;
+Observable - значений(в т.ч., к примеру, Subject * и EventEmitter) соответствующий элемент формы не создается.
+ *
 
 ___
 
