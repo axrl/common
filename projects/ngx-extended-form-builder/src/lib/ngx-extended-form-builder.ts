@@ -1,70 +1,70 @@
-import { FormGroup, FormArray, FormControl } from "@angular/forms";
-import type { ValidatorFn, ValidationErrors, AsyncValidatorFn, AbstractControl, FormControlOptions } from "@angular/forms";
-import { Observable } from "rxjs";
-
-/**
- * Вспомогательная утилита типа.
- * На вход принимает некий тип T, возвращает список только строковых ключей этого типа, при этом значения этих ключей не являются Observable или Function.
- */
-export type StringKeys<T> = {
-  [K in keyof T]-?: T[K] extends Observable<unknown> | Function ?
-  never :
-  K extends string ?
-  K : never;
-}[keyof T];
+import type {
+    AbstractControl,
+    AsyncValidatorFn,
+    FormControlOptions,
+    ValidationErrors,
+    ValidatorFn,
+} from '@angular/forms';
+import {FormArray, FormControl, FormGroup} from '@angular/forms';
+import {Observable} from 'rxjs';
 
 /**
  * Вспомогательный alias-тип ключей в объекте Map, содержащем конфигурацию валидаторов контролов.
  */
-export type ControlsNames<T> = T extends null | undefined | number | bigint | boolean | symbol | string ?
-  'main' :
-  T extends Array<infer U> ?
-  'main' | 'mainItems' | `mainItems.${PropertyesKeys<U>}` :
-  T extends Observable<unknown> | Function ?
-  never :
-  'main' | PropertyesKeys<T>;
+export type ControlsNames<T> = T extends
+    | null
+    | undefined
+    | number
+    | bigint
+    | boolean
+    | symbol
+    | string
+    ? 'main'
+    : T extends Array<infer U>
+    ? 'main' | 'mainItems' | `mainItems.${PropertyesKeys<U>}`
+    : T extends Observable<unknown> | Function
+    ? never
+    : 'main' | PropertyesKeys<T>;
 
 /**
  * Вспомогательная утилита типа.
- * На вход принимает некий тип T, возвращает только строковые ключи этого типа, значения которых не являются Observable или Function, а также 
+ * На вход принимает некий тип T, возвращает только строковые ключи этого типа, значения которых не являются Observable или Function, а также
  * строковые ключи всех вложенных объектов и объектов внутри вложенных массивов разделенных символом "." (точкой), так называемый "dot-like path".
  * Названия ключей также дополнительно модифицируются применимо к специфики использования только для данной библиотеки!
  */
-export type PropertyesKeys<T> = T extends undefined | null | number | bigint | boolean | symbol | Observable<unknown> | Function ?
-  never :
-  T extends string ?
-  T :
-  T extends Array<infer U> ?
-  PropertyesKeys<U> :
-  T extends {} ?
-  {
-    [K in keyof T]-?: K extends string ?
-    T[K] extends (string | number | bigint | boolean | symbol | undefined | null) ?
-    K :
-    T[K] extends Observable<unknown> | Function ?
-    never :
-    T[K] extends Array<infer U> ?
-    K | `${K}Items.${PropertyesKeys<U>}` | `${K}Items` :
-    K | `${K}.${PropertyesKeys<T[K]>}` : never
-  }[keyof T] :
-  never;
+export type PropertyesKeys<T> = T extends
+    | undefined
+    | null
+    | number
+    | bigint
+    | boolean
+    | symbol
+    | Observable<unknown>
+    | Function
+    ? never
+    : T extends string
+    ? T
+    : T extends Array<infer U>
+    ? PropertyesKeys<U>
+    : T extends {}
+    ? {
+          [K in keyof T]-?: K extends string
+              ? T[K] extends string | number | bigint | boolean | symbol | undefined | null
+                  ? K
+                  : T[K] extends Observable<unknown> | Function
+                  ? never
+                  : T[K] extends Array<infer U>
+                  ? K | `${K}Items.${PropertyesKeys<U>}` | `${K}Items`
+                  : K | `${K}.${PropertyesKeys<T[K]>}`
+              : never;
+      }[keyof T]
+    : never;
 
 /**
  * Упрощенная запись для типа объекта FormGroup, образованного из типа T.
+ * @deprecated Используй ScanFormType
  */
-export type FormGroupType<T> = FormGroup<{
-  [K in StringKeys<T>]: T[K] extends string ?
-  FormControl<T[K]> :
-  T[K] extends boolean ?
-  FormControl<boolean> :
-  T[K] extends number ?
-  FormControl<number> :
-  T[K] extends bigint ?
-  FormControl<bigint> :
-  T extends symbol ?
-  FormControl<T[K]> :
-  ScanFormType<T[K]>
-}>;
+export type FormGroupType<T> = ScanFormType<T>;
 
 /**
  * Универсальный тип-утилита.
@@ -74,117 +74,27 @@ export type FormGroupType<T> = FormGroup<{
  * Observable-значений ( в т.ч., к примеру, Subject  * и EventEmitter) и значений с типом Function (функции либо методы классов)
  * соответствующий элемент формы не создается. ScanFormType это также учитывает.
  */
-export type ScanFormType<T> = T extends AbstractControl<unknown, unknown> ?
-  T :
-  T extends null | undefined ?
-  never :
-  T extends Array<infer U> ?
-  FormArray<ScanFormType<U>> :
-  T extends object ?
-  FormGroupType<T> :
-  FormControl<T>;
+export type ScanFormType<T> = T extends AbstractControl
+    ? T
+    : T extends `${string}`
+    ? FormControl<`${PropertyesKeys<T>}`>
+    : T extends true | false | boolean
+    ? FormControl<boolean>
+    : T extends undefined | null | symbol | number | bigint | string
+    ? FormControl<T>
+    : T extends Array<infer U>
+    ? FormArray<ScanFormType<U>>
+    : T extends {}
+    ? FormGroup<{
+          [K in keyof T]: ScanFormType<T[K]>;
+      }>
+    : never;
 
 export type MakeControlOptions = Omit<FormControlOptions, 'validators' | 'asyncValidators'> & {
-  disabled?: boolean;
-  validators?: ValidatorFn[];
-  asyncValidators?: AsyncValidatorFn[];
+    disabled?: boolean;
+    validators?: ValidatorFn[];
+    asyncValidators?: AsyncValidatorFn[];
 };
-
-function getValidatorsOrNull<T>(
-  key: ControlsNames<T>,
-  options?: Map<ControlsNames<T>, MakeControlOptions>,
-  addLift: boolean = false
-): MakeControlOptions | null | undefined {
-  const result = options && options.has(key) ? options.get(key) : null;
-  if (addLift) {
-    if (result && result.validators) {
-      result.validators.push(<ValidatorFn>liftErrors);
-      return result;
-    } else {
-      if (result) {
-        result.validators = [liftErrors];
-        return result;
-      } else {
-        return {
-          validators: [liftErrors]
-        };
-      };
-    }
-  } else {
-    return result;
-  };
-}
-
-function makeNewMainMap<I, O>(
-  key: ControlsNames<I>,
-  oldMap?: Map<ControlsNames<I>, MakeControlOptions>,
-): Map<ControlsNames<O>, MakeControlOptions> | undefined {
-  if (!oldMap || key === 'main') {
-    return <Map<ControlsNames<O>, MakeControlOptions> | undefined>oldMap;
-  } else {
-    if (!oldMap.has(key) && !oldMap.has(<ControlsNames<I>>`${key}Items`)) {
-      return new Map<ControlsNames<O>, MakeControlOptions>(
-        Array.from(
-          oldMap.entries()
-        ).filter(
-          item => item[0] !== 'main' && item[0] !== 'mainItems'
-        ).map(
-          ([entryKey, entryValue]) => [<ControlsNames<O>>(entryKey.startsWith(`${key}.`) ? entryKey.replace(`${key}.`, '') : entryKey), entryValue]
-        )
-      );
-    } else {
-      const filterPredicate = oldMap.has(<ControlsNames<I>>'main') ?
-        oldMap.has(<ControlsNames<I>>'mainItems') ?
-          (item: [ControlsNames<I>, MakeControlOptions]) => {
-            const pre = item[0] !== (key + 'Items');
-            return item[0] !== key && pre && item[0] !== 'main' && item[0] !== 'mainItems';
-          } :
-          (item: [ControlsNames<I>, MakeControlOptions]) => {
-            const pre = item[0] !== (key + 'Items');
-            return item[0] !== key && key[0] !== (key + 'Items') && item[0] !== 'main';
-          } :
-        oldMap.has(<ControlsNames<I>>'mainItems') ?
-          (item: [ControlsNames<I>, MakeControlOptions]) => {
-            const pre = item[0] !== (key + 'Items');
-            return item[0] !== key && pre && item[0] !== 'mainItems';
-          } :
-          (item: [ControlsNames<I>, MakeControlOptions]) => {
-            const pre = item[0] !== (key + 'Items');
-            return item[0] !== key && pre;
-          };
-      const newMainValidatorsArray: [ControlsNames<O>, MakeControlOptions][] = oldMap.has(key) ?
-        oldMap.has(<ControlsNames<I>>`${key}Items`) ?
-          [
-            [<ControlsNames<O>>'main', oldMap.get(key)!],
-            [<ControlsNames<O>>'mainItems', oldMap.get(<ControlsNames<I>>`${key}Items`)!]
-          ] :
-          [
-            [<ControlsNames<O>>'main', oldMap.get(key)!],
-          ] :
-        oldMap.has(<ControlsNames<I>>`${key}Items`) ?
-          [
-            [<ControlsNames<O>>'mainItems', oldMap.get(<ControlsNames<I>>`${key}Items`)!]
-          ] :
-          [];
-      const filtered = Array.from(
-        oldMap.entries()
-      ).filter(filterPredicate);
-      const result = new Map<ControlsNames<O>, MakeControlOptions>([
-        ...newMainValidatorsArray,
-        ...filtered.map<[ControlsNames<O>, MakeControlOptions]>(
-          ([entryKey, entryValue]) => [<ControlsNames<O>>(
-            entryKey.startsWith(`${key}.`) ?
-              entryKey.replace(`${key}.`, '') :
-              entryKey.startsWith(`${key}Items.`) ?
-                entryKey.replace(`${key}Items.`, '') :
-                entryKey
-          ), entryValue]
-        )
-      ]);
-      return result;
-    };
-  };
-}
 
 /**
 @function makeForm<T>
@@ -224,154 +134,308 @@ Observable - значений(в т.ч., к примеру, Subject * и EventEm
  * @returns объект типизированной формы - FormGroup, FormArray или FormControl в зависимости от типа значения source.
  */
 export function makeForm<T extends unknown>(
-  source: T,
-  options?: Map<ControlsNames<T>, MakeControlOptions>,
+    source: T,
+    options?: Map<ControlsNames<T>, MakeControlOptions>,
 ): ScanFormType<T> {
-  const form = !!source && (typeof source === 'object' || typeof source === 'function') ?
-    source instanceof Array<unknown> ?
-      makeArray(source, options) :
-      makeGroup(<object>source, 'main', options) :
-    makeControl(<undefined | null | number | bigint | boolean | symbol | string>source, options);
+    const isValue = <T extends any>(value: T | null | undefined): value is NonNullable<T> => {
+        return value !== null && value !== undefined;
+    };
 
-  return <ScanFormType<T>>form;
-};
+    const form =
+        isValue(source) && (typeof source === 'object' || typeof source === 'function')
+            ? source instanceof Array
+                ? CreationHelper.makeArray(source, options)
+                : CreationHelper.makeGroup(source, 'main', options)
+            : CreationHelper.makeControl(
+                  <undefined | null | number | bigint | boolean | symbol | string>source,
+                  options,
+              );
 
-function liftErrors(control: AbstractControl): ValidationErrors | null {
-  if (control instanceof FormControl) {
-    return null;
-  } else {
-    const allControls = control instanceof FormGroup ?
-      Object.values(control.controls) :
-      control instanceof FormArray ?
-        control.controls :
-        [];
-    const invalidControls = allControls.filter(control => control.status === 'INVALID');
-    return invalidControls.length === 0 ? null : invalidControls.reduce(
-      (accumulator, current) => {
-        if (current.errors) {
-          addValidationErrors(current.errors, accumulator);
-        };
-        return accumulator;
-      }, <ValidationErrors>{}
-    );
-  }
+    return <ScanFormType<T>>form;
 }
 
 export function liftValidationErrors(control: AbstractControl): ValidationErrors | null {
-  const allControls = control instanceof FormGroup ?
-    Object.values(control.controls) :
-    control instanceof FormArray ?
-      control.controls :
-      [];
-  const invalidControls = allControls.filter(control => control.status === 'INVALID');
-  const errors: ValidationErrors = invalidControls.length === 0 ? {} : invalidControls.reduce(
-    (accumulator, current) => {
-      if (current.errors) {
-        addValidationErrors(current.errors, accumulator);
-      };
-      const innerErrors = liftValidationErrors(current);
-      if (innerErrors) {
-        addValidationErrors(innerErrors, accumulator);
-      };
-      return accumulator;
-    }, <ValidationErrors>{}
-  );
-  return Object.values(errors).length === 0 ? null : errors;
-};
-
-function addValidationErrors(additionErrors: ValidationErrors, currentErrors: ValidationErrors) {
-  Object.entries(additionErrors).forEach(
-    entry => currentErrors[entry[0]] = entry[1]
-  );
+    const allControls =
+        control instanceof FormGroup
+            ? Object.values(control.controls)
+            : control instanceof FormArray
+            ? control.controls
+            : [];
+    const invalidControls = allControls.filter(control => control.status === 'INVALID');
+    const errors: ValidationErrors =
+        invalidControls.length === 0
+            ? {}
+            : invalidControls.reduce(
+                  (accumulator, current) => {
+                      if (current.errors) {
+                          CreationHelper.addValidationErrors(current.errors, accumulator);
+                      }
+                      const innerErrors = liftValidationErrors(current);
+                      if (innerErrors) {
+                          CreationHelper.addValidationErrors(innerErrors, accumulator);
+                      }
+                      return accumulator;
+                  },
+                  <ValidationErrors>{},
+              );
+    return Object.values(errors).length === 0 ? null : errors;
 }
 
-function makeControl<T extends undefined | null | number | bigint | boolean | symbol | string>(
-  source: T | FormControl<T | null>,
-  options?: Map<ControlsNames<T>, MakeControlOptions>
-): FormControl<T | null> {
-  const controlOptions = getValidatorsOrNull(<ControlsNames<T>>'main', options, false);
-  const result = source instanceof FormControl ?
-    source :
-    new FormControl<T | null>(
-      !!source && typeof source == 'string' && (source.includes('0001-01-01') || source.includes('1970-01-01')) ? null : source
-      ,
-      {
-        validators: controlOptions?.validators,
-        asyncValidators: controlOptions?.asyncValidators,
-        updateOn: controlOptions?.updateOn,
-        nonNullable: controlOptions?.nonNullable
-      },
-    );
-  if (controlOptions?.disabled) {
-    result.disable();
-  };
-  return result;
-}
+class CreationHelper {
+    static makeControl<T extends unknown>(
+        source: T,
+        options?: Map<ControlsNames<T>, MakeControlOptions>,
+    ): FormControl<T | null> {
+        const controlOptions = CreationHelper.getValidatorsOrNull(
+            <ControlsNames<T>>'main',
+            options,
+            false,
+        );
+        const result =
+            source instanceof FormControl
+                ? source
+                : new FormControl<T | null>(
+                      !!source &&
+                      typeof source == 'string' &&
+                      (source.includes('0001-01-01') || source.includes('1970-01-01'))
+                          ? null
+                          : source,
+                      {
+                          validators: controlOptions?.validators,
+                          asyncValidators: controlOptions?.asyncValidators,
+                          updateOn: controlOptions?.updateOn,
+                          nonNullable: controlOptions?.nonNullable,
+                      },
+                  );
+        if (controlOptions?.disabled) {
+            result.disable();
+        }
+        return result;
+    }
 
-function makeGroup<T extends object = object>(
-  source: T | FormGroupType<T>,
-  internalKey: ControlsNames<T>,
-  options?: Map<ControlsNames<T>, MakeControlOptions>
-): FormGroupType<T> {
-  const controlOptions = getValidatorsOrNull(internalKey, options, true);
-  const result = source instanceof FormGroup<{ [K in StringKeys<T>]: ScanFormType<T[K]>; }> ?
-    source :
-    (<[StringKeys<T>, T[StringKeys<T>]][]>Object.entries(source)).reduce(
-      (accumulator: FormGroup, entry: [StringKeys<T>, T[StringKeys<T>]]) => {
-        const key = entry[0];
-        const value = entry[1];
-        if (!(value instanceof Observable)) {
-          accumulator.addControl(
-            key,
-            !!value && (
-              value instanceof FormGroup || value instanceof FormArray || value instanceof FormControl
-            ) ?
-              <ScanFormType<T[StringKeys<T>]>>value :
-              makeForm<T[StringKeys<T>]>(
-                value,
-                makeNewMainMap<T, T[StringKeys<T>]>(<ControlsNames<T>>key, options),
-              )
-          );
-        };
-        return <FormGroupType<T>>accumulator;
-      }, new FormGroup<{ [K in StringKeys<T>]: ScanFormType<T[K]>; }>(<{ [K in StringKeys<T>]: ScanFormType<T[K]>; }>{},
-        {
-          validators: controlOptions?.validators,
-          asyncValidators: controlOptions?.asyncValidators,
-          updateOn: controlOptions?.updateOn,
-        },
-      )
-    );
-  if (controlOptions?.disabled) {
-    result.disable();
-  };
-  return result;
-}
+    static makeGroup<T extends {}>(
+        source: T | ScanFormType<T>,
+        internalKey: ControlsNames<T>,
+        options?: Map<ControlsNames<T>, MakeControlOptions>,
+    ): ScanFormType<T> {
+        const controlOptions = CreationHelper.getValidatorsOrNull(internalKey, options, true);
+        const result: ScanFormType<T> =
+            source instanceof FormGroup
+                ? source
+                : (<Array<[keyof T & string, T[keyof T]]>>Object.entries(source)).reduce(
+                      (accumulator: ScanFormType<T>, entry) => {
+                          const key = entry[0];
+                          const value = entry[1];
+                          if (!(value instanceof Observable)) {
+                              accumulator.addControl(
+                                  key,
+                                  !!value &&
+                                      (value instanceof FormGroup ||
+                                          value instanceof FormArray ||
+                                          value instanceof FormControl)
+                                      ? <ScanFormType<T[keyof T]>>value
+                                      : makeForm<T[keyof T]>(
+                                            value,
+                                            CreationHelper.makeNewMainMap<T, T[keyof T]>(
+                                                <ControlsNames<T>>key,
+                                                options,
+                                            ),
+                                        ),
+                              );
+                          }
+                          return accumulator;
+                      },
+                      <ScanFormType<T>>new FormGroup(
+                          {},
+                          {
+                              validators: controlOptions?.validators,
+                              asyncValidators: controlOptions?.asyncValidators,
+                              updateOn: controlOptions?.updateOn,
+                          },
+                      ),
+                  );
+        if (controlOptions?.disabled) {
+            result.disable();
+        }
+        return result;
+    }
 
-function makeArray<T extends Array<unknown>, E = T extends Array<infer U> ? U : never>(
-  source: E[] | FormArray<ScanFormType<E>>,
-  options?: Map<ControlsNames<T>, MakeControlOptions>
-): FormArray<ScanFormType<E>> {
-  const controlOptions = getValidatorsOrNull(<ControlsNames<T>>'main', options, true);
-  const result = source instanceof FormArray ?
-    source :
-    new FormArray(
-      source.map(
-        (item: E) => {
-          const itemForm = makeForm(
-            item,
-            makeNewMainMap<T, E>(<ControlsNames<T>>'mainItems', options),
-          );
-          return itemForm;
-        }),
-      {
-        validators: controlOptions?.validators,
-        asyncValidators: controlOptions?.asyncValidators,
-        updateOn: controlOptions?.updateOn
-      }
-    );
-  if (controlOptions?.disabled) {
-    result.disable();
-  };
-  return result;
+    static makeArray<T extends unknown[], E = T extends Array<infer U> ? U : never>(
+        source: E[] | FormArray<ScanFormType<E>>,
+        options?: Map<ControlsNames<T>, MakeControlOptions>,
+    ): FormArray<ScanFormType<E>> {
+        const controlOptions = CreationHelper.getValidatorsOrNull(
+            <ControlsNames<T>>'main',
+            options,
+            true,
+        );
+        const result =
+            source instanceof FormArray
+                ? source
+                : new FormArray(
+                      source.map((item: E) => {
+                          const itemForm = makeForm(
+                              item,
+                              CreationHelper.makeNewMainMap<T, E>(
+                                  <ControlsNames<T>>'mainItems',
+                                  options,
+                              ),
+                          );
+                          return itemForm;
+                      }),
+                      {
+                          validators: controlOptions?.validators,
+                          asyncValidators: controlOptions?.asyncValidators,
+                          updateOn: controlOptions?.updateOn,
+                      },
+                  );
+        if (controlOptions?.disabled) {
+            result.disable();
+        }
+        return result;
+    }
+
+    static addValidationErrors(
+        additionErrors: ValidationErrors,
+        currentErrors: ValidationErrors,
+    ): void {
+        Object.entries(additionErrors).forEach(entry => (currentErrors[entry[0]] = entry[1]));
+    }
+
+    static liftErrors(control: AbstractControl): ValidationErrors | null {
+        if (control instanceof FormControl) {
+            return null;
+        } else {
+            const allControls =
+                control instanceof FormGroup
+                    ? Object.values(control.controls)
+                    : control instanceof FormArray
+                    ? control.controls
+                    : [];
+            const invalidControls = allControls.filter(control => control.status === 'INVALID');
+            return invalidControls.length === 0
+                ? null
+                : invalidControls.reduce(
+                      (accumulator, current) => {
+                          if (current.errors) {
+                              CreationHelper.addValidationErrors(current.errors, accumulator);
+                          }
+                          return accumulator;
+                      },
+                      <ValidationErrors>{},
+                  );
+        }
+    }
+
+    static getValidatorsOrNull<T>(
+        key: ControlsNames<T>,
+        options?: Map<ControlsNames<T>, MakeControlOptions>,
+        addLift: boolean = false,
+    ): MakeControlOptions | null | undefined {
+        const result = options && options.has(key) ? options.get(key) : null;
+        if (addLift) {
+            if (result && result.validators) {
+                result.validators.push(<ValidatorFn>CreationHelper.liftErrors);
+                return result;
+            } else {
+                if (result) {
+                    result.validators = [CreationHelper.liftErrors];
+                    return result;
+                } else {
+                    return {
+                        validators: [CreationHelper.liftErrors],
+                    };
+                }
+            }
+        } else {
+            return result;
+        }
+    }
+
+    static makeNewMainMap<I, O>(
+        key: ControlsNames<I>,
+        oldMap?: Map<ControlsNames<I>, MakeControlOptions>,
+    ): Map<ControlsNames<O>, MakeControlOptions> | undefined {
+        if (!oldMap || key === 'main') {
+            return <Map<ControlsNames<O>, MakeControlOptions> | undefined>oldMap;
+        } else {
+            if (!oldMap.has(key) && !oldMap.has(<ControlsNames<I>>`${key}Items`)) {
+                return new Map<ControlsNames<O>, MakeControlOptions>(
+                    Array.from(oldMap.entries())
+                        .filter(item => item[0] !== 'main' && item[0] !== 'mainItems')
+                        .map(([entryKey, entryValue]) => [
+                            <ControlsNames<O>>(
+                                (entryKey.startsWith(`${key}.`)
+                                    ? entryKey.replace(`${key}.`, '')
+                                    : entryKey)
+                            ),
+                            entryValue,
+                        ]),
+                );
+            } else {
+                const filterPredicate = oldMap.has(<ControlsNames<I>>'main')
+                    ? oldMap.has(<ControlsNames<I>>'mainItems')
+                        ? (item: [ControlsNames<I>, MakeControlOptions]): boolean => {
+                              const pre = item[0] !== key + 'Items';
+                              return (
+                                  item[0] !== key &&
+                                  pre &&
+                                  item[0] !== 'main' &&
+                                  item[0] !== 'mainItems'
+                              );
+                          }
+                        : (item: [ControlsNames<I>, MakeControlOptions]): boolean => {
+                              const pre = item[0] !== key + 'Items';
+                              return (
+                                  item[0] !== key && key[0] !== key + 'Items' && item[0] !== 'main'
+                              );
+                          }
+                    : oldMap.has(<ControlsNames<I>>'mainItems')
+                    ? (item: [ControlsNames<I>, MakeControlOptions]): boolean => {
+                          const pre = item[0] !== key + 'Items';
+                          return item[0] !== key && pre && item[0] !== 'mainItems';
+                      }
+                    : (item: [ControlsNames<I>, MakeControlOptions]): boolean => {
+                          const pre = item[0] !== key + 'Items';
+                          return item[0] !== key && pre;
+                      };
+                const newMainValidatorsArray: Array<[ControlsNames<O>, MakeControlOptions]> =
+                    oldMap.has(key)
+                        ? oldMap.has(<ControlsNames<I>>`${key}Items`)
+                            ? [
+                                  [<ControlsNames<O>>'main', oldMap.get(key)!],
+                                  [
+                                      <ControlsNames<O>>'mainItems',
+                                      oldMap.get(<ControlsNames<I>>`${key}Items`)!,
+                                  ],
+                              ]
+                            : [[<ControlsNames<O>>'main', oldMap.get(key)!]]
+                        : oldMap.has(<ControlsNames<I>>`${key}Items`)
+                        ? [
+                              [
+                                  <ControlsNames<O>>'mainItems',
+                                  oldMap.get(<ControlsNames<I>>`${key}Items`)!,
+                              ],
+                          ]
+                        : [];
+                const filtered = Array.from(oldMap.entries()).filter(filterPredicate);
+                const result = new Map<ControlsNames<O>, MakeControlOptions>([
+                    ...newMainValidatorsArray,
+                    ...filtered.map<[ControlsNames<O>, MakeControlOptions]>(
+                        ([entryKey, entryValue]) => [
+                            <ControlsNames<O>>(
+                                (entryKey.startsWith(`${key}.`)
+                                    ? entryKey.replace(`${key}.`, '')
+                                    : entryKey.startsWith(`${key}Items.`)
+                                    ? entryKey.replace(`${key}Items.`, '')
+                                    : entryKey)
+                            ),
+                            entryValue,
+                        ],
+                    ),
+                ]);
+                return result;
+            }
+        }
+    }
 }

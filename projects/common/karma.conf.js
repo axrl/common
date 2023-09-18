@@ -39,7 +39,7 @@ module.exports = function (config) {
     autoWatch: false,
     watch: false,
     browsers: ['ChromeHeadless'],
-    singleRun: false,
+    singleRun: true,
     restartOnFileChange: true
   });
 };
