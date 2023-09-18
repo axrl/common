@@ -80,8 +80,8 @@ export type ScanFormType<T> = T extends AbstractControl
     ? FormControl<`${PropertyesKeys<T>}`>
     : T extends true | false | boolean
     ? FormControl<boolean>
-    : T extends undefined | null | symbol | number | bigint | string
-    ? FormControl<T>
+    : T extends symbol | number | bigint | string
+    ? FormControl<T extends undefined ? T | undefined | null : T | null>
     : T extends Array<infer U>
     ? FormArray<ScanFormType<U>>
     : T extends {}

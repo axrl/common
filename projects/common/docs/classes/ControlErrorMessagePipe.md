@@ -40,13 +40,13 @@
 
 ### transform
 
-▸ **transform**(`control`): `string`
+▸ **transform**(`control?`): `string`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `control` | `AbstractControl`<`any`, `any`\> |
+| `control?` | ``null`` \| `AbstractControl`<`any`, `any`\> |
 
 #### Returns
 

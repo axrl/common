@@ -68,7 +68,7 @@ ___
 
 ### ScanFormType
 
-Ƭ **ScanFormType**<`T`\>: `T` extends `AbstractControl` ? `T` : `T` extends \`${string}\` ? `FormControl`<\`${PropertyesKeys<T\>}\`\> : `T` extends `boolean` \| `boolean` ? `FormControl`<`boolean`\> : `T` extends `undefined` \| ``null`` \| `symbol` \| `number` \| `bigint` \| `string` ? `FormControl`<`T`\> : `T` extends infer U[] ? `FormArray`<[`ScanFormType`](README.md#scanformtype)<`U`\>\> : `T` extends {} ? `FormGroup`<{ [K in keyof T]: ScanFormType<T[K]\> }\> : `never`
+Ƭ **ScanFormType**<`T`\>: `T` extends `AbstractControl` ? `T` : `T` extends \`${string}\` ? `FormControl`<\`${PropertyesKeys<T\>}\`\> : `T` extends `boolean` \| `boolean` ? `FormControl`<`boolean`\> : `T` extends `symbol` \| `number` \| `bigint` \| `string` ? `FormControl`<`T` extends `undefined` ? `T` \| `undefined` \| ``null`` : `T` \| ``null``\> : `T` extends infer U[] ? `FormArray`<[`ScanFormType`](README.md#scanformtype)<`U`\>\> : `T` extends {} ? `FormGroup`<{ [K in keyof T]: ScanFormType<T[K]\> }\> : `never`
 
 Универсальный тип-утилита.
 Для любого типа Т выводит правильный тип создаваемой формы, включая любой уровень вложенности.
