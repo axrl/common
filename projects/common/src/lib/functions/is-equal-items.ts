@@ -55,7 +55,7 @@ export function throwIfNotEqual<T>(a: T, b: T): boolean {
         if (result) {
             return result;
         } else {
-            throw new Error(`Аргументы не совпадают`);
+            throw new Error('Аргументы не совпадают');
         }
     } else {
         if (Array.isArray(a)) {
