@@ -1,6 +1,6 @@
 import {Observable} from 'rxjs';
-import {isValue} from './is-value';
-import {objectKeys} from './object-keys';
+import {isValue} from '../is-value';
+import {objectKeys} from '../object-keys';
 
 type ArrayElement<T> = T extends Array<infer U> ? U : never;
 

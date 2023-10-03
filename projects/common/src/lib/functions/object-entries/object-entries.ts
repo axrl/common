@@ -1,4 +1,4 @@
-import {isValue} from './is-value';
+import {isValue} from '../is-value';
 
 export type ObjectEntry<T extends {}> = {
     [K in keyof T & string]: [K, T[K]];

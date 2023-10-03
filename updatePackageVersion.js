@@ -73,7 +73,7 @@ function main() {
                     libraryDependencies_1 = libraryPackageJson.peerDependencies;
                     haveChanges_1 = false;
                     checkDep_1 = function (main, library) {
-                        return main && !library.includes('>=') && main !== library;
+                        return !!main && !library.includes('>=') && main !== library;
                     };
                     Object.keys(libraryDependencies_1).forEach(function (key) {
                         if (checkDep_1(mainPackageJson_1.dependencies[key], libraryDependencies_1[key])) {
@@ -99,12 +99,14 @@ function main() {
                     return [4 /*yield*/, (0, promises_1.writeFile)(libraryPackageJsonPath, JSON.stringify(libraryPackageJson, null, 2))];
                 case 3:
                     _f.sent();
-                    console.log("Successfully update library package.json file!.");
+                    // eslint-disable-next-line no-console
+                    console.log('Successfully update library package.json file!.');
                     return [3 /*break*/, 5];
                 case 4: throw new Error("Error on update version in package.json file!. Current value (need fix) = ".concat(libraryPackageJson.version, "."));
                 case 5: return [3 /*break*/, 7];
                 case 6:
                     message_1 = _f.sent();
+                    // eslint-disable-next-line no-console
                     console.log(message_1);
                     return [3 /*break*/, 7];
                 case 7: return [2 /*return*/];
