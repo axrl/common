@@ -2,6 +2,7 @@ export {createObservable} from './create-observable';
 export {createSubject} from './create-subject';
 export {deepClone} from './deep-clone';
 export {delayedObservable} from './delayed-observable';
+export * from './generate-uuid';
 export {getFilteredData} from './get-filtered-data';
 export {isEqualItems} from './is-equal-items';
 export {isValue} from './is-value';

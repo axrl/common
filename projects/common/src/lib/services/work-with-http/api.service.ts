@@ -45,12 +45,12 @@ export class ApiService {
         this._isLoadingResults$.next(count);
     }
 
-    getData<T>(url: string, options: ParamsAndHeaders & {responseType: 'text'}): Observable<string>;
-    getData<T>(
+    getData(url: string, options: ParamsAndHeaders & {responseType: 'text'}): Observable<string>;
+    getData(
         url: string,
         options: ParamsAndHeaders & {responseType: 'arraybuffer'},
     ): Observable<ArrayBuffer>;
-    getData<T>(url: string, options: ParamsAndHeaders & {responseType: 'blob'}): Observable<File>;
+    getData(url: string, options: ParamsAndHeaders & {responseType: 'blob'}): Observable<File>;
     getData<T>(url: string, options?: ParamsAndHeaders & {responseType?: 'json'}): Observable<T>;
     getData<T>(
         url: string,
@@ -77,7 +77,7 @@ export class ApiService {
                 this.updateLoadingIndicator();
                 return isValue(options.responseType) &&
                     ['text', 'arraybuffer', 'blob'].includes(options.responseType)
-                    ? res
+                    ? <string | File | ArrayBuffer>res
                     : this.methodGetMapFn<T>(res);
             }),
             catchError((message: string) => {
