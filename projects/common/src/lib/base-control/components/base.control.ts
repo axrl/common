@@ -30,7 +30,7 @@ export abstract class CommonBaseControl<TValue> implements ControlValueAccessor 
     /** Сервис для генерации GUID */
     protected _generateUUIDHelper: GenerateUUIDService;
     /** Ссылка на DOM-элемент, соответствующий компоненту */
-    protected _elementRef: ElementRef<HTMLElement> | undefined;
+    protected _elementRef: ElementRef<HTMLElement>;
     /** ChangeDetectorRef, Доступный для вызова любым классом-наследником */
     protected _cdr: ChangeDetectorRef;
     /** Renderer2, Доступный для вызова любым классом-наследником */
