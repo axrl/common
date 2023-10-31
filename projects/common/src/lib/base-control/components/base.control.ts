@@ -122,8 +122,8 @@ export abstract class CommonBaseControl<TValue> implements ControlValueAccessor 
     }
 
     /** @inheritDoc */
-    protected _onChange(_: any): void {}
+    _onChange(_: any): void {}
 
     /** @inheritDoc */
-    protected _onTouched(): void {}
+    _onTouched(): void {}
 }
