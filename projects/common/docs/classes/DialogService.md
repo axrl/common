@@ -21,7 +21,11 @@
 
 ### constructor
 
-• **new DialogService**()
+• **new DialogService**(): [`DialogService`](DialogService.md)
+
+#### Returns
+
+[`DialogService`](DialogService.md)
 
 ## Properties
 

@@ -22,13 +22,17 @@
 
 ### constructor
 
-• **new ControlErrorMessagePipe**(`controlErrorsMessagesPipeDictionary`)
+• **new ControlErrorMessagePipe**(`controlErrorsMessagesPipeDictionary`): [`ControlErrorMessagePipe`](ControlErrorMessagePipe.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `controlErrorsMessagesPipeDictionary` | `Record`<`string`, `string`\> |
+
+#### Returns
+
+[`ControlErrorMessagePipe`](ControlErrorMessagePipe.md)
 
 ## Properties
 

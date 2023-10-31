@@ -19,7 +19,7 @@
 
 ### constructor
 
-• **new SnackService**(`snackBar`, `snackServiceConfig`)
+• **new SnackService**(`snackBar`, `snackServiceConfig`): [`SnackService`](SnackService.md)
 
 #### Parameters
 
@@ -27,6 +27,10 @@
 | :------ | :------ |
 | `snackBar` | `MatSnackBar` |
 | `snackServiceConfig` | `undefined` \| [`SnackServiceConfig`](../interfaces/SnackServiceConfig.md)<`unknown`, `any`\> |
+
+#### Returns
+
+[`SnackService`](SnackService.md)
 
 ## Properties
 

@@ -24,7 +24,7 @@
 
 ### constructor
 
-• **new TranslatePipe**(`translationService`, `ref`)
+• **new TranslatePipe**(`translationService`, `ref`): [`TranslatePipe`](TranslatePipe.md)
 
 #### Parameters
 
@@ -32,6 +32,10 @@
 | :------ | :------ |
 | `translationService` | [`TranslationsService`](TranslationsService.md) |
 | `ref` | `ChangeDetectorRef` |
+
+#### Returns
+
+[`TranslatePipe`](TranslatePipe.md)
 
 ## Properties
 

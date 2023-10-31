@@ -20,7 +20,11 @@
 
 ### constructor
 
-• **new FileLoaderAndReaderService**()
+• **new FileLoaderAndReaderService**(): [`FileLoaderAndReaderService`](FileLoaderAndReaderService.md)
+
+#### Returns
+
+[`FileLoaderAndReaderService`](FileLoaderAndReaderService.md)
 
 ## Properties
 

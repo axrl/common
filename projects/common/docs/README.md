@@ -4,10 +4,12 @@
 
 ### Classes
 
+- [CommonBaseControl](classes/CommonBaseControl.md)
 - [ControlErrorMessagePipe](classes/ControlErrorMessagePipe.md)
 - [RuDateMediumPipe](classes/RuDateMediumPipe.md)
 - [TranslatePipe](classes/TranslatePipe.md)
 - [DialogService](classes/DialogService.md)
+- [GenerateUUIDService](classes/GenerateUUIDService.md)
 - [LanguagePersonSettingsService](classes/LanguagePersonSettingsService.md)
 - [SnackService](classes/SnackService.md)
 - [TranslationsService](classes/TranslationsService.md)
@@ -48,6 +50,7 @@
 - [createSubject](README.md#createsubject)
 - [deepClone](README.md#deepclone)
 - [delayedObservable](README.md#delayedobservable)
+- [generateUUIDFn](README.md#generateuuidfn)
 - [getFilteredData](README.md#getfiltereddata)
 - [isEqualItems](README.md#isequalitems)
 - [isValue](README.md#isvalue)
@@ -395,6 +398,22 @@ ___
 `Observable`<`T`\>
 
 Функция создает Obsewrvable-поток, который будет по очереди испускать значения массива values с задержкой delayInMs между каждым событием.
+
+___
+
+### generateUUIDFn
+
+▸ **generateUUIDFn**(`win`): `string`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `win` | ``null`` \| `Window` & typeof `globalThis` |
+
+#### Returns
+
+`string`
 
 ___
 

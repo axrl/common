@@ -8,14 +8,14 @@
 
 ### Properties
 
+- [\_isLoadingResults$](ApiService.md#_isloadingresults$)
+- [isLoadingResults$](ApiService.md#isloadingresults$)
 - [http](ApiService.md#http)
 - [snack](ApiService.md#snack)
 - [methodGetMapFn](ApiService.md#methodgetmapfn)
 - [methodPostMapFn](ApiService.md#methodpostmapfn)
 - [methodPutMapFn](ApiService.md#methodputmapfn)
 - [methodDeleteMapFn](ApiService.md#methoddeletemapfn)
-- [\_isLoadingResults](ApiService.md#_isloadingresults)
-- [isLoadingResults$](ApiService.md#isloadingresults$)
 
 ### Methods
 
@@ -32,7 +32,7 @@
 
 ### constructor
 
-• **new ApiService**(`http`, `snack`, `methodGetMapFn`, `methodPostMapFn`, `methodPutMapFn`, `methodDeleteMapFn`)
+• **new ApiService**(`http`, `snack`, `methodGetMapFn`, `methodPostMapFn`, `methodPutMapFn`, `methodDeleteMapFn`): [`ApiService`](ApiService.md)
 
 #### Parameters
 
@@ -45,7 +45,23 @@
 | `methodPutMapFn` | [`TransformIncomingDataFn`](../README.md#transformincomingdatafn) |
 | `methodDeleteMapFn` | [`TransformIncomingDataFn`](../README.md#transformincomingdatafn) |
 
+#### Returns
+
+[`ApiService`](ApiService.md)
+
 ## Properties
+
+### \_isLoadingResults$
+
+• `Private` **\_isLoadingResults$**: `BehaviorSubject`<`number`\>
+
+___
+
+### isLoadingResults$
+
+• **isLoadingResults$**: `Observable`<`boolean`\>
+
+___
 
 ### http
 
@@ -81,18 +97,6 @@ ___
 
 • `Private` **methodDeleteMapFn**: [`TransformIncomingDataFn`](../README.md#transformincomingdatafn)
 
-___
-
-### \_isLoadingResults
-
-• `Private` **\_isLoadingResults**: `BehaviorSubject`<`number`\>
-
-___
-
-### isLoadingResults$
-
-• **isLoadingResults$**: `Observable`<`boolean`\>
-
 ## Methods
 
 ### updateLoadingIndicator
@@ -113,13 +117,7 @@ ___
 
 ### getData
 
-▸ **getData**<`T`\>(`url`, `options`): `Observable`<`string`\>
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `T` |
+▸ **getData**(`url`, `options`): `Observable`<`string`\>
 
 #### Parameters
 
@@ -132,13 +130,7 @@ ___
 
 `Observable`<`string`\>
 
-▸ **getData**<`T`\>(`url`, `options`): `Observable`<`ArrayBuffer`\>
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `T` |
+▸ **getData**(`url`, `options`): `Observable`<`ArrayBuffer`\>
 
 #### Parameters
 
@@ -151,13 +143,7 @@ ___
 
 `Observable`<`ArrayBuffer`\>
 
-▸ **getData**<`T`\>(`url`, `options`): `Observable`<`File`\>
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `T` |
+▸ **getData**(`url`, `options`): `Observable`<`File`\>
 
 #### Parameters
 

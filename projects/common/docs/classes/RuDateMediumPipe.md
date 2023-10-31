@@ -18,7 +18,11 @@
 
 ### constructor
 
-• **new RuDateMediumPipe**()
+• **new RuDateMediumPipe**(): [`RuDateMediumPipe`](RuDateMediumPipe.md)
+
+#### Returns
+
+[`RuDateMediumPipe`](RuDateMediumPipe.md)
 
 ## Methods
 

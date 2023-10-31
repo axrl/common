@@ -8,21 +8,21 @@
 
 ### Properties
 
-- [api](HttpBusService.md#api)
 - [\_httpBus$](HttpBusService.md#_httpbus$)
 - [httpBus$](HttpBusService.md#httpbus$)
+- [api](HttpBusService.md#api)
 
 ### Methods
 
-- [reducer](HttpBusService.md#reducer)
 - [sendEventToBus](HttpBusService.md#sendeventtobus)
 - [destroyBus](HttpBusService.md#destroybus)
+- [reducer](HttpBusService.md#reducer)
 
 ## Constructors
 
 ### constructor
 
-• **new HttpBusService**(`api`)
+• **new HttpBusService**(`api`): [`HttpBusService`](HttpBusService.md)
 
 #### Parameters
 
@@ -30,13 +30,11 @@
 | :------ | :------ |
 | `api` | [`ApiService`](ApiService.md) |
 
+#### Returns
+
+[`HttpBusService`](HttpBusService.md)
+
 ## Properties
-
-### api
-
-• `Private` **api**: [`ApiService`](ApiService.md)
-
-___
 
 ### \_httpBus$
 
@@ -48,29 +46,13 @@ ___
 
 • **httpBus$**: `Observable`<`void`\>
 
-## Methods
-
-### reducer
-
-▸ `Private` **reducer**<`T`\>(`e`): `Observable`<`unknown`\>
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `T` |
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `e` | [`HttpBusEventData`](../README.md#httpbuseventdata)<`T`\> |
-
-#### Returns
-
-`Observable`<`unknown`\>
-
 ___
+
+### api
+
+• `Private` **api**: [`ApiService`](ApiService.md)
+
+## Methods
 
 ### sendEventToBus
 
@@ -101,3 +83,25 @@ ___
 #### Returns
 
 `void`
+
+___
+
+### reducer
+
+▸ **reducer**<`T`\>(`e`): `Observable`<`unknown`\>
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `e` | [`HttpBusEventData`](../README.md#httpbuseventdata)<`T`\> |
+
+#### Returns
+
+`Observable`<`unknown`\>

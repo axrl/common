@@ -24,6 +24,7 @@ import {GenerateUUIDService} from '../../services/generate-uuid';
         '[attr.disabled]': 'disabled',
         '[attr.id]': 'id',
         '[attr.name]': 'name || null',
+        '(blur)': '_onTouched()',
     },
 })
 export abstract class CommonBaseControl<TValue> implements ControlValueAccessor {

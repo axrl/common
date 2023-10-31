@@ -1,6 +1,6 @@
 # Interface: SnackServiceConfig<T, D\>
 
-Тип для InjectionToken с объектом конфигурации для SnackService для ситуации, в качестве Snackbar требуется отображать пользовательский компонент вместо 
+Тип для InjectionToken с объектом конфигурации для SnackService для ситуации, в качестве Snackbar требуется отображать пользовательский компонент вместо
 встроенного в в Angular Material компонента по умолчанию.
 
 ## Type parameters

@@ -31,7 +31,7 @@
 
 ### constructor
 
-• **new LanguagePersonSettingsService**<`Settings`\>(`translationsService`, `defaultPersonSettingsValue`)
+• **new LanguagePersonSettingsService**<`Settings`\>(`translationsService`, `defaultPersonSettingsValue`): [`LanguagePersonSettingsService`](LanguagePersonSettingsService.md)<`Settings`\>
 
 #### Type parameters
 
@@ -45,6 +45,10 @@
 | :------ | :------ |
 | `translationsService` | [`TranslationsService`](TranslationsService.md) |
 | `defaultPersonSettingsValue` | ``null`` \| `Settings` |
+
+#### Returns
+
+[`LanguagePersonSettingsService`](LanguagePersonSettingsService.md)<`Settings`\>
 
 ## Properties
 

@@ -8,12 +8,12 @@
 
 ### Properties
 
-- [api](TranslationsService.md#api)
-- [translationsConfig](TranslationsService.md#translationsconfig)
-- [\_currentLanguage](TranslationsService.md#_currentlanguage)
+- [\_currentLanguage$](TranslationsService.md#_currentlanguage$)
+- [memory](TranslationsService.md#memory)
 - [currentLanguage$](TranslationsService.md#currentlanguage$)
 - [translations$](TranslationsService.md#translations$)
-- [memory](TranslationsService.md#memory)
+- [api](TranslationsService.md#api)
+- [translationsConfig](TranslationsService.md#translationsconfig)
 
 ### Accessors
 
@@ -30,7 +30,7 @@
 
 ### constructor
 
-• **new TranslationsService**(`api`, `translationsConfig`)
+• **new TranslationsService**(`api`, `translationsConfig`): [`TranslationsService`](TranslationsService.md)
 
 #### Parameters
 
@@ -39,23 +39,21 @@
 | `api` | [`ApiService`](ApiService.md) |
 | `translationsConfig` | [`TranslationConfig`](../README.md#translationconfig) |
 
+#### Returns
+
+[`TranslationsService`](TranslationsService.md)
+
 ## Properties
 
-### api
+### \_currentLanguage$
 
-• `Private` **api**: [`ApiService`](ApiService.md)
-
-___
-
-### translationsConfig
-
-• `Private` **translationsConfig**: [`TranslationConfig`](../README.md#translationconfig)
+• `Private` **\_currentLanguage$**: `BehaviorSubject`<``null`` \| `string`\>
 
 ___
 
-### \_currentLanguage
+### memory
 
-• `Private` **\_currentLanguage**: `BehaviorSubject`<``null`` \| `string`\>
+• `Private` **memory**: `Map`<`string`, `string`\>
 
 ___
 
@@ -71,9 +69,15 @@ ___
 
 ___
 
-### memory
+### api
 
-• `Private` **memory**: `Map`<`string`, `string`\>
+• `Private` **api**: [`ApiService`](ApiService.md)
+
+___
+
+### translationsConfig
+
+• `Private` **translationsConfig**: [`TranslationConfig`](../README.md#translationconfig)
 
 ## Accessors
 
