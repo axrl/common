@@ -5,6 +5,9 @@
 ### Classes
 
 - [CommonBaseControl](classes/CommonBaseControl.md)
+- [TrackByPropertyDirective](classes/TrackByPropertyDirective.md)
+- [TrackByIdDirective](classes/TrackByIdDirective.md)
+- [TrackByIndexDirective](classes/TrackByIndexDirective.md)
 - [ControlErrorMessagePipe](classes/ControlErrorMessagePipe.md)
 - [RuDateMediumPipe](classes/RuDateMediumPipe.md)
 - [TranslatePipe](classes/TranslatePipe.md)
@@ -67,11 +70,11 @@
 
 ### TransformIncomingDataFn
 
-Ƭ **TransformIncomingDataFn**: <T\>(`res`: `unknown`) => `T`
+Ƭ **TransformIncomingDataFn**: \<T\>(`res`: `unknown`) => `T`
 
 #### Type declaration
 
-▸ <`T`\>(`res`): `T`
+▸ \<`T`\>(`res`): `T`
 
 Описание типа для функций трансформации данных, полученных при использовании методов
 
@@ -116,7 +119,7 @@ ___
 
 ### MakeNullable
 
-Ƭ **MakeNullable**<`T`\>: { [K in keyof T]: T[K] extends string \| number \| boolean \| bigint \| null \| undefined ? T[K] \| null : MakeNullable<T[K]\> }
+Ƭ **MakeNullable**\<`T`\>: \{ [K in keyof T]: T[K] extends string \| number \| boolean \| bigint \| null \| undefined ? T[K] \| null : MakeNullable\<T[K]\> }
 
 Хелпер-утилита типа - для всех полей типа разрешает установить в качестве значения null
 
@@ -130,7 +133,7 @@ ___
 
 ### HttpBusEventData
 
-Ƭ **HttpBusEventData**<`T`\>: [`HttpBusBaseEventData`](interfaces/HttpBusBaseEventData.md)<`T`\> & { `method`: ``"post"`` \| ``"post-blob"`` \| ``"post-text"`` \| ``"put"`` ; `url`: `string` ; `body?`: `unknown` \| ``null`` ; `options`: [`ParamsAndHeaders`](README.md#paramsandheaders) ; `filename?`: `string`  } \| { `method`: ``"custom"`` ; `customObservable`: `Observable`<`T`\>  } \| { `method`: ``"get"`` \| ``"get-blob"`` \| ``"get-text"`` \| ``"delete"`` ; `url`: `string` ; `options`: [`ParamsAndHeaders`](README.md#paramsandheaders) ; `filename?`: `string`  }
+Ƭ **HttpBusEventData**\<`T`\>: [`HttpBusBaseEventData`](interfaces/HttpBusBaseEventData.md)\<`T`\> & \{ `method`: ``"post"`` \| ``"post-blob"`` \| ``"post-text"`` \| ``"put"`` ; `url`: `string` ; `body?`: `unknown` \| ``null`` ; `options`: [`ParamsAndHeaders`](README.md#paramsandheaders) ; `filename?`: `string`  } \| \{ `method`: ``"custom"`` ; `customObservable`: `Observable`\<`T`\>  } \| \{ `method`: ``"get"`` \| ``"get-blob"`` \| ``"get-text"`` \| ``"delete"`` ; `url`: `string` ; `options`: [`ParamsAndHeaders`](README.md#paramsandheaders) ; `filename?`: `string`  }
 
 #### Type parameters
 
@@ -142,7 +145,7 @@ ___
 
 ### AdditionalActionCallbackFn
 
-Ƭ **AdditionalActionCallbackFn**<`T`\>: (`result?`: `T`) => `void`
+Ƭ **AdditionalActionCallbackFn**\<`T`\>: (`result?`: `T`) => `void`
 
 #### Type parameters
 
@@ -174,14 +177,14 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `headers?` | { `[header: string]`: `string`;  } |
-| `params?` | { `[params: string]`: `any`;  } |
+| `headers?` | \{ `[header: string]`: `string`;  } |
+| `params?` | \{ `[params: string]`: `any`;  } |
 
 ## Variables
 
 ### API\_SERVICE\_GET\_MAP\_FN
 
-• `Const` **API\_SERVICE\_GET\_MAP\_FN**: `InjectionToken`<[`TransformIncomingDataFn`](README.md#transformincomingdatafn)\>
+• `Const` **API\_SERVICE\_GET\_MAP\_FN**: `InjectionToken`\<[`TransformIncomingDataFn`](README.md#transformincomingdatafn)\>
 
 InjectionToken с функцией, которая будет применяться ко всем данным, полученным при использовании методов
 
@@ -194,7 +197,7 @@ ___
 
 ### API\_SERVICE\_POST\_MAP\_FN
 
-• `Const` **API\_SERVICE\_POST\_MAP\_FN**: `InjectionToken`<[`TransformIncomingDataFn`](README.md#transformincomingdatafn)\>
+• `Const` **API\_SERVICE\_POST\_MAP\_FN**: `InjectionToken`\<[`TransformIncomingDataFn`](README.md#transformincomingdatafn)\>
 
 InjectionToken с функцией, которая будет применяться ко всем данным, полученным при использовании
 
@@ -211,7 +214,7 @@ ___
 
 ### API\_SERVICE\_PUT\_MAP\_FN
 
-• `Const` **API\_SERVICE\_PUT\_MAP\_FN**: `InjectionToken`<[`TransformIncomingDataFn`](README.md#transformincomingdatafn)\>
+• `Const` **API\_SERVICE\_PUT\_MAP\_FN**: `InjectionToken`\<[`TransformIncomingDataFn`](README.md#transformincomingdatafn)\>
 
 InjectionToken с функцией, которая будет применяться ко всем данным, полученным при использовании
 
@@ -224,7 +227,7 @@ ___
 
 ### API\_SERVICE\_DELETE\_MAP\_FN
 
-• `Const` **API\_SERVICE\_DELETE\_MAP\_FN**: `InjectionToken`<[`TransformIncomingDataFn`](README.md#transformincomingdatafn)\>
+• `Const` **API\_SERVICE\_DELETE\_MAP\_FN**: `InjectionToken`\<[`TransformIncomingDataFn`](README.md#transformincomingdatafn)\>
 
 InjectionToken с функцией, которая будет применяться ко всем данным, полученным при использовании
 
@@ -237,7 +240,7 @@ ___
 
 ### SNACK\_SERVICE\_CONFIG
 
-• `Const` **SNACK\_SERVICE\_CONFIG**: `InjectionToken`<`undefined` \| [`SnackServiceConfig`](interfaces/SnackServiceConfig.md)<`unknown`, `any`\>\>
+• `Const` **SNACK\_SERVICE\_CONFIG**: `InjectionToken`\<`undefined` \| [`SnackServiceConfig`](interfaces/SnackServiceConfig.md)\<`unknown`, `any`\>\>
 
 InjectionToken с объектом SnackServiceConfig - конфигурацией компонента , который будет отображаться в качестве Snackbar.
 По умолчанию задано значение undefined - сервис использует встроенный в Angular Material компонент по умолчанию, иначе - используется компонент из токена.
@@ -246,7 +249,7 @@ ___
 
 ### TRANSLATIONS\_CONFIG
 
-• `Const` **TRANSLATIONS\_CONFIG**: `InjectionToken`<[`TranslationConfig`](README.md#translationconfig)\>
+• `Const` **TRANSLATIONS\_CONFIG**: `InjectionToken`\<[`TranslationConfig`](README.md#translationconfig)\>
 
 InjectionToken с объектом конфигурации TranslationConfig.
 
@@ -265,7 +268,7 @@ ___
 
 ### CONTROL\_ERROR\_MESSAGES\_PIPE\_DICTIONARY
 
-• `Const` **CONTROL\_ERROR\_MESSAGES\_PIPE\_DICTIONARY**: `InjectionToken`<`Record`<`string`, `string`\>\>
+• `Const` **CONTROL\_ERROR\_MESSAGES\_PIPE\_DICTIONARY**: `InjectionToken`\<`Record`\<`string`, `string`\>\>
 
 InjectionToken с объектом-словарем сообщений об ошибке валидации контролов формы, используемым ControlErrorMessagePipe для форматирования.
 Пайп проверяет список ошибок контрола и возвращает сообщение для первой найденной ошибки.
@@ -275,7 +278,7 @@ ___
 
 ### LANGUAGE\_PERSON\_SETTINGS\_START\_VALUE
 
-• `Const` **LANGUAGE\_PERSON\_SETTINGS\_START\_VALUE**: `InjectionToken`<``null`` \| [`LanguagePersonSettings`](interfaces/LanguagePersonSettings.md)\>
+• `Const` **LANGUAGE\_PERSON\_SETTINGS\_START\_VALUE**: `InjectionToken`\<``null`` \| [`LanguagePersonSettings`](interfaces/LanguagePersonSettings.md)\>
 
 InjectionToken со стартовым значением для потока с настройками пользователя.
 По умолчанию - использются данные, хранящиеся в localStorage, при их отсутствии - значение по умолчанию.
@@ -287,7 +290,7 @@ InjectionToken со стартовым значением для потока с
 
 ### createObservable
 
-▸ **createObservable**<`T`\>(`initValue`): `Observable`<`T`\>
+▸ **createObservable**\<`T`\>(`initValue`): `Observable`\<`T`\>
 
 #### Type parameters
 
@@ -303,13 +306,13 @@ InjectionToken со стартовым значением для потока с
 
 #### Returns
 
-`Observable`<`T`\>
+`Observable`\<`T`\>
 
 ___
 
 ### createSubject
 
-▸ **createSubject**<`T`\>(`initValue`): `BehaviorSubject`<`T`\>
+▸ **createSubject**\<`T`\>(`initValue`): `BehaviorSubject`\<`T`\>
 
 #### Type parameters
 
@@ -325,9 +328,9 @@ ___
 
 #### Returns
 
-`BehaviorSubject`<`T`\>
+`BehaviorSubject`\<`T`\>
 
-▸ **createSubject**<`T`\>(`initValue`): `BehaviorSubject`<`T` \| ``null``\>
+▸ **createSubject**\<`T`\>(`initValue`): `BehaviorSubject`\<`T` \| ``null``\>
 
 #### Type parameters
 
@@ -343,13 +346,13 @@ ___
 
 #### Returns
 
-`BehaviorSubject`<`T` \| ``null``\>
+`BehaviorSubject`\<`T` \| ``null``\>
 
 ___
 
 ### deepClone
 
-▸ **deepClone**<`T`\>(`source`): `T`
+▸ **deepClone**\<`T`\>(`source`): `T`
 
 #### Type parameters
 
@@ -378,7 +381,7 @@ ___
 
 ### delayedObservable
 
-▸ **delayedObservable**<`T`\>(`values`, `delayInMs`): `Observable`<`T`\>
+▸ **delayedObservable**\<`T`\>(`values`, `delayInMs`): `Observable`\<`T`\>
 
 #### Type parameters
 
@@ -395,7 +398,7 @@ ___
 
 #### Returns
 
-`Observable`<`T`\>
+`Observable`\<`T`\>
 
 Функция создает Obsewrvable-поток, который будет по очереди испускать значения массива values с задержкой delayInMs между каждым событием.
 
@@ -419,7 +422,7 @@ ___
 
 ### getFilteredData
 
-▸ **getFilteredData**<`T`\>(`nonFilteredData`): `Observable`<`T`\>
+▸ **getFilteredData**\<`T`\>(`nonFilteredData`): `Observable`\<`T`\>
 
 #### Type parameters
 
@@ -431,17 +434,17 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `nonFilteredData` | `Observable`<``null`` \| `T`\> |
+| `nonFilteredData` | `Observable`\<``null`` \| `T`\> |
 
 #### Returns
 
-`Observable`<`T`\>
+`Observable`\<`T`\>
 
 ___
 
 ### isEqualItems
 
-▸ **isEqualItems**<`T`\>(`a`, `b`): `boolean`
+▸ **isEqualItems**\<`T`\>(`a`, `b`): `boolean`
 
 Функция для сравнения двух переменных.
 Осуществляет "глубокое" сравнение для непримитивных типов по значениям их свойств, а не по ссылке на объект.
@@ -469,7 +472,7 @@ ___
 
 ### isValue
 
-▸ **isValue**<`T`\>(`value`): value is NonNullable<T\>
+▸ **isValue**\<`T`\>(`value`): value is NonNullable\<T\>
 
 #### Type parameters
 
@@ -485,7 +488,7 @@ ___
 
 #### Returns
 
-value is NonNullable<T\>
+value is NonNullable\<T\>
 
 **`Function`**
 
@@ -517,7 +520,7 @@ ___
 
 ### objectEntries
 
-▸ **objectEntries**<`T`\>(`source`): `ObjectEntry`<`T`\>[]
+▸ **objectEntries**\<`T`\>(`source`): `ObjectEntry`\<`T`\>[]
 
 Типизированная версия стандартного метода Object.entries
 
@@ -535,7 +538,7 @@ ___
 
 #### Returns
 
-`ObjectEntry`<`T`\>[]
+`ObjectEntry`\<`T`\>[]
 
 массив пар ключ-значение в source
 
@@ -543,7 +546,7 @@ ___
 
 ### objectKeys
 
-▸ **objectKeys**<`T`\>(`source`): keyof `T`[]
+▸ **objectKeys**\<`T`\>(`source`): keyof `T`[]
 
 Типизированная версия стандартного метода Object.keys
 
@@ -569,7 +572,7 @@ ___
 
 ### resizeObservable
 
-▸ **resizeObservable**(`element`): `Observable`<`ResizeObserverEntry`[]\>
+▸ **resizeObservable**(`element`): `Observable`\<`ResizeObserverEntry`[]\>
 
 #### Parameters
 
@@ -579,13 +582,13 @@ ___
 
 #### Returns
 
-`Observable`<`ResizeObserverEntry`[]\>
+`Observable`\<`ResizeObserverEntry`[]\>
 
 ___
 
 ### trackByFn
 
-▸ **trackByFn**<`T`\>(`index`, `item`): `number`
+▸ **trackByFn**\<`T`\>(`index`, `item`): `number`
 
 #### Type parameters
 
@@ -604,11 +607,15 @@ ___
 
 `number`
 
+**`Deprecated`**
+
+Use TrackByPropertyDirective / TrackByIdDirective / TrackByIndexDirective.
+
 ___
 
 ### distinctUntilObjectChanged
 
-▸ **distinctUntilObjectChanged**<`T`\>(): `MonoTypeOperatorFunction`<`T`\>
+▸ **distinctUntilObjectChanged**\<`T`\>(): `MonoTypeOperatorFunction`\<`T`\>
 
 Returns a result Observable that emits all values pushed by the source observable if they
 are distinct in comparison to the last value the result observable emitted.
@@ -622,7 +629,7 @@ Works also for objects and arrays, not just primitive types.
 
 #### Returns
 
-`MonoTypeOperatorFunction`<`T`\>
+`MonoTypeOperatorFunction`\<`T`\>
 
 ___
 

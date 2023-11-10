@@ -26,7 +26,7 @@
 | Name | Type |
 | :------ | :------ |
 | `snackBar` | `MatSnackBar` |
-| `snackServiceConfig` | `undefined` \| [`SnackServiceConfig`](../interfaces/SnackServiceConfig.md)<`unknown`, `any`\> |
+| `snackServiceConfig` | `undefined` \| [`SnackServiceConfig`](../interfaces/SnackServiceConfig.md)\<`unknown`, `any`\> |
 
 #### Returns
 
@@ -42,13 +42,13 @@ ___
 
 ### snackServiceConfig
 
-• `Private` **snackServiceConfig**: `undefined` \| [`SnackServiceConfig`](../interfaces/SnackServiceConfig.md)<`unknown`, `any`\>
+• `Private` **snackServiceConfig**: `undefined` \| [`SnackServiceConfig`](../interfaces/SnackServiceConfig.md)\<`unknown`, `any`\>
 
 ## Methods
 
 ### showText
 
-▸ **showText**(`message`, `isError?`, `config?`): `MatSnackBarRef`<`unknown`\>
+▸ **showText**(`message`, `isError?`, `config?`): `MatSnackBarRef`\<`unknown`\>
 
 #### Parameters
 
@@ -56,8 +56,8 @@ ___
 | :------ | :------ | :------ |
 | `message` | `string` | `undefined` |
 | `isError` | `boolean` | `false` |
-| `config?` | `MatSnackBarConfig`<`any`\> | `undefined` |
+| `config?` | `MatSnackBarConfig`\<`any`\> | `undefined` |
 
 #### Returns
 
-`MatSnackBarRef`<`unknown`\>
+`MatSnackBarRef`\<`unknown`\>

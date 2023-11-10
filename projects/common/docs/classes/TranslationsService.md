@@ -47,25 +47,25 @@
 
 ### \_currentLanguage$
 
-• `Private` **\_currentLanguage$**: `BehaviorSubject`<``null`` \| `string`\>
+• `Private` **\_currentLanguage$**: `BehaviorSubject`\<``null`` \| `string`\>
 
 ___
 
 ### memory
 
-• `Private` **memory**: `Map`<`string`, `string`\>
+• `Private` **memory**: `Map`\<`string`, `string`\>
 
 ___
 
 ### currentLanguage$
 
-• **currentLanguage$**: `Observable`<`string`\>
+• **currentLanguage$**: `Observable`\<`string`\>
 
 ___
 
 ### translations$
 
-• **translations$**: `Observable`<`Record`<`string`, `string`\>\>
+• **translations$**: `Observable`\<`Record`\<`string`, `string`\>\>
 
 ___
 
@@ -115,7 +115,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `translations` | `Record`<`string`, `string`\> |
+| `translations` | `Record`\<`string`, `string`\> |
 | `value?` | `string` |
 
 #### Returns

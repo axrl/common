@@ -53,7 +53,7 @@ ___
 
 ### getDialogOptions
 
-▸ **getDialogOptions**<`D`\>(`config?`): `MatDialogConfig`<`D`\>
+▸ **getDialogOptions**\<`D`\>(`config?`): `MatDialogConfig`\<`D`\>
 
 #### Type parameters
 
@@ -65,17 +65,17 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `config?` | `MatDialogConfig`<`D`\> |
+| `config?` | `MatDialogConfig`\<`D`\> |
 
 #### Returns
 
-`MatDialogConfig`<`D`\>
+`MatDialogConfig`\<`D`\>
 
 ___
 
 ### openWindow
 
-▸ **openWindow**<`T`, `D`, `R`\>(`T`, `config?`, `dialog?`): `MatDialogRef`<`T`, `R`\>
+▸ **openWindow**\<`T`, `D`, `R`\>(`T`, `config?`, `dialog?`): `MatDialogRef`\<`T`, `R`\>
 
 #### Type parameters
 
@@ -89,19 +89,19 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `T` | `ComponentType`<`T`\> \| `TemplateRef`<`T`\> |
-| `config?` | `MatDialogConfig`<`D`\> |
+| `T` | `ComponentType`\<`T`\> \| `TemplateRef`\<`T`\> |
+| `config?` | `MatDialogConfig`\<`D`\> |
 | `dialog?` | `MatDialog` |
 
 #### Returns
 
-`MatDialogRef`<`T`, `R`\>
+`MatDialogRef`\<`T`, `R`\>
 
 ___
 
 ### openWindowAndWaitPromise
 
-▸ **openWindowAndWaitPromise**<`T`, `D`, `R`\>(`T`, `config?`, `dialog?`): `Promise`<`undefined` \| `R`\>
+▸ **openWindowAndWaitPromise**\<`T`, `D`, `R`\>(`T`, `config?`, `dialog?`): `Promise`\<`undefined` \| `R`\>
 
 #### Type parameters
 
@@ -115,10 +115,10 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `T` | `ComponentType`<`T`\> \| `TemplateRef`<`T`\> |
-| `config?` | `MatDialogConfig`<`D`\> |
+| `T` | `ComponentType`\<`T`\> \| `TemplateRef`\<`T`\> |
+| `config?` | `MatDialogConfig`\<`D`\> |
 | `dialog?` | `MatDialog` |
 
 #### Returns
 
-`Promise`<`undefined` \| `R`\>
+`Promise`\<`undefined` \| `R`\>

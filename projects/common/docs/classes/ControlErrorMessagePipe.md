@@ -28,7 +28,7 @@
 
 | Name | Type |
 | :------ | :------ |
-| `controlErrorsMessagesPipeDictionary` | `Record`<`string`, `string`\> |
+| `controlErrorsMessagesPipeDictionary` | `Record`\<`string`, `string`\> |
 
 #### Returns
 
@@ -38,7 +38,7 @@
 
 ### controlErrorsMessagesPipeDictionary
 
-• `Private` **controlErrorsMessagesPipeDictionary**: `Record`<`string`, `string`\>
+• `Private` **controlErrorsMessagesPipeDictionary**: `Record`\<`string`, `string`\>
 
 ## Methods
 
@@ -50,7 +50,7 @@
 
 | Name | Type |
 | :------ | :------ |
-| `control?` | ``null`` \| `AbstractControl`<`any`, `any`\> |
+| `control?` | ``null`` \| `AbstractControl`\<`any`, `any`\> |
 
 #### Returns
 

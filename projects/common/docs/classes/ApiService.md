@@ -53,13 +53,13 @@
 
 ### \_isLoadingResults$
 
-• `Private` **\_isLoadingResults$**: `BehaviorSubject`<`number`\>
+• `Private` **\_isLoadingResults$**: `BehaviorSubject`\<`number`\>
 
 ___
 
 ### isLoadingResults$
 
-• **isLoadingResults$**: `Observable`<`boolean`\>
+• **isLoadingResults$**: `Observable`\<`boolean`\>
 
 ___
 
@@ -117,46 +117,46 @@ ___
 
 ### getData
 
-▸ **getData**(`url`, `options`): `Observable`<`string`\>
+▸ **getData**(`url`, `options`): `Observable`\<`string`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `url` | `string` |
-| `options` | [`ParamsAndHeaders`](../README.md#paramsandheaders) & { `responseType`: ``"text"``  } |
+| `options` | [`ParamsAndHeaders`](../README.md#paramsandheaders) & \{ `responseType`: ``"text"``  } |
 
 #### Returns
 
-`Observable`<`string`\>
+`Observable`\<`string`\>
 
-▸ **getData**(`url`, `options`): `Observable`<`ArrayBuffer`\>
+▸ **getData**(`url`, `options`): `Observable`\<`ArrayBuffer`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `url` | `string` |
-| `options` | [`ParamsAndHeaders`](../README.md#paramsandheaders) & { `responseType`: ``"arraybuffer"``  } |
+| `options` | [`ParamsAndHeaders`](../README.md#paramsandheaders) & \{ `responseType`: ``"arraybuffer"``  } |
 
 #### Returns
 
-`Observable`<`ArrayBuffer`\>
+`Observable`\<`ArrayBuffer`\>
 
-▸ **getData**(`url`, `options`): `Observable`<`File`\>
+▸ **getData**(`url`, `options`): `Observable`\<`File`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `url` | `string` |
-| `options` | [`ParamsAndHeaders`](../README.md#paramsandheaders) & { `responseType`: ``"blob"``  } |
+| `options` | [`ParamsAndHeaders`](../README.md#paramsandheaders) & \{ `responseType`: ``"blob"``  } |
 
 #### Returns
 
-`Observable`<`File`\>
+`Observable`\<`File`\>
 
-▸ **getData**<`T`\>(`url`, `options?`): `Observable`<`T`\>
+▸ **getData**\<`T`\>(`url`, `options?`): `Observable`\<`T`\>
 
 #### Type parameters
 
@@ -169,17 +169,17 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `url` | `string` |
-| `options?` | [`ParamsAndHeaders`](../README.md#paramsandheaders) & { `responseType?`: ``"json"``  } |
+| `options?` | [`ParamsAndHeaders`](../README.md#paramsandheaders) & \{ `responseType?`: ``"json"``  } |
 
 #### Returns
 
-`Observable`<`T`\>
+`Observable`\<`T`\>
 
 ___
 
 ### getBlobData
 
-▸ **getBlobData**(`url`, `params?`, `headers?`): `Observable`<`File`\>
+▸ **getBlobData**(`url`, `params?`, `headers?`): `Observable`\<`File`\>
 
 #### Parameters
 
@@ -191,13 +191,13 @@ ___
 
 #### Returns
 
-`Observable`<`File`\>
+`Observable`\<`File`\>
 
 ___
 
 ### postData
 
-▸ **postData**<`TResponse`, `TBody`\>(`url`, `body`, `options`): `Observable`<`string`\>
+▸ **postData**\<`TResponse`, `TBody`\>(`url`, `body`, `options`): `Observable`\<`string`\>
 
 #### Type parameters
 
@@ -212,13 +212,13 @@ ___
 | :------ | :------ |
 | `url` | `string` |
 | `body` | `TBody` |
-| `options` | [`ParamsAndHeaders`](../README.md#paramsandheaders) & { `responseType`: ``"text"``  } |
+| `options` | [`ParamsAndHeaders`](../README.md#paramsandheaders) & \{ `responseType`: ``"text"``  } |
 
 #### Returns
 
-`Observable`<`string`\>
+`Observable`\<`string`\>
 
-▸ **postData**<`TResponse`, `TBody`\>(`url`, `body`, `options`): `Observable`<`ArrayBuffer`\>
+▸ **postData**\<`TResponse`, `TBody`\>(`url`, `body`, `options`): `Observable`\<`ArrayBuffer`\>
 
 #### Type parameters
 
@@ -233,13 +233,13 @@ ___
 | :------ | :------ |
 | `url` | `string` |
 | `body` | `TBody` |
-| `options` | [`ParamsAndHeaders`](../README.md#paramsandheaders) & { `responseType`: ``"arraybuffer"``  } |
+| `options` | [`ParamsAndHeaders`](../README.md#paramsandheaders) & \{ `responseType`: ``"arraybuffer"``  } |
 
 #### Returns
 
-`Observable`<`ArrayBuffer`\>
+`Observable`\<`ArrayBuffer`\>
 
-▸ **postData**<`TResponse`, `TBody`\>(`url`, `body`, `options`): `Observable`<`File`\>
+▸ **postData**\<`TResponse`, `TBody`\>(`url`, `body`, `options`): `Observable`\<`File`\>
 
 #### Type parameters
 
@@ -254,13 +254,13 @@ ___
 | :------ | :------ |
 | `url` | `string` |
 | `body` | `TBody` |
-| `options` | [`ParamsAndHeaders`](../README.md#paramsandheaders) & { `responseType`: ``"blob"``  } |
+| `options` | [`ParamsAndHeaders`](../README.md#paramsandheaders) & \{ `responseType`: ``"blob"``  } |
 
 #### Returns
 
-`Observable`<`File`\>
+`Observable`\<`File`\>
 
-▸ **postData**<`TResponse`, `TBody`\>(`url`, `body`, `options?`): `Observable`<`TResponse`\>
+▸ **postData**\<`TResponse`, `TBody`\>(`url`, `body`, `options?`): `Observable`\<`TResponse`\>
 
 #### Type parameters
 
@@ -275,17 +275,17 @@ ___
 | :------ | :------ |
 | `url` | `string` |
 | `body` | `TBody` |
-| `options?` | [`ParamsAndHeaders`](../README.md#paramsandheaders) & { `responseType?`: ``"json"``  } |
+| `options?` | [`ParamsAndHeaders`](../README.md#paramsandheaders) & \{ `responseType?`: ``"json"``  } |
 
 #### Returns
 
-`Observable`<`TResponse`\>
+`Observable`\<`TResponse`\>
 
 ___
 
 ### postBlobData
 
-▸ **postBlobData**<`TBody`\>(`url`, `body`, `options?`): `Observable`<`File`\>
+▸ **postBlobData**\<`TBody`\>(`url`, `body`, `options?`): `Observable`\<`File`\>
 
 #### Type parameters
 
@@ -303,13 +303,13 @@ ___
 
 #### Returns
 
-`Observable`<`File`\>
+`Observable`\<`File`\>
 
 ___
 
 ### postNoData
 
-▸ **postNoData**<`TResponse`\>(`url`, `options?`): `Observable`<`TResponse`\>
+▸ **postNoData**\<`TResponse`\>(`url`, `options?`): `Observable`\<`TResponse`\>
 
 #### Type parameters
 
@@ -326,13 +326,13 @@ ___
 
 #### Returns
 
-`Observable`<`TResponse`\>
+`Observable`\<`TResponse`\>
 
 ___
 
 ### putData
 
-▸ **putData**<`TResponse`, `TBody`\>(`url`, `body`, `options?`): `Observable`<`TResponse`\>
+▸ **putData**\<`TResponse`, `TBody`\>(`url`, `body`, `options?`): `Observable`\<`TResponse`\>
 
 #### Type parameters
 
@@ -351,13 +351,13 @@ ___
 
 #### Returns
 
-`Observable`<`TResponse`\>
+`Observable`\<`TResponse`\>
 
 ___
 
 ### delete
 
-▸ **delete**<`T`\>(`url`, `params?`): `Observable`<`T`\>
+▸ **delete**\<`T`\>(`url`, `params?`): `Observable`\<`T`\>
 
 #### Type parameters
 
@@ -374,4 +374,4 @@ ___
 
 #### Returns
 
-`Observable`<`T`\>
+`Observable`\<`T`\>

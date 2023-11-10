@@ -38,13 +38,13 @@
 
 ### \_httpBus$
 
-• `Private` **\_httpBus$**: `EventEmitter`<[`HttpBusEventData`](../README.md#httpbuseventdata)<`any`\>\>
+• `Private` **\_httpBus$**: `EventEmitter`\<[`HttpBusEventData`](../README.md#httpbuseventdata)\<`any`\>\>
 
 ___
 
 ### httpBus$
 
-• **httpBus$**: `Observable`<`void`\>
+• **httpBus$**: `Observable`\<`void`\>
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 ### sendEventToBus
 
-▸ **sendEventToBus**<`TResponse`\>(`options`): `void`
+▸ **sendEventToBus**\<`TResponse`\>(`options`): `void`
 
 #### Type parameters
 
@@ -68,7 +68,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `options` | [`SendEventToBusFnParams`](../interfaces/SendEventToBusFnParams.md)<`TResponse`\> |
+| `options` | [`SendEventToBusFnParams`](../interfaces/SendEventToBusFnParams.md)\<`TResponse`\> |
 
 #### Returns
 
@@ -88,7 +88,7 @@ ___
 
 ### reducer
 
-▸ **reducer**<`T`\>(`e`): `Observable`<`unknown`\>
+▸ **reducer**\<`T`\>(`e`): `Observable`\<`unknown`\>
 
 #### Type parameters
 
@@ -100,8 +100,8 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `e` | [`HttpBusEventData`](../README.md#httpbuseventdata)<`T`\> |
+| `e` | [`HttpBusEventData`](../README.md#httpbuseventdata)\<`T`\> |
 
 #### Returns
 
-`Observable`<`unknown`\>
+`Observable`\<`unknown`\>

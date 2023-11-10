@@ -1,4 +1,4 @@
-# Interface: HttpBusBaseEventData<T\>
+# Interface: HttpBusBaseEventData\<T\>
 
 Базовый интерфейс для всех событий HttpBusEvent
 
@@ -19,10 +19,10 @@
 
 ### cb
 
-• **cb**: [`AdditionalActionCallbackFn`](../README.md#additionalactioncallbackfn)<`T`\>
+• **cb**: [`AdditionalActionCallbackFn`](../README.md#additionalactioncallbackfn)\<`T`\>
 
 ___
 
 ### errCb
 
-• **errCb**: [`AdditionalActionCallbackFn`](../README.md#additionalactioncallbackfn)<`unknown`\>
+• **errCb**: [`AdditionalActionCallbackFn`](../README.md#additionalactioncallbackfn)\<`unknown`\>

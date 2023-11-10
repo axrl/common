@@ -1,4 +1,4 @@
-# Interface: SendEventToBusFnParams<TResponse\>
+# Interface: SendEventToBusFnParams\<TResponse\>
 
 ## Type parameters
 
@@ -41,13 +41,13 @@ ___
 
 ### cb
 
-• `Optional` **cb**: [`AdditionalActionCallbackFn`](../README.md#additionalactioncallbackfn)<`TResponse`\>
+• `Optional` **cb**: [`AdditionalActionCallbackFn`](../README.md#additionalactioncallbackfn)\<`TResponse`\>
 
 ___
 
 ### errCb
 
-• `Optional` **errCb**: [`AdditionalActionCallbackFn`](../README.md#additionalactioncallbackfn)<`unknown`\>
+• `Optional` **errCb**: [`AdditionalActionCallbackFn`](../README.md#additionalactioncallbackfn)\<`unknown`\>
 
 ___
 

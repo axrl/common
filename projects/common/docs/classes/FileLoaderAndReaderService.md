@@ -52,7 +52,7 @@
 
 ### onlyLoadFile
 
-▸ **onlyLoadFile**(`accept`): `Promise`<`File`\>
+▸ **onlyLoadFile**(`accept`): `Promise`\<`File`\>
 
 #### Parameters
 
@@ -62,13 +62,13 @@
 
 #### Returns
 
-`Promise`<`File`\>
+`Promise`\<`File`\>
 
 ___
 
 ### readFileAsBase64
 
-▸ **readFileAsBase64**(`accept`): `Promise`<{ `name`: `string` ; `data`: `string`  }\>
+▸ **readFileAsBase64**(`accept`): `Promise`\<\{ `name`: `string` ; `data`: `string`  }\>
 
 #### Parameters
 
@@ -78,13 +78,13 @@ ___
 
 #### Returns
 
-`Promise`<{ `name`: `string` ; `data`: `string`  }\>
+`Promise`\<\{ `name`: `string` ; `data`: `string`  }\>
 
 ___
 
 ### readFileAsDataUrl
 
-▸ **readFileAsDataUrl**(`accept`): `Promise`<{ `name`: `string` ; `dataUrl`: `string`  }\>
+▸ **readFileAsDataUrl**(`accept`): `Promise`\<\{ `name`: `string` ; `dataUrl`: `string`  }\>
 
 #### Parameters
 
@@ -94,4 +94,4 @@ ___
 
 #### Returns
 
-`Promise`<{ `name`: `string` ; `dataUrl`: `string`  }\>
+`Promise`\<\{ `name`: `string` ; `dataUrl`: `string`  }\>

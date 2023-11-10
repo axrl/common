@@ -1,4 +1,4 @@
-# Class: LanguagePersonSettingsService<Settings\>
+# Class: LanguagePersonSettingsService\<Settings\>
 
 ## Type parameters
 
@@ -31,7 +31,7 @@
 
 ### constructor
 
-• **new LanguagePersonSettingsService**<`Settings`\>(`translationsService`, `defaultPersonSettingsValue`): [`LanguagePersonSettingsService`](LanguagePersonSettingsService.md)<`Settings`\>
+• **new LanguagePersonSettingsService**\<`Settings`\>(`translationsService`, `defaultPersonSettingsValue`): [`LanguagePersonSettingsService`](LanguagePersonSettingsService.md)\<`Settings`\>
 
 #### Type parameters
 
@@ -48,19 +48,19 @@
 
 #### Returns
 
-[`LanguagePersonSettingsService`](LanguagePersonSettingsService.md)<`Settings`\>
+[`LanguagePersonSettingsService`](LanguagePersonSettingsService.md)\<`Settings`\>
 
 ## Properties
 
 ### \_settingsChanges
 
-• `Private` **\_settingsChanges**: `EventEmitter`<`Settings`\>
+• `Private` **\_settingsChanges**: `EventEmitter`\<`Settings`\>
 
 ___
 
 ### settingsChanges
 
-• `Readonly` **settingsChanges**: `Observable`<`Settings`\>
+• `Readonly` **settingsChanges**: `Observable`\<`Settings`\>
 
 Поток с данными об обновлениях в настроках.
 
@@ -74,19 +74,19 @@ ___
 
 ### \_languagePersonSettings$
 
-• `Readonly` **\_languagePersonSettings$**: `BehaviorSubject`<``null`` \| `Settings`\>
+• `Readonly` **\_languagePersonSettings$**: `BehaviorSubject`\<``null`` \| `Settings`\>
 
 ___
 
 ### languagePersonSettings$
 
-• `Readonly` **languagePersonSettings$**: `Observable`<``null`` \| `Settings`\>
+• `Readonly` **languagePersonSettings$**: `Observable`\<``null`` \| `Settings`\>
 
 ___
 
 ### languagePersonSettingsFiltered$
 
-• `Readonly` **languagePersonSettingsFiltered$**: `Observable`<`Settings`\>
+• `Readonly` **languagePersonSettingsFiltered$**: `Observable`\<`Settings`\>
 
 ___
 
@@ -104,7 +104,7 @@ ___
 
 ### updatePersonSettings
 
-▸ **updatePersonSettings**(`newSettings`, `emitEvent?`): `Promise`<`void`\>
+▸ **updatePersonSettings**(`newSettings`, `emitEvent?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -115,4 +115,4 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>

@@ -1,4 +1,4 @@
-# Interface: SnackServiceConfig<T, D\>
+# Interface: SnackServiceConfig\<T, D\>
 
 Тип для InjectionToken с объектом конфигурации для SnackService для ситуации, в качестве Snackbar требуется отображать пользовательский компонент вместо
 встроенного в в Angular Material компонента по умолчанию.
@@ -21,17 +21,17 @@
 
 ### component
 
-• **component**: `ComponentType`<`T`\>
+• **component**: `ComponentType`\<`T`\>
 
 ___
 
 ### snackBarConfig
 
-• **snackBarConfig**: (`message`: `string`, `isError`: `boolean`) => `MatSnackBarConfig`<`D`\>
+• **snackBarConfig**: (`message`: `string`, `isError`: `boolean`) => `MatSnackBarConfig`\<`D`\>
 
 #### Type declaration
 
-▸ (`message`, `isError`): `MatSnackBarConfig`<`D`\>
+▸ (`message`, `isError`): `MatSnackBarConfig`\<`D`\>
 
 ##### Parameters
 
@@ -42,4 +42,4 @@ ___
 
 ##### Returns
 
-`MatSnackBarConfig`<`D`\>
+`MatSnackBarConfig`\<`D`\>

@@ -1,4 +1,4 @@
-# Class: CommonBaseControl<TValue\>
+# Class: CommonBaseControl\<TValue\>
 
 Базовый класс для компонентов, реализующих функционал ControlValueAccessor.
 
@@ -51,7 +51,7 @@
 
 ### constructor
 
-• **new CommonBaseControl**<`TValue`\>(`inj`): [`CommonBaseControl`](CommonBaseControl.md)<`TValue`\>
+• **new CommonBaseControl**\<`TValue`\>(`inj`): [`CommonBaseControl`](CommonBaseControl.md)\<`TValue`\>
 
 #### Type parameters
 
@@ -67,7 +67,7 @@
 
 #### Returns
 
-[`CommonBaseControl`](CommonBaseControl.md)<`TValue`\>
+[`CommonBaseControl`](CommonBaseControl.md)\<`TValue`\>
 
 ## Properties
 
@@ -81,7 +81,7 @@ ___
 
 ### \_elementRef
 
-• `Protected` **\_elementRef**: `ElementRef`<`HTMLElement`\>
+• `Protected` **\_elementRef**: `ElementRef`\<`HTMLElement`\>
 
 Ссылка на DOM-элемент, соответствующий компоненту
 
@@ -151,7 +151,7 @@ ___
 
 ### valueChanges
 
-• `Readonly` **valueChanges**: `EventEmitter`<``null`` \| `TValue`\>
+• `Readonly` **valueChanges**: `EventEmitter`\<``null`` \| `TValue`\>
 
 Emit changes in control
 
