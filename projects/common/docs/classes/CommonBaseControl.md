@@ -8,6 +8,12 @@
 | :------ |
 | `TValue` |
 
+## Hierarchy
+
+- `DefaultValueAccessor`
+
+  ↳ **`CommonBaseControl`**
+
 ## Implements
 
 - `ControlValueAccessor`
@@ -20,10 +26,14 @@
 
 ### Properties
 
+- [onChange](CommonBaseControl.md#onchange)
+- [onTouched](CommonBaseControl.md#ontouched)
+- [ɵfac](CommonBaseControl.md#ɵfac)
+- [ɵdir](CommonBaseControl.md#ɵdir)
 - [\_generateUUIDHelper](CommonBaseControl.md#_generateuuidhelper)
-- [\_elementRef](CommonBaseControl.md#_elementref)
+- [\_\_elementRef](CommonBaseControl.md#__elementref)
 - [\_cdr](CommonBaseControl.md#_cdr)
-- [\_renderer](CommonBaseControl.md#_renderer)
+- [\_\_renderer](CommonBaseControl.md#__renderer)
 - [\_disabled](CommonBaseControl.md#_disabled)
 - [\_value](CommonBaseControl.md#_value)
 - [ngControl](CommonBaseControl.md#ngcontrol)
@@ -40,18 +50,17 @@
 
 ### Methods
 
-- [writeValue](CommonBaseControl.md#writevalue)
-- [registerOnChange](CommonBaseControl.md#registeronchange)
+- [setProperty](CommonBaseControl.md#setproperty)
 - [registerOnTouched](CommonBaseControl.md#registerontouched)
+- [registerOnChange](CommonBaseControl.md#registeronchange)
 - [setDisabledState](CommonBaseControl.md#setdisabledstate)
-- [\_onChange](CommonBaseControl.md#_onchange)
-- [\_onTouched](CommonBaseControl.md#_ontouched)
+- [writeValue](CommonBaseControl.md#writevalue)
 
 ## Constructors
 
 ### constructor
 
-• **new CommonBaseControl**\<`TValue`\>(`inj`): [`CommonBaseControl`](CommonBaseControl.md)\<`TValue`\>
+• **new CommonBaseControl**\<`TValue`\>(`inj`, `_renderer`, `_elementRef`, `_compositionMode`): [`CommonBaseControl`](CommonBaseControl.md)\<`TValue`\>
 
 #### Type parameters
 
@@ -61,27 +70,105 @@
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `inj` | `Injector` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `inj` | `Injector` | - |
+| `_renderer` | `Renderer2` | Renderer2, Доступный для вызова любым классом-наследником |
+| `_elementRef` | `ElementRef`\<`HTMLElement`\> | Ссылка на DOM-элемент, соответствующий компоненту |
+| `_compositionMode` | `boolean` | - |
 
 #### Returns
 
 [`CommonBaseControl`](CommonBaseControl.md)\<`TValue`\>
 
+#### Overrides
+
+DefaultValueAccessor.constructor
+
 ## Properties
+
+### onChange
+
+• **onChange**: (`_`: `any`) => `void`
+
+The registered callback function called when a change or input event occurs on the input
+element.
+
+**`Nodoc`**
+
+#### Type declaration
+
+▸ (`_`): `void`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `_` | `any` |
+
+##### Returns
+
+`void`
+
+#### Inherited from
+
+DefaultValueAccessor.onChange
+
+___
+
+### onTouched
+
+• **onTouched**: () => `void`
+
+The registered callback function called when a blur event occurs on the input element.
+
+**`Nodoc`**
+
+#### Type declaration
+
+▸ (): `void`
+
+##### Returns
+
+`void`
+
+#### Inherited from
+
+DefaultValueAccessor.onTouched
+
+___
+
+### ɵfac
+
+▪ `Static` **ɵfac**: `unknown`
+
+#### Inherited from
+
+DefaultValueAccessor.ɵfac
+
+___
+
+### ɵdir
+
+▪ `Static` **ɵdir**: `unknown`
+
+#### Inherited from
+
+DefaultValueAccessor.ɵdir
+
+___
 
 ### \_generateUUIDHelper
 
-• `Protected` **\_generateUUIDHelper**: [`GenerateUUIDService`](GenerateUUIDService.md)
+• `Protected` `Readonly` **\_generateUUIDHelper**: [`GenerateUUIDService`](GenerateUUIDService.md)
 
 Сервис для генерации GUID
 
 ___
 
-### \_elementRef
+### \_\_elementRef
 
-• `Protected` **\_elementRef**: `ElementRef`\<`HTMLElement`\>
+• `Protected` `Readonly` **\_\_elementRef**: `ElementRef`\<`HTMLElement`\>
 
 Ссылка на DOM-элемент, соответствующий компоненту
 
@@ -89,15 +176,15 @@ ___
 
 ### \_cdr
 
-• `Protected` **\_cdr**: `ChangeDetectorRef`
+• `Protected` `Readonly` **\_cdr**: `ChangeDetectorRef`
 
 ChangeDetectorRef, Доступный для вызова любым классом-наследником
 
 ___
 
-### \_renderer
+### \_\_renderer
 
-• `Protected` **\_renderer**: `Renderer2`
+• `Protected` `Readonly` **\_\_renderer**: `Renderer2`
 
 Renderer2, Доступный для вызова любым классом-наследником
 
@@ -221,47 +308,29 @@ ___
 
 ## Methods
 
-### writeValue
+### setProperty
 
-▸ **writeValue**(`value`): `void`
+▸ **setProperty**(`key`, `value`): `void`
 
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `value` | ``null`` \| `TValue` |
-
-#### Returns
-
-`void`
-
-**`Inherit Doc`**
-
-#### Implementation of
-
-ControlValueAccessor.writeValue
-
-___
-
-### registerOnChange
-
-▸ **registerOnChange**(`fn`): `void`
+Helper method that sets a property on a target element using the current Renderer
+implementation.
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `fn` | `any` |
+| `key` | `string` |
+| `value` | `any` |
 
 #### Returns
 
 `void`
 
-**`Inherit Doc`**
+**`Nodoc`**
 
-#### Implementation of
+#### Inherited from
 
-ControlValueAccessor.registerOnChange
+DefaultValueAccessor.setProperty
 
 ___
 
@@ -269,27 +338,63 @@ ___
 
 ▸ **registerOnTouched**(`fn`): `void`
 
+Registers a function called when the control is touched.
+
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `fn` | `any` |
+| `fn` | () => `void` |
 
 #### Returns
 
 `void`
 
-**`Inherit Doc`**
+**`Nodoc`**
 
 #### Implementation of
 
 ControlValueAccessor.registerOnTouched
+
+#### Inherited from
+
+DefaultValueAccessor.registerOnTouched
+
+___
+
+### registerOnChange
+
+▸ **registerOnChange**(`fn`): `void`
+
+Registers a function called when the control value changes.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `fn` | (`_`: `any`) => {} |
+
+#### Returns
+
+`void`
+
+**`Nodoc`**
+
+#### Implementation of
+
+ControlValueAccessor.registerOnChange
+
+#### Inherited from
+
+DefaultValueAccessor.registerOnChange
 
 ___
 
 ### setDisabledState
 
 ▸ **setDisabledState**(`isDisabled`): `void`
+
+Sets the "disabled" property on the range input element.
 
 #### Parameters
 
@@ -301,38 +406,40 @@ ___
 
 `void`
 
-**`Inherit Doc`**
+**`Nodoc`**
 
 #### Implementation of
 
 ControlValueAccessor.setDisabledState
 
+#### Inherited from
+
+DefaultValueAccessor.setDisabledState
+
 ___
 
-### \_onChange
+### writeValue
 
-▸ **_onChange**(`_`): `void`
+▸ **writeValue**(`value`): `void`
+
+Sets the "value" property on the input element.
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `_` | `any` |
+| `value` | `any` |
 
 #### Returns
 
 `void`
 
-**`Inherit Doc`**
+**`Nodoc`**
 
-___
+#### Implementation of
 
-### \_onTouched
+ControlValueAccessor.writeValue
 
-▸ **_onTouched**(): `void`
+#### Inherited from
 
-#### Returns
-
-`void`
-
-**`Inherit Doc`**
+DefaultValueAccessor.writeValue

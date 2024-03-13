@@ -3,12 +3,19 @@ import {
     Directive,
     ElementRef,
     EventEmitter,
+    Inject,
     Injector,
     Input,
+    Optional,
     Output,
     Renderer2,
 } from '@angular/core';
-import {ControlValueAccessor, NgControl} from '@angular/forms';
+import {
+    COMPOSITION_BUFFER_MODE,
+    ControlValueAccessor,
+    DefaultValueAccessor,
+    NgControl,
+} from '@angular/forms';
 import {isEqualItems} from '../../functions';
 import {GenerateUUIDService} from '../../services/generate-uuid';
 
@@ -24,18 +31,21 @@ import {GenerateUUIDService} from '../../services/generate-uuid';
         '[attr.disabled]': 'disabled',
         '[attr.id]': 'id',
         '[attr.name]': 'name || null',
-        '(blur)': '_onTouched()',
     },
 })
-export abstract class CommonBaseControl<TValue> implements ControlValueAccessor {
+export abstract class CommonBaseControl<TValue>
+    extends DefaultValueAccessor
+    implements ControlValueAccessor
+{
     /** Сервис для генерации GUID */
-    protected _generateUUIDHelper: GenerateUUIDService;
+    protected readonly _generateUUIDHelper: GenerateUUIDService;
     /** Ссылка на DOM-элемент, соответствующий компоненту */
-    protected _elementRef: ElementRef<HTMLElement>;
+    protected readonly __elementRef: ElementRef<HTMLElement>;
+
     /** ChangeDetectorRef, Доступный для вызова любым классом-наследником */
-    protected _cdr: ChangeDetectorRef;
+    protected readonly _cdr: ChangeDetectorRef;
     /** Renderer2, Доступный для вызова любым классом-наследником */
-    protected _renderer: Renderer2;
+    protected readonly __renderer: Renderer2;
     /** Отключение компонента */
     protected _disabled = false;
     protected _value: TValue | null = null;
@@ -47,7 +57,7 @@ export abstract class CommonBaseControl<TValue> implements ControlValueAccessor 
         if (!isEqualItems(this._value, value)) {
             this._value = value;
             this.valueChanges.emit(value);
-            this._onChange(value);
+            this.onChange(value);
             this._cdr.markForCheck();
         }
     }
@@ -84,10 +94,18 @@ export abstract class CommonBaseControl<TValue> implements ControlValueAccessor 
     /** Emit changes in control */
     @Output() readonly valueChanges = new EventEmitter<TValue | null>();
 
-    constructor(inj: Injector) {
-        this._elementRef = inj.get<ElementRef<HTMLElement>>(ElementRef);
+    constructor(
+        inj: Injector,
+        /** Renderer2, Доступный для вызова любым классом-наследником */
+        _renderer: Renderer2,
+        /** Ссылка на DOM-элемент, соответствующий компоненту */
+        _elementRef: ElementRef<HTMLElement>,
+        @Optional() @Inject(COMPOSITION_BUFFER_MODE) _compositionMode: boolean,
+    ) {
+        super(_renderer, _elementRef, _compositionMode);
         this._cdr = inj.get(ChangeDetectorRef);
-        this._renderer = inj.get(Renderer2);
+        this.__elementRef = _elementRef;
+        this.__renderer = _renderer;
         this._generateUUIDHelper = inj.get(GenerateUUIDService);
         this.id = this._generateUUIDHelper.getGUID();
         this.ngControl = inj.get(NgControl, undefined, {optional: true, self: true});
@@ -98,32 +116,4 @@ export abstract class CommonBaseControl<TValue> implements ControlValueAccessor 
             this.ngControl.valueAccessor = this;
         }
     }
-
-    /** @inheritDoc */
-    writeValue(value: TValue | null): void {
-        this._value = value;
-        this._cdr.markForCheck();
-    }
-
-    /** @inheritDoc */
-    registerOnChange(fn: any): void {
-        this._onChange = fn;
-    }
-
-    /** @inheritDoc */
-    registerOnTouched(fn: any): void {
-        this._onTouched = fn;
-    }
-
-    /** @inheritDoc */
-    setDisabledState?(isDisabled: boolean): void {
-        this.disabled = isDisabled;
-        this._cdr.markForCheck();
-    }
-
-    /** @inheritDoc */
-    _onChange(_: any): void {}
-
-    /** @inheritDoc */
-    _onTouched(): void {}
 }

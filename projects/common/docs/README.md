@@ -72,11 +72,15 @@
 
 Ƭ **TransformIncomingDataFn**: \<T\>(`res`: `unknown`) => `T`
 
+Описание типа для функций трансформации данных, полученных при использовании методов
+
+**`Method`**
+
+`ApiService.getData<T>`
+
 #### Type declaration
 
 ▸ \<`T`\>(`res`): `T`
-
-Описание типа для функций трансформации данных, полученных при использовании методов
 
 ##### Type parameters
 
@@ -93,10 +97,6 @@
 ##### Returns
 
 `T`
-
-**`Method`**
-
-`ApiService.getData<T>`
 
 ___
 

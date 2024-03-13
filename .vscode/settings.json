@@ -33,13 +33,13 @@
     "[typescript]": {
       "editor.formatOnSave": true,
       "editor.codeActionsOnSave": {
-        "source.organizeImports": true
+        "source.organizeImports": "explicit"
       }
     },
     "scss.validate": false,
     "[scss]": {
       "editor.codeActionsOnSave": {
-        "source.fixAll.stylelint": true
+        "source.fixAll.stylelint": "explicit"
       },
       "editor.formatOnSave": true,
     },
